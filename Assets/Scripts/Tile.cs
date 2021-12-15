@@ -1,22 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
-[ExecuteInEditMode]
 public class Tile : MonoBehaviour
 {
     private Grid _grid;
-    [Randomize(0, 10)]
-    public int myFloat;
 
     // Start is called before the first frame update
     void Start()
     {
         _grid = GetComponentInParent<Grid>();
+
+        if (!_grid)
+        {
+            transform.parent = FindObjectOfType<Grid>().transform;
+        }
+
+        SnapToNearestCell();
     }
 
     public void SnapToNearestCell()
     {
+        if (!_grid)
+            return;
+
         Vector3Int cellPos = _grid.WorldToCell(
             transform.position);
 
@@ -27,6 +35,9 @@ public class Tile : MonoBehaviour
 
     public void SnapToNearestCell(Vector3 inputPos)
     {
+        if (!_grid)
+            return;
+
         Vector3Int cellPos = _grid.WorldToCell(
             inputPos);
 
@@ -37,13 +48,10 @@ public class Tile : MonoBehaviour
 
     public Vector3Int GetCoordinates()
     {
+        if (!_grid)
+            return Vector3Int.zero;
+
         return _grid.WorldToCell(transform.position);
     }
 
-    //private void OnDrawGizmosSelected()
-    //{
-    //    Gizmos.color = Color.red;
-    //    Gizmos.DrawIcon(transform.position, "pointer.png", true, Color.cyan);
-        
-    //}
 }
