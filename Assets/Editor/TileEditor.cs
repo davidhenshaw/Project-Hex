@@ -39,7 +39,7 @@ public class TileEditor : Editor
         var transform = tile.transform;
 
         Handles.Label(transform.position,
-            $"{tile.GetCoordinates().ToString()}");
+            $"{tile.GridPosition.ToString()}");
     }
 
 }

@@ -2,56 +2,68 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System;
 
-public class Tile : MonoBehaviour
+[ExecuteAlways]
+public class Tile : BoardElement
 {
-    private Grid _grid;
+    public readonly List<BoardElement> elements = new List<BoardElement>();
 
     // Start is called before the first frame update
     void Start()
     {
-        _grid = GetComponentInParent<Grid>();
-
-        if (!_grid)
-        {
-            transform.parent = FindObjectOfType<Grid>().transform;
-        }
-
         SnapToNearestCell();
     }
 
     public void SnapToNearestCell()
     {
-        if (!_grid)
+        if (!Board.Grid)
             return;
 
-        Vector3Int cellPos = _grid.WorldToCell(
-            transform.position);
-
-        var newPos = _grid.CellToWorld(cellPos);
-
-        transform.position = newPos;
+        GridPosition = Board.Grid
+            .WorldToCell(transform.position);
     }
 
     public void SnapToNearestCell(Vector3 inputPos)
     {
-        if (!_grid)
+        if (!Board.Grid)
             return;
 
-        Vector3Int cellPos = _grid.WorldToCell(
+        GridPosition = Board.Grid.WorldToCell(
             inputPos);
-
-        var newPos = _grid.CellToWorld(cellPos);
-
-        transform.position = newPos;
     }
 
-    public Vector3Int GetCoordinates()
+    public void Add(BoardElement b)
     {
-        if (!_grid)
-            return Vector3Int.zero;
-
-        return _grid.WorldToCell(transform.position);
+        elements.Add(b);
     }
 
+    public void Remove(BoardElement b)
+    {
+        elements.Remove(b);
+    }
+
+    public List<BoardElement> GetWalls()
+    {
+        var output = elements.FindAll(
+            (element) =>
+           {
+               return element.GetType().Equals(typeof(Wall));
+           }
+         );
+
+        return output;
+    }
+
+    public List<BoardElement> GetAll(Type type)
+    {
+        var output = elements.FindAll(
+            (element) =>
+            {
+                return element.GetType().Equals(type);
+            }
+         );
+
+        return output;
+    }
 }
