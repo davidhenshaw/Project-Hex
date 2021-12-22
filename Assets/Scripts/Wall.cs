@@ -122,7 +122,7 @@ public class Wall : BoardElement
             return;
 
         tileList.Add(anchorTile);
-        anchorTile.Add(this);
+        anchorTile.walls.Add(Direction, this);
     }
 
     void InitTileNeighbor(HexDirection neighborDir, List<Tile> tileList, bool isCorner)
