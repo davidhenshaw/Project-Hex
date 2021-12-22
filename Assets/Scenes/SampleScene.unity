@@ -692,6 +692,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_S
       objectReference: {fileID: 0}
+    - target: {fileID: 5077569685924266467, guid: b7c6539e6cd5c734bb90609f6fb435d9, type: 3}
+      propertyPath: direction
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6389000717566982907, guid: b7c6539e6cd5c734bb90609f6fb435d9, type: 3}
       propertyPath: m_RootOrder
       value: 6

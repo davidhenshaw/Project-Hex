@@ -8,11 +8,13 @@ using System;
 public class Tile : BoardElement
 {
     public readonly List<BoardElement> elements = new List<BoardElement>();
+    public readonly Dictionary<HexDirection, Wall> walls = new Dictionary<HexDirection, Wall>();
+    public readonly Dictionary<HexDirection, Wall> cornerWalls = new Dictionary<HexDirection, Wall>();
 
     // Start is called before the first frame update
     void Start()
     {
-        SnapToNearestCell();
+        //SnapToNearestCell();
     }
 
     public void SnapToNearestCell()
@@ -43,27 +45,4 @@ public class Tile : BoardElement
         elements.Remove(b);
     }
 
-    public List<BoardElement> GetWalls()
-    {
-        var output = elements.FindAll(
-            (element) =>
-           {
-               return element.GetType().Equals(typeof(Wall));
-           }
-         );
-
-        return output;
-    }
-
-    public List<BoardElement> GetAll(Type type)
-    {
-        var output = elements.FindAll(
-            (element) =>
-            {
-                return element.GetType().Equals(type);
-            }
-         );
-
-        return output;
-    }
 }

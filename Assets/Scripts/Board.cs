@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,60 +29,18 @@ public class Board : MonoBehaviour
         }
     }
 
-    public bool CanMove(Tile source, HexDirection dir)
+    public bool CanMove(Vector3Int startPos, HexDirection dir)
     {
+        Vector3Int newPos = startPos.Neighbor(dir);
         Tile destination;
-        var destPos = source.GridPosition.Neighbor(dir);
-
-        tiles.TryGetValue(destPos, out destination);
+        tiles.TryGetValue(newPos, out destination);
 
         if (!destination)
             return false;
 
-        var destWalls = destination.GetWalls();
+        Wall wall;
+        destination.walls.TryGetValue(Wall.Opposite(dir) , out wall);
 
-        //If any one wall is anchored to the source tile and the destination tile,
-        // it will block the desired movement.
-        foreach(BoardElement b in destWalls)
-        {
-            Wall w = (Wall)b;
-
-            if (w.anchors.Contains(source) && w.anchors.Contains(destination))
-                return false;
-        }
-
-        return true;
+        return (wall == null);
     }
-
-    public bool CanMove(Vector3Int sourcePos, HexDirection dir)
-    {
-        Tile source;
-        tiles.TryGetValue(sourcePos, out source);
-        //TODO: Might need to remove this later since it could soft-lock the game
-        if (!source)
-            return false;
-
-        Tile destination;
-        var destPos = source.GridPosition.Neighbor(dir);
-
-        tiles.TryGetValue(destPos, out destination);
-
-        if (!destination)
-            return false;
-
-        var destWalls = destination.GetWalls();
-
-        //If any one wall is anchored to the source tile and the destination tile,
-        // it will block the desired movement.
-        foreach (BoardElement b in destWalls)
-        {
-            Wall w = (Wall)b;
-
-            if (w.anchors.Contains(source) && w.anchors.Contains(destination))
-                return false;
-        }
-
-        return true;
-    }
-
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -41,22 +42,100 @@ public class Wall : BoardElement
 
         return output;
     }
+    public static HexDirection Clockwise( HexDirection incident )
+    {
+        var outputDir = incident + 1;
 
-    public readonly List<BoardElement> anchors = new List<BoardElement>();
+        int output = ((int)outputDir > 5) ?
+            (int)outputDir % 6
+            :
+            (int)outputDir;
+
+        return (HexDirection)output;
+    }
+    private static HexDirection CounterClockwise(HexDirection incident)
+    {
+        var outputDir = incident - 1;
+
+        int output = ((int)outputDir < 0) ?
+            Math.Abs((int)outputDir)
+            :
+            (int)outputDir;
+
+        return (HexDirection)output;
+    }
+    public static bool IsDiagonal(HexDirection incident)
+    {
+        return incident.Equals(HexDirection.NORTHWEST) ||
+               incident.Equals(HexDirection.SOUTHEAST) ||
+               incident.Equals(HexDirection.SOUTHWEST) ||
+               incident.Equals(HexDirection.NORTHWEST); ;
+    }
+
+    //End tiles are tiles touching the 'endpoints' of the wall
+    public readonly List<Tile> endTiles = new List<Tile>();
+    
+    //Edge tiles are tiles touching the face of the wall
+    public readonly List<Tile> edgeTiles = new List<Tile>();
+
+    public readonly Tile anchor;
     [SerializeField]
-    public readonly HexDirection direction;
+    private HexDirection direction;
+
+    public HexDirection Direction {
+        get => direction;
+    }
 
     private void Start()
     {
         base.Start();
 
-        Tile anchor;
-        Board.tiles.TryGetValue(GridPosition, out anchor);
-        anchors.Add(anchor);
-        anchor.Add(this);
+        //Edge tile at the anchor
+        InitTile(GridPosition, edgeTiles);
 
-        Board.tiles.TryGetValue(GridPosition.Neighbor(direction), out anchor);
-        anchors.Add(anchor);
-        anchor.Add(this);
+        //Edge tile opposite the anchor
+        InitTileNeighbor(
+            Direction,
+            edgeTiles,
+            false
+            );
+
+        //End tile clockwise from anchor
+        InitTileNeighbor(
+            Clockwise(Direction),
+            endTiles,
+            true
+            );
+        //End tile counter clockwise from anchor
+        InitTileNeighbor(
+            CounterClockwise(Direction),
+            endTiles,
+            true
+            );
     }
+
+    void InitTile(Vector3Int tilePos, List<Tile> tileList)
+    {
+        Tile anchorTile;
+        Board.tiles.TryGetValue(tilePos, out anchorTile);
+        if (!anchorTile)
+            return;
+
+        tileList.Add(anchorTile);
+        anchorTile.Add(this);
+    }
+
+    void InitTileNeighbor(HexDirection neighborDir, List<Tile> tileList, bool isCorner)
+    {
+        Tile anchorTile;
+        var anchorPosition = GridPosition.Neighbor(neighborDir);
+        Board.tiles.TryGetValue(anchorPosition, out anchorTile);
+        if (!anchorTile)
+            return;
+
+        tileList.Add(anchorTile);
+        if(!isCorner)
+            anchorTile.walls.Add(Opposite(Direction), this);
+    }
+
 }

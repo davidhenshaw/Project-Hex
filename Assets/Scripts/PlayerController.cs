@@ -19,16 +19,10 @@ public class PlayerController : BoardElement
 
     private void Move(HexDirection moveDir)
     {
-        Vector3Int newPos = GridPosition.Neighbor(moveDir);
-        Tile destination;
-        Board.tiles.TryGetValue(newPos, out destination);
-
-        if (!destination)
-            return;
-
         if (!Board.CanMove(GridPosition, moveDir))
             return;
 
+        Vector3Int newPos = GridPosition.Neighbor(moveDir);
         GridPosition = newPos;
     }
 

@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 251313665451864370, guid: fa0bb8f85cd68134abd24838891249f6, type: 3}
       propertyPath: m_Name
-      value: Wall_NW
+      value: Wall_NW Variant
       objectReference: {fileID: 0}
     - target: {fileID: 6634710227097980511, guid: fa0bb8f85cd68134abd24838891249f6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -42,6 +42,10 @@ PrefabInstance:
     - target: {fileID: 6634710227097980511, guid: fa0bb8f85cd68134abd24838891249f6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 8061692162975496840, guid: fa0bb8f85cd68134abd24838891249f6, type: 3}
+      propertyPath: direction
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8159835022756479376, guid: fa0bb8f85cd68134abd24838891249f6, type: 3}
       propertyPath: m_RootOrder
