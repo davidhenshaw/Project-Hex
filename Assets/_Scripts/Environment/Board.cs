@@ -38,8 +38,8 @@ public class Board : MonoBehaviour
         if (!destination)
             return false;
 
-        Wall wall;
-        destination.walls.TryGetValue(Wall.Opposite(dir) , out wall);
+        Pipe wall;
+        destination.pipes.TryGetValue(Pipe.Opposite(dir) , out wall);
 
         return (wall == null);
     }

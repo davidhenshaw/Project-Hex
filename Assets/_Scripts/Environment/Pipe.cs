@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Wall : BoardElement
+public class Pipe : BoardElement
 {
     public static HexDirection Opposite( HexDirection incident)
     {
@@ -72,10 +72,10 @@ public class Wall : BoardElement
                incident.Equals(HexDirection.NORTHWEST); ;
     }
 
-    //End tiles are tiles touching the 'endpoints' of the wall
+    //End tiles are tiles touching the 'endpoints' of the pipe
     public readonly List<Tile> endTiles = new List<Tile>();
     
-    //Edge tiles are tiles touching the face of the wall
+    //Edge tiles are tiles touching the side of the pipe
     public readonly List<Tile> edgeTiles = new List<Tile>();
 
     public readonly Tile anchor;
@@ -86,7 +86,7 @@ public class Wall : BoardElement
         get => direction;
     }
 
-    private void Start()
+    protected override void Start()
     {
         base.Start();
 
@@ -122,7 +122,7 @@ public class Wall : BoardElement
             return;
 
         tileList.Add(anchorTile);
-        anchorTile.walls.Add(Direction, this);
+        anchorTile.pipes.Add(Direction, this);
     }
 
     void InitTileNeighbor(HexDirection neighborDir, List<Tile> tileList, bool isCorner)
@@ -135,7 +135,7 @@ public class Wall : BoardElement
 
         tileList.Add(anchorTile);
         if(!isCorner)
-            anchorTile.walls.Add(Opposite(Direction), this);
+            anchorTile.pipes.Add(Opposite(Direction), this);
     }
 
 }

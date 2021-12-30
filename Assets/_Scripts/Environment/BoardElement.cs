@@ -5,17 +5,6 @@ public abstract class BoardElement : MonoBehaviour
     private Board _board;
     private Vector3Int _gridPos;
 
-    protected void Start()
-    {
-        Tile t;
-        Board.tiles.TryGetValue(_gridPos, out t);
-
-        if (!t)
-            return;
-
-        t.Add(this);
-    }
-
     public Vector3Int GridPosition {
         get
         {
@@ -48,4 +37,18 @@ public abstract class BoardElement : MonoBehaviour
         }
         private set => _board = value;
     }
+
+    protected virtual void Start()
+    {
+        _gridPos = Board.Grid
+            .WorldToCell(transform.position);
+        Tile t;
+        Board.tiles.TryGetValue(_gridPos, out t);
+
+        if (!t)
+            return;
+
+        t.Add(this);
+    }
+
 }

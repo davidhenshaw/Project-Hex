@@ -8,8 +8,8 @@ using System;
 public class Tile : BoardElement
 {
     public readonly List<BoardElement> elements = new List<BoardElement>();
-    public readonly Dictionary<HexDirection, Wall> walls = new Dictionary<HexDirection, Wall>();
-    public readonly Dictionary<HexDirection, Wall> cornerWalls = new Dictionary<HexDirection, Wall>();
+    public readonly Dictionary<HexDirection, Pipe> pipes = new Dictionary<HexDirection, Pipe>();
+    public readonly Dictionary<HexVertex, Pipe> vertexPipes = new Dictionary<HexVertex, Pipe>();
 
     public void SnapToNearestCell()
     {
