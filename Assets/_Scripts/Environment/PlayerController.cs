@@ -1,16 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : BoardElement
+public class PlayerController : BoardElement, IDeathTileInteractable
 {
-    Grid _grid;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        _grid = GetComponentInParent<Grid>();
-    }
+    public event Action Died;
 
     private void Update()
     {
@@ -57,5 +52,10 @@ public class PlayerController : BoardElement
         {
             Move(HexDirection.NORTHWEST);
         }
+    }
+
+    public void Interact()
+    {
+        Died?.Invoke();
     }
 }

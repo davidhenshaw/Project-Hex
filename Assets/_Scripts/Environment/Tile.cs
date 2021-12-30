@@ -11,12 +11,6 @@ public class Tile : BoardElement
     public readonly Dictionary<HexDirection, Wall> walls = new Dictionary<HexDirection, Wall>();
     public readonly Dictionary<HexDirection, Wall> cornerWalls = new Dictionary<HexDirection, Wall>();
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        //SnapToNearestCell();
-    }
-
     public void SnapToNearestCell()
     {
         if (!Board.Grid)
