@@ -1,7 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using metakazz.Hex;
 
 public class PlayerController : BoardElement, IDeathTileInteractable
 {
@@ -21,9 +20,28 @@ public class PlayerController : BoardElement, IDeathTileInteractable
         GridPosition = newPos;
     }
 
+    private void VertexMove(HexVertex moveDir)
+    {
+        if (!Board.CanMove(GridPosition, moveDir))
+            return;
+
+        Vector3Int newPos = GridPosition.Neighbor(moveDir);
+        GridPosition = newPos;
+    }
+
     void HandleInputs()
     {
-        if(Input.GetButtonDown("Move_N"))
+        if(Input.GetKeyDown(KeyCode.Keypad6))
+        {
+            VertexMove(HexVertex.EAST);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Keypad4))
+        {
+            VertexMove(HexVertex.WEST);
+        }
+
+        if (Input.GetButtonDown("Move_N"))
         {
             Move(HexDirection.NORTH);
         }

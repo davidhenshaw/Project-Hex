@@ -1367,6 +1367,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Hex Tile
       objectReference: {fileID: 0}
+    - target: {fileID: 918264241146125054, guid: f601c64a08a625b4bae3a5cd498cb977, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2972140389662265537, guid: f601c64a08a625b4bae3a5cd498cb977, type: 3}
       propertyPath: m_RootOrder
       value: 3

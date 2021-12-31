@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
-using System;
+using metakazz.Hex;
 
 [ExecuteAlways]
 public class Tile : BoardElement

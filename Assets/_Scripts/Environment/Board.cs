@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using metakazz.Hex;
+
 public class Board : MonoBehaviour
 {
     private Grid grid;
@@ -38,9 +40,24 @@ public class Board : MonoBehaviour
         if (!destination)
             return false;
 
-        Pipe wall;
-        destination.pipes.TryGetValue(Pipe.Opposite(dir) , out wall);
+        Pipe pipe;
+        destination.pipes.TryGetValue(HexUtil.Opposite(dir) , out pipe);
 
-        return (wall == null);
+        return (pipe == null);
+    }
+
+    public bool CanMove(Vector3Int startPos, HexVertex dir)
+    {
+        Vector3Int newPos = startPos.Neighbor(dir);
+        Tile destination;
+        tiles.TryGetValue(newPos, out destination);
+
+        if (!destination)
+            return false;
+
+        Pipe pipe;
+        destination.vertexPipes.TryGetValue(HexUtil.Opposite(dir), out pipe);
+
+        return (pipe != null);
     }
 }

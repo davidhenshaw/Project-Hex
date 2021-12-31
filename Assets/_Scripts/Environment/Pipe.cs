@@ -2,87 +2,22 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using metakazz.Hex;
 
 public class Pipe : BoardElement
 {
-    public static HexDirection Opposite( HexDirection incident)
-    {
-        HexDirection output;
 
-        switch(incident)
-        {
-            case HexDirection.NORTH:
-                output = HexDirection.SOUTH;
-                break;
-
-            case HexDirection.NORTHEAST:
-                output = HexDirection.SOUTHWEST;
-                break;
-
-            case HexDirection.SOUTHEAST:
-                output = HexDirection.NORTHWEST;
-                break;
-
-            case HexDirection.SOUTH:
-                output = HexDirection.NORTH;
-                break;
-
-            case HexDirection.SOUTHWEST:
-                output = HexDirection.NORTHEAST;
-                break;
-
-            case HexDirection.NORTHWEST:
-                output = HexDirection.SOUTHEAST;
-                break;
-
-            default:
-                output = incident;
-                break;
-        }
-
-        return output;
-    }
-    public static HexDirection Clockwise( HexDirection incident )
-    {
-        var outputDir = incident + 1;
-
-        int output = ((int)outputDir > 5) ?
-            (int)outputDir % 6
-            :
-            (int)outputDir;
-
-        return (HexDirection)output;
-    }
-    private static HexDirection CounterClockwise(HexDirection incident)
-    {
-        var outputDir = incident - 1;
-
-        int output = ((int)outputDir < 0) ?
-            Math.Abs((int)outputDir)
-            :
-            (int)outputDir;
-
-        return (HexDirection)output;
-    }
-    public static bool IsDiagonal(HexDirection incident)
-    {
-        return incident.Equals(HexDirection.NORTHWEST) ||
-               incident.Equals(HexDirection.SOUTHEAST) ||
-               incident.Equals(HexDirection.SOUTHWEST) ||
-               incident.Equals(HexDirection.NORTHWEST); ;
-    }
-
-    //End tiles are tiles touching the 'endpoints' of the pipe
-    public readonly List<Tile> endTiles = new List<Tile>();
+    //End tiles are tiles touching the vertex of the pipe
+    public readonly List<Tile> vertexTiles = new List<Tile>();
     
-    //Edge tiles are tiles touching the side of the pipe
-    public readonly List<Tile> edgeTiles = new List<Tile>();
+    //Edge tiles are tiles touching the face of the pipe
+    public readonly List<Tile> faceTiles = new List<Tile>();
 
     public readonly Tile anchor;
     [SerializeField]
     private HexDirection direction;
 
-    public HexDirection Direction {
+    public HexDirection FaceDirection {
         get => direction;
     }
 
@@ -91,27 +26,16 @@ public class Pipe : BoardElement
         base.Start();
 
         //Edge tile at the anchor
-        InitTile(GridPosition, edgeTiles);
+        InitTile(GridPosition, faceTiles);
 
-        //Edge tile opposite the anchor
+        //Edge tile opposite the pipe
         InitTileNeighbor(
-            Direction,
-            edgeTiles,
+            FaceDirection,
+            faceTiles,
             false
             );
 
-        //End tile clockwise from anchor
-        InitTileNeighbor(
-            Clockwise(Direction),
-            endTiles,
-            true
-            );
-        //End tile counter clockwise from anchor
-        InitTileNeighbor(
-            CounterClockwise(Direction),
-            endTiles,
-            true
-            );
+        InitVertexNeighbors();
     }
 
     void InitTile(Vector3Int tilePos, List<Tile> tileList)
@@ -122,7 +46,7 @@ public class Pipe : BoardElement
             return;
 
         tileList.Add(anchorTile);
-        anchorTile.pipes.Add(Direction, this);
+        anchorTile.pipes.Add(FaceDirection, this);
     }
 
     void InitTileNeighbor(HexDirection neighborDir, List<Tile> tileList, bool isCorner)
@@ -135,7 +59,45 @@ public class Pipe : BoardElement
 
         tileList.Add(anchorTile);
         if(!isCorner)
-            anchorTile.pipes.Add(Opposite(Direction), this);
+            anchorTile.pipes.Add(HexUtil.Opposite(FaceDirection), this); 
+    }
+
+    void InitVertexNeighbors()
+    {
+        Tile anchorTile;
+        var neighborVerts = HexUtil.EdgeToVertex(FaceDirection);
+
+        //---CLOCKWISE NEIGHBOR---
+
+        HexDirection neighborDir = HexUtil.Clockwise(FaceDirection);
+        var tilePos = GridPosition.Neighbor(neighborDir);
+
+        Board.tiles.TryGetValue(tilePos, out anchorTile);
+        if (anchorTile)
+        {
+            vertexTiles.Add(anchorTile);
+            //Inform the tile which vertex this pipe is touching
+            anchorTile
+                .vertexPipes
+                .Add(neighborVerts[0], this);
+        }
+
+        //---COUNTER CLOCKWISE NEIGHBOR---
+
+        neighborDir = HexUtil.CounterClockwise(FaceDirection);
+        tilePos = GridPosition.Neighbor(neighborDir);
+
+        Board.tiles.TryGetValue(tilePos, out anchorTile);
+        if (anchorTile)
+        {
+            vertexTiles.Add(anchorTile);
+
+            //Inform the tile which vertex this pipe is touching
+            anchorTile
+                .vertexPipes
+                .Add(neighborVerts[1], this);
+        }
+
     }
 
 }

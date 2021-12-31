@@ -1,11 +1,14 @@
 using System;
 
-public enum HexDirection
+namespace metakazz.Hex
 {
-    NORTH, NORTHEAST, SOUTHEAST, SOUTH, SOUTHWEST, NORTHWEST
-}
+    public enum HexDirection
+    {
+        NORTH, NORTHEAST, SOUTHEAST, SOUTH, SOUTHWEST, NORTHWEST
+    }
 
-public enum HexVertex
-{
-    NORTHWEST, NORTHEAST, EAST, SOUTHEAST, SOUTHWEST, WEST
+    public enum HexVertex
+    {
+        NORTHWEST, NORTHEAST, EAST, SOUTHEAST, SOUTHWEST, WEST
+    }
 }
