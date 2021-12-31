@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using metakazz.Hex;
@@ -9,6 +9,9 @@ public class Tile : BoardElement
     public readonly List<BoardElement> elements = new List<BoardElement>();
     public readonly Dictionary<HexDirection, Pipe> pipes = new Dictionary<HexDirection, Pipe>();
     public readonly Dictionary<HexVertex, Pipe> vertexPipes = new Dictionary<HexVertex, Pipe>();
+
+    public event Action<Tile> RotatedClockwise;
+    public event Action<Tile> RotatedCounterClockwise;
 
     public void SnapToNearestCell()
     {
@@ -38,4 +41,15 @@ public class Tile : BoardElement
         elements.Remove(b);
     }
 
+    [ContextMenu("Rotate Clockwise")]
+    public void RotateClockwise()
+    {
+        RotatedClockwise?.Invoke(this);
+    }
+
+    [ContextMenu("Rotate Counter-Clockwise")]
+    public void RotateCounterClockwise()
+    {
+        RotatedCounterClockwise?.Invoke(this);
+    }
 }
