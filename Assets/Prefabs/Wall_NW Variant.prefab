@@ -47,6 +47,10 @@ PrefabInstance:
       propertyPath: direction
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 8061692162975496840, guid: fa0bb8f85cd68134abd24838891249f6, type: 3}
+      propertyPath: _direction
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 8159835022756479376, guid: fa0bb8f85cd68134abd24838891249f6, type: 3}
       propertyPath: m_RootOrder
       value: 0

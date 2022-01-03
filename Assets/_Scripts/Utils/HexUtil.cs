@@ -57,7 +57,7 @@ namespace metakazz.Hex
             var outputDir = incident - 1;
 
             int output = ((int)outputDir < 0) ?
-                Math.Abs((int)outputDir)
+                6 - Math.Abs((int)outputDir)
                 :
                 (int)outputDir;
 

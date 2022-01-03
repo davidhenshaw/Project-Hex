@@ -6,7 +6,6 @@ using metakazz.Hex;
 
 public class Pipe : BoardElement
 {
-
     //End tiles are tiles touching the vertex of the pipe
     public readonly List<Tile> vertexTiles = new List<Tile>();
     
@@ -41,10 +40,10 @@ public class Pipe : BoardElement
         if (anchorTile)
         {
             faceTiles.Add(anchorTile);
+
             anchorTile
                 .pipes
                 .Add(FaceDirection, this);
-            Subscribe(anchorTile);
         }
 
         anchorTile = null;
@@ -53,13 +52,41 @@ public class Pipe : BoardElement
         var anchorPosition = GridPosition.Neighbor(FaceDirection);
         Board.tiles.TryGetValue(anchorPosition, out anchorTile);
         if (anchorTile)
-            {
+        {
             faceTiles.Add(anchorTile);
 
             anchorTile
                 .pipes
                 .Add(HexUtil.Opposite(FaceDirection), this);
-            Subscribe(anchorTile);
+        }
+    }
+
+    void RemoveFaceNeighbors()
+    {
+        Tile anchorTile;
+
+        //Initialize anchor tile
+        Board.tiles.TryGetValue(GridPosition, out anchorTile);
+        if (anchorTile)
+        {
+            faceTiles.Remove(anchorTile);
+            anchorTile
+                .pipes
+                .Remove(FaceDirection);
+        }
+
+        anchorTile = null;
+
+        //Initialize neighbor to anchor tile
+        var anchorPosition = GridPosition.Neighbor(FaceDirection);
+        Board.tiles.TryGetValue(anchorPosition, out anchorTile);
+        if (anchorTile)
+        {
+            faceTiles.Remove(anchorTile);
+
+            anchorTile
+                .pipes
+                .Remove(HexUtil.Opposite(FaceDirection));
         }
     }
 
@@ -103,41 +130,81 @@ public class Pipe : BoardElement
 
     }
 
-    void Subscribe(Tile tile)
+    void RemoveVertexNeighbors()
     {
-        tile.RotatedClockwise += RotateClockwise;
-        tile.RotatedCounterClockwise += RotateCounterClockwise;
+        Tile neighborTile;
+        var neighborVerts = HexUtil.EdgeToVertex(FaceDirection);
+
+        //---CLOCKWISE NEIGHBOR---
+
+        HexDirection neighborDir = HexUtil.Clockwise(FaceDirection);
+        var neighborPos = GridPosition.Neighbor(neighborDir);
+
+        Board.tiles.TryGetValue(neighborPos, out neighborTile);
+        if (neighborTile)
+        {
+            vertexTiles.Remove(neighborTile);
+            //Inform the tile which vertex this pipe is touching
+            neighborTile
+                .vertexPipes
+                .Remove(neighborVerts[0]);
+        }
+
+        neighborTile = null;
+
+        //---COUNTER CLOCKWISE NEIGHBOR---
+
+        neighborDir = HexUtil.CounterClockwise(FaceDirection);
+        neighborPos = GridPosition.Neighbor(neighborDir);
+
+        Board.tiles.TryGetValue(neighborPos, out neighborTile);
+        if (neighborTile)
+        {
+            vertexTiles.Remove(neighborTile);
+
+            //Inform the tile which vertex this pipe is touching
+            neighborTile
+                .vertexPipes
+                .Remove(neighborVerts[1]);
+        }
+
     }
 
-    void Unsubscribe(Tile tile)
-    {
-        tile.RotatedClockwise -= RotateClockwise;
-        tile.RotatedCounterClockwise -= RotateCounterClockwise;
-    }
-
-    void ReAnchor(Tile tile)
+    void InvertAnchorTile(Tile newAnchor)
     {
         _direction = HexUtil.Opposite(_direction);
-        GridPosition = tile.GridPosition;
+        GridPosition = newAnchor.GridPosition;
         transform.Rotate(0, 0, 180);
+        _anchor = newAnchor;
     }
 
-    private void RotateCounterClockwise(Tile tile)
+    public void PreRotate()
     {
-        if(_anchor != tile)
-            ReAnchor(tile);
-
-        _direction = HexUtil.CounterClockwise(_direction);
-        transform.Rotate(0, 0, 60);
+        RemoveFaceNeighbors();
+        RemoveVertexNeighbors();        
     }
 
-    private void RotateClockwise(Tile tile)
+    public void PostRotate()
     {
-        if (_anchor != tile)
-            ReAnchor(tile);
+        InitFaceNeighbors();
+        InitVertexNeighbors();
+    }
+
+    public void RotateClockwise(Tile anchorTile)
+    {
+        if (_anchor != anchorTile)
+            InvertAnchorTile(anchorTile);
 
         _direction = HexUtil.Clockwise(_direction);
         transform.Rotate(0, 0, -60);
     }
 
+    public void RotateCounterClockwise(Tile anchorTile)
+    {
+        if(_anchor != anchorTile)
+            InvertAnchorTile(anchorTile);
+
+        _direction = HexUtil.CounterClockwise(_direction);
+        transform.Rotate(0, 0, 60);
+    }
 }
