@@ -31,14 +31,34 @@ public class PlayerController : BoardElement, IDeathTileInteractable
 
     void HandleInputs()
     {
-        if(Input.GetKeyDown(KeyCode.Keypad6))
+        if (Input.GetKeyDown(KeyCode.Keypad9))
+        {
+            VertexMove(HexVertex.NORTHEAST);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Keypad6))
         {
             VertexMove(HexVertex.EAST);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Keypad3))
+        {
+            VertexMove(HexVertex.SOUTHEAST);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Keypad7))
+        {
+            VertexMove(HexVertex.NORTHWEST);
         }
 
         if (Input.GetKeyDown(KeyCode.Keypad4))
         {
             VertexMove(HexVertex.WEST);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            VertexMove(HexVertex.SOUTHWEST);
         }
 
         if (Input.GetButtonDown("Move_N"))
