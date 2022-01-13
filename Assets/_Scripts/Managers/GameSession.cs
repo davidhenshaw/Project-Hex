@@ -33,6 +33,11 @@ public class GameSession : Singleton<GameSession>
         CurrentState = GameState.PLAY;
     }
 
+    private void Update()
+    {
+        HandleInput();
+    }
+
     private void OnGoalReached()
     {
         CurrentState = GameState.WIN;
@@ -46,7 +51,7 @@ public class GameSession : Singleton<GameSession>
 
     IEnumerator ResetLevel_co()
     {
-        yield return new WaitForSeconds(1.8f);
+        yield return new WaitForSeconds(1.2f);
         Reset();
         SceneLoader.Instance.ReloadLevel();
     }
@@ -54,6 +59,15 @@ public class GameSession : Singleton<GameSession>
     private void Reset()
     {
         CurrentState = GameState.PLAY;
+    }
+
+    void HandleInput()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Reset();
+            SceneLoader.Instance.ReloadLevel();
+        }
     }
 }
 

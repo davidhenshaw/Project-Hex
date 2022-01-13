@@ -7,6 +7,7 @@ using metakazz.Hex;
 
 public class Board : MonoBehaviour
 {
+    public bool isFrozen;
     private Grid grid;
     public readonly Dictionary<Vector3Int, Tile> tiles = new Dictionary<Vector3Int, Tile>();
 
@@ -33,6 +34,9 @@ public class Board : MonoBehaviour
 
     public bool CanMove(Vector3Int startPos, HexDirection dir)
     {
+        if (isFrozen)
+            return false;
+
         Vector3Int newPos = startPos.Neighbor(dir);
         Tile destination;
         tiles.TryGetValue(newPos, out destination);
@@ -48,6 +52,9 @@ public class Board : MonoBehaviour
 
     public bool CanMove(Vector3Int startPos, HexVertex dir)
     {
+        if (isFrozen)
+            return false;
+
         Vector3Int newPos = startPos.Neighbor(dir);
         Tile destination;
         tiles.TryGetValue(newPos, out destination);

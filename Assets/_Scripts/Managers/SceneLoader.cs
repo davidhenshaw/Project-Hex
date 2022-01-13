@@ -39,6 +39,7 @@ public class SceneLoader : PersistentSingleton<SceneLoader>
     [ContextMenu("Reload Scene")]
     public void ReloadLevel()
     {
-        LoadLevel("Gameplay");
+        LoadLevel(gameplayScene.name);
     }
+
 }
