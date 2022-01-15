@@ -11,6 +11,8 @@ public class GameSession : Singleton<GameSession>
     Board board;
     GameState _currentState;
 
+    private float _loadDelay = 1.2f;
+
     public GameState CurrentState {
         get => _currentState;
         set {
@@ -23,6 +25,9 @@ public class GameSession : Singleton<GameSession>
     protected override void Awake()
     {
         base.Awake();
+        if (willSelfDestruct)
+            return;
+
         Goal.GoalReached += OnGoalReached;
         player.Died += OnPlayerDied;
     }
@@ -41,6 +46,7 @@ public class GameSession : Singleton<GameSession>
     private void OnGoalReached()
     {
         CurrentState = GameState.WIN;
+        StartCoroutine(LoadNextLevel_co());
     }
 
     private void OnPlayerDied()
@@ -51,14 +57,26 @@ public class GameSession : Singleton<GameSession>
 
     IEnumerator ResetLevel_co()
     {
-        yield return new WaitForSeconds(1.2f);
+        yield return new WaitForSeconds(_loadDelay);
         Reset();
         SceneLoader.Instance.ReloadLevel();
+    }
+
+    IEnumerator LoadNextLevel_co()
+    {
+        yield return new WaitForSeconds(_loadDelay);
+        Reset();
+        SceneLoader.Instance.LoadNextLevel();
     }
 
     private void Reset()
     {
         CurrentState = GameState.PLAY;
+    }
+
+    private void OnDestroy()
+    {
+        Goal.GoalReached -= OnGoalReached;
     }
 
     void HandleInput()

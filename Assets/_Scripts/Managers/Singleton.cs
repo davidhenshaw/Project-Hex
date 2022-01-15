@@ -10,12 +10,17 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         get;
         private set;
     }
+    protected bool willSelfDestruct {
+        get;
+        private set;
+    }
 
     protected virtual void Awake()
     {
         if(Instance != null)
         {
             Destroy(gameObject);
+            willSelfDestruct = true;
             return;
         }
 
