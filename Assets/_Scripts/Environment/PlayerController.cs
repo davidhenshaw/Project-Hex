@@ -1,10 +1,17 @@
 using System;
 using UnityEngine;
 using metakazz.Hex;
+using DG.Tweening;
 
 public class PlayerController : BoardElement, IDeathTileInteractable
 {
     public event Action Died;
+    private Collider2D _collider;
+
+    private void Awake()
+    {
+        _collider = GetComponent<Collider2D>();
+    }
 
     private void Update()
     {
@@ -17,7 +24,18 @@ public class PlayerController : BoardElement, IDeathTileInteractable
             return;
 
         Vector3Int newPos = GridPosition.Neighbor(moveDir);
-        GridPosition = newPos;
+
+        var worldPos = Board.grid.CellToWorld(newPos);
+
+        _collider.enabled = false;
+        transform
+            .DOMove(worldPos, 0.3f)
+            .SetEase(Ease.OutQuad)
+            .OnComplete( ()=>
+            {
+                GridPosition = newPos;
+                _collider.enabled = true;
+            });
     }
 
     private void VertexMove(HexVertex moveDir)
@@ -26,7 +44,18 @@ public class PlayerController : BoardElement, IDeathTileInteractable
             return;
 
         Vector3Int newPos = GridPosition.Neighbor(moveDir);
-        GridPosition = newPos;
+
+        var worldPos = Board.grid.CellToWorld(newPos);
+
+        _collider.enabled = false;
+        transform
+            .DOMove(worldPos, 0.3f)
+            .SetEase(Ease.OutQuad)
+            .OnComplete(() =>
+            {
+                GridPosition = newPos;
+                _collider.enabled = true;
+            });
     }
 
     void HandleInputs()

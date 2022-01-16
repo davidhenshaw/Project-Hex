@@ -8,17 +8,9 @@ using metakazz.Hex;
 public class Board : MonoBehaviour
 {
     public bool isFrozen;
-    private Grid grid;
     public readonly Dictionary<Vector3Int, Tile> tiles = new Dictionary<Vector3Int, Tile>();
 
-    public Grid Grid {
-        get {
-            if (!grid)
-                grid = GetComponent<Grid>();
-
-            return grid;
-        }
-    }
+    public Grid grid { get; private set; }
 
     // Start is called before the first frame update
     void Awake()

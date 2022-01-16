@@ -8,7 +8,6 @@ public class GameSession : Singleton<GameSession>
     public event Action<GameState, GameState> StateChanged;
 
     [SerializeField] PlayerController player;
-    Board board;
     GameState _currentState;
 
     private float _loadDelay = 1.2f;

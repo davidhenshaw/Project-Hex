@@ -12,19 +12,19 @@ public class Tile : BoardElement
 
     public void SnapToNearestCell()
     {
-        if (!Board.Grid)
+        if (!Board.grid)
             return;
 
-        GridPosition = Board.Grid
+        GridPosition = Board.grid
             .WorldToCell(transform.position);
     }
 
     public void SnapToNearestCell(Vector3 inputPos)
     {
-        if (!Board.Grid)
+        if (!Board.grid)
             return;
 
-        GridPosition = Board.Grid.WorldToCell(
+        GridPosition = Board.grid.WorldToCell(
             inputPos);
     }
 
