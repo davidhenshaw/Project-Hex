@@ -61,10 +61,20 @@ public class SceneLoader : PersistentSingleton<SceneLoader>
         LoadLevel(nextIndex);
     }
 
+    public void LoadPrevLevel()
+    {
+        var currIndex = gameplayScene.buildIndex;
+        var prevIndex = currIndex - 1;
+
+        if (prevIndex < 1)
+            return;
+
+        LoadLevel(prevIndex);
+    }
+
     [ContextMenu("Reload Scene")]
     public void ReloadLevel()
     {
         LoadLevel(gameplayScene.name);
     }
-
 }
