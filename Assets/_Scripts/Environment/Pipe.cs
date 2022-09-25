@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using metakazz.Hex;
+using DG.Tweening;
 
 public class Pipe : BoardElement
 {
@@ -16,6 +17,8 @@ public class Pipe : BoardElement
 
     [SerializeField]
     private HexDirection _direction;
+    [SerializeField]
+    private float _rotationSpeed = 0.3f;
 
     public HexDirection FaceDirection {
         get => _direction;
@@ -196,7 +199,10 @@ public class Pipe : BoardElement
             InvertAnchorTile(anchorTile);
 
         _direction = HexUtil.Clockwise(_direction);
-        transform.Rotate(0, 0, -60);
+        transform
+            .DORotate(transform.rotation.eulerAngles + new Vector3(0, 0, -60),
+                _rotationSpeed)
+            .SetEase(Ease.OutBack);
     }
 
     public void RotateCounterClockwise(Tile anchorTile)
@@ -205,6 +211,9 @@ public class Pipe : BoardElement
             InvertAnchorTile(anchorTile);
 
         _direction = HexUtil.CounterClockwise(_direction);
-        transform.Rotate(0, 0, 60);
+        transform
+            .DORotate(transform.rotation.eulerAngles + new Vector3(0, 0, 60),
+                _rotationSpeed)
+            .SetEase(Ease.OutBack);
     }
 }

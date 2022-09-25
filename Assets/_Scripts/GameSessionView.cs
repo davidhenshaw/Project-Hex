@@ -1,16 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameSessionView : MonoBehaviour
 {
     public GameObject winDisplay;
     public GameObject loseDisplay;
+    public TMP_Text levelTitle;
 
-    void Start()
+    private void Awake()
     {
         GameSession.InstanceChanged += () => SubscribeToEvents();
         SubscribeToEvents();
+
+        levelTitle.text = SceneManager.GetActiveScene().name;
     }
 
     void SubscribeToEvents()
@@ -18,6 +23,16 @@ public class GameSessionView : MonoBehaviour
         GameSession
             .Instance
             .StateChanged += OnStateChange;
+
+        SceneManager.sceneLoaded += OnLevelLoad;
+    }
+
+    private void OnLevelLoad(Scene scene, LoadSceneMode mode)
+    {
+        if(scene.name.StartsWith("Level"))
+        {
+            levelTitle.text = scene.name;
+        }
     }
 
     private void OnStateChange(GameState oldState, GameState newState)

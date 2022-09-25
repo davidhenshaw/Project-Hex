@@ -6,39 +6,16 @@ namespace metakazz.Hex
     {
         public static HexDirection Opposite(HexDirection incident)
         {
-            HexDirection output;
-
-            switch (incident)
+            var output = incident switch
             {
-                case HexDirection.NORTH:
-                    output = HexDirection.SOUTH;
-                    break;
-
-                case HexDirection.NORTHEAST:
-                    output = HexDirection.SOUTHWEST;
-                    break;
-
-                case HexDirection.SOUTHEAST:
-                    output = HexDirection.NORTHWEST;
-                    break;
-
-                case HexDirection.SOUTH:
-                    output = HexDirection.NORTH;
-                    break;
-
-                case HexDirection.SOUTHWEST:
-                    output = HexDirection.NORTHEAST;
-                    break;
-
-                case HexDirection.NORTHWEST:
-                    output = HexDirection.SOUTHEAST;
-                    break;
-
-                default:
-                    output = incident;
-                    break;
-            }
-
+                HexDirection.NORTH => HexDirection.SOUTH,
+                HexDirection.NORTHEAST => HexDirection.SOUTHWEST,
+                HexDirection.SOUTHEAST => HexDirection.NORTHWEST,
+                HexDirection.SOUTH => HexDirection.NORTH,
+                HexDirection.SOUTHWEST => HexDirection.NORTHEAST,
+                HexDirection.NORTHWEST => HexDirection.SOUTHEAST,
+                _ => incident,
+            };
             return output;
         }
         public static HexDirection Clockwise(HexDirection incident)
@@ -72,39 +49,16 @@ namespace metakazz.Hex
         }
         public static HexVertex Opposite(HexVertex incident)
         {
-            HexVertex output;
-
-            switch (incident)
+            var output = incident switch
             {
-                case HexVertex.NORTHWEST:
-                    output = HexVertex.SOUTHEAST;
-                    break;
-
-                case HexVertex.NORTHEAST:
-                    output = HexVertex.SOUTHWEST;
-                    break;
-
-                case HexVertex.EAST:
-                    output = HexVertex.WEST;
-                    break;
-
-                case HexVertex.SOUTHEAST:
-                    output = HexVertex.NORTHWEST;
-                    break;
-
-                case HexVertex.SOUTHWEST:
-                    output = HexVertex.NORTHEAST;
-                    break;
-
-                case HexVertex.WEST:
-                    output = HexVertex.EAST;
-                    break;
-
-                default:
-                    output = incident;
-                    break;
-            }
-
+                HexVertex.NORTHWEST => HexVertex.SOUTHEAST,
+                HexVertex.NORTHEAST => HexVertex.SOUTHWEST,
+                HexVertex.EAST => HexVertex.WEST,
+                HexVertex.SOUTHEAST => HexVertex.NORTHWEST,
+                HexVertex.SOUTHWEST => HexVertex.NORTHEAST,
+                HexVertex.WEST => HexVertex.EAST,
+                _ => incident,
+            };
             return output;
         }
 

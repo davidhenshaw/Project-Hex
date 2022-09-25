@@ -73,7 +73,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -351708773
-  m_SortingLayer: 2
+  m_SortingLayer: -1
   m_SortingOrder: 0
   m_Sprite: {fileID: -7371491302934811483, guid: 45b71837a6c1dd54eb2322f853136d3b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -100,6 +100,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   connections:
   - {fileID: 5499527354364458600}
+  _connectionLinePrefab: {fileID: 4054714311675754436, guid: b2130a70cd00fcf43a8da826aa7b3c68, type: 3}
+  _connLineColor: {r: 0, g: 0, b: 0, a: 0}
+  _connLineFlashColor: {r: 0, g: 0, b: 0, a: 0}
+  _flashDuration: 0
 --- !u!61 &5499527354364458602
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -225,7 +229,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -351708773
-  m_SortingLayer: 2
+  m_SortingLayer: -1
   m_SortingOrder: 1
   m_Sprite: {fileID: -1907253454297212924, guid: 45b71837a6c1dd54eb2322f853136d3b, type: 3}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
@@ -310,7 +314,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -351708773
-  m_SortingLayer: 2
+  m_SortingLayer: -1
   m_SortingOrder: 0
   m_Sprite: {fileID: 2747690628134850419, guid: 16037dbd798344f57a526d53d48f5ead, type: 3}
   m_Color: {r: 0.449, g: 0.35700977, b: 0.35700977, a: 1}

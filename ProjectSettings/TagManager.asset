@@ -38,12 +38,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Default
-    uniqueID: 0
-    locked: 0
   - name: Board
     uniqueID: 2155756317
     locked: 0
   - name: Actors
     uniqueID: 3943258523
+    locked: 0
+  - name: Default
+    uniqueID: 0
     locked: 0

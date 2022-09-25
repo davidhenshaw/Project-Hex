@@ -55,7 +55,7 @@ public class SceneLoader : PersistentSingleton<SceneLoader>
         var currIndex = gameplayScene.buildIndex;
         var nextIndex = currIndex + 1;
 
-        if (nextIndex >= SceneManager.sceneCountInBuildSettings)
+        if (nextIndex >= SceneManager.sceneCountInBuildSettings - 1)
             return;
 
         LoadLevel(nextIndex);
@@ -66,7 +66,7 @@ public class SceneLoader : PersistentSingleton<SceneLoader>
         var currIndex = gameplayScene.buildIndex;
         var prevIndex = currIndex - 1;
 
-        if (prevIndex < 1)
+        if (prevIndex < 0)
             return;
 
         LoadLevel(prevIndex);

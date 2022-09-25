@@ -8,6 +8,9 @@ public class PlayerController : BoardElement, IDeathTileInteractable
     public event Action Died;
     private Collider2D _collider;
 
+    [SerializeField]
+    private float _moveSpeed = 0.3f;
+
     private void Awake()
     {
         _collider = GetComponent<Collider2D>();
@@ -29,7 +32,7 @@ public class PlayerController : BoardElement, IDeathTileInteractable
 
         _collider.enabled = false;
         transform
-            .DOMove(worldPos, 0.3f)
+            .DOMove(worldPos, _moveSpeed)
             .SetEase(Ease.OutQuad)
             .OnComplete( ()=>
             {
@@ -49,7 +52,7 @@ public class PlayerController : BoardElement, IDeathTileInteractable
 
         _collider.enabled = false;
         transform
-            .DOMove(worldPos, 0.3f)
+            .DOMove(worldPos, _moveSpeed)
             .SetEase(Ease.OutQuad)
             .OnComplete(() =>
             {

@@ -71,7 +71,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -351708773
-  m_SortingLayer: 2
+  m_SortingLayer: -1
   m_SortingOrder: 0
   m_Sprite: {fileID: 6671129100014354366, guid: 45b71837a6c1dd54eb2322f853136d3b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -97,6 +97,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connections: []
+  _connectionLinePrefab: {fileID: 4054714311675754436, guid: b2130a70cd00fcf43a8da826aa7b3c68, type: 3}
+  _connLineColor: {r: 1, g: 1, b: 1, a: 1}
+  _connLineFlashColor: {r: 0.41821158, g: 1, b: 0, a: 1}
+  _flashDuration: 0.25
 --- !u!61 &8670668392055773448
 BoxCollider2D:
   m_ObjectHideFlags: 0
