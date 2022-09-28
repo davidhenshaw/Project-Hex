@@ -63,34 +63,30 @@ public class PlayerController : BoardElement, IDeathTileInteractable
 
     void HandleInputs()
     {
-        if (Input.GetKeyDown(KeyCode.Keypad9))
+        if (Input.GetButton("Move_E"))
         {
-            VertexMove(HexVertex.NORTHEAST);
+            if (Input.GetButtonDown("Move_N"))
+            {
+                Move(HexDirection.NORTHEAST);
+            }
+            else if(Input.GetButtonDown("Move_S"))
+            {
+                Move(HexDirection.SOUTHEAST);
+            }
+            return;
         }
 
-        if (Input.GetKeyDown(KeyCode.Keypad6))
+        if (Input.GetButton("Move_W"))
         {
-            VertexMove(HexVertex.EAST);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Keypad3))
-        {
-            VertexMove(HexVertex.SOUTHEAST);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Keypad7))
-        {
-            VertexMove(HexVertex.NORTHWEST);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Keypad4))
-        {
-            VertexMove(HexVertex.WEST);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Keypad1))
-        {
-            VertexMove(HexVertex.SOUTHWEST);
+            if (Input.GetButtonDown("Move_N"))
+            {
+                Move(HexDirection.NORTHWEST);
+            }
+            else if (Input.GetButtonDown("Move_S"))
+            {
+                Move(HexDirection.SOUTHWEST);
+            }
+            return;
         }
 
         if (Input.GetButtonDown("Move_N"))
@@ -98,29 +94,9 @@ public class PlayerController : BoardElement, IDeathTileInteractable
             Move(HexDirection.NORTH);
         }
 
-        if (Input.GetButtonDown("Move_NE"))
-        {
-            Move(HexDirection.NORTHEAST);
-        }
-
-        if (Input.GetButtonDown("Move_SE"))
-        {
-            Move(HexDirection.SOUTHEAST);
-        }
-
         if (Input.GetButtonDown("Move_S"))
         {
             Move(HexDirection.SOUTH);
-        }
-
-        if (Input.GetButtonDown("Move_SW"))
-        {
-            Move(HexDirection.SOUTHWEST);
-        }
-
-        if (Input.GetButtonDown("Move_NW"))
-        {
-            Move(HexDirection.NORTHWEST);
         }
     }
 
