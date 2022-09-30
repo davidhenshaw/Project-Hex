@@ -4,7 +4,7 @@ namespace metakazz.Hex
 {
     public enum HexDirection
     {
-        NORTH, NORTHEAST, SOUTHEAST, SOUTH, SOUTHWEST, NORTHWEST
+        NORTH = 0, NORTHEAST = 1, SOUTHEAST = 2, SOUTH = 3, SOUTHWEST = 4, NORTHWEST = 5
     }
 
     public enum HexVertex

@@ -9,6 +9,9 @@ public class PlayerController : BoardElement, IDeathTileInteractable
     private Collider2D _collider;
 
     [SerializeField]
+    private GameObject _dirIndicator;
+
+    [SerializeField]
     private float _moveSpeed = 0.3f;
 
     private void Awake()
@@ -67,10 +70,12 @@ public class PlayerController : BoardElement, IDeathTileInteractable
         {
             if (Input.GetButton("Move_N"))
             {
+                SetDirIndicator(HexDirection.NORTHEAST);
                 Move(HexDirection.NORTHEAST);
             }
             else if(Input.GetButton("Move_S"))
             {
+                SetDirIndicator(HexDirection.SOUTHEAST);
                 Move(HexDirection.SOUTHEAST);
             }
             return;
@@ -81,25 +86,33 @@ public class PlayerController : BoardElement, IDeathTileInteractable
             if (Input.GetButton("Move_N"))
             {
                 Move(HexDirection.NORTHWEST);
+                SetDirIndicator(HexDirection.NORTHWEST);
             }
             else if (Input.GetButton("Move_S"))
             {
                 Move(HexDirection.SOUTHWEST);
+                SetDirIndicator(HexDirection.SOUTHWEST);
             }
             return;
         }
 
         if(Input.GetButtonDown("Move_N"))
         {
+            SetDirIndicator(HexDirection.NORTH);
             Move(HexDirection.NORTH);
         }        
         
         if(Input.GetButtonDown("Move_S"))
         {
+            SetDirIndicator(HexDirection.SOUTH);
             Move(HexDirection.SOUTH);
         }
     }
 
+    void SetDirIndicator(HexDirection dir)
+    {
+        _dirIndicator.transform.rotation = Quaternion.Euler(0,0, HexUtil.ToAngle(dir));
+    }
     public void Interact()
     {
         Died?.Invoke();

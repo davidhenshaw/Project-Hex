@@ -61,6 +61,16 @@ namespace metakazz.Hex
             };
             return output;
         }
+        
+        /// <summary>
+        /// Converts Hex Direction to an angle in degrees (clockwise). 0 degrees is the same as Vector2.Up
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <returns></returns>
+        public static float ToAngle(HexDirection dir)
+        {
+            return (int)dir * -60.0f;
+        }
 
         /// <summary>
         /// <para>
