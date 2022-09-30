@@ -3,9 +3,17 @@ using UnityEngine;
 using metakazz.Hex;
 using DG.Tweening;
 
-public class PlayerController : BoardElement, IDeathTileInteractable
+public interface IMover
+{
+    event Action<Vector3Int, Vector3Int> Moved;
+    void Move(Vector3Int moveDir);
+}
+
+public class PlayerController : BoardElement, IDeathTileInteractable, IMover
 {
     public event Action Died;
+    public event Action<Vector3Int, Vector3Int> Moved;
+
     private Collider2D _collider;
 
     [SerializeField]
@@ -24,24 +32,31 @@ public class PlayerController : BoardElement, IDeathTileInteractable
         HandleInputs();
     }
 
-    private void Move(HexDirection moveDir)
+    public void Move(Vector3Int to)
+    {
+        var worldPos = Board.grid.CellToWorld(to);
+
+        Moved?.Invoke(GridPosition, to);
+
+        _collider.enabled = false;
+        transform
+            .DOMove(worldPos, _moveSpeed)
+            .SetEase(Ease.OutQuad)
+            .OnComplete(() =>
+            {
+                GridPosition = to;
+                _collider.enabled = true;
+            });
+    }
+
+    private void MoveDir(HexDirection moveDir)
     {
         if (!Board.CanMove(GridPosition, moveDir))
             return;
 
         Vector3Int newPos = GridPosition.Neighbor(moveDir);
 
-        var worldPos = Board.grid.CellToWorld(newPos);
-
-        _collider.enabled = false;
-        transform
-            .DOMove(worldPos, _moveSpeed)
-            .SetEase(Ease.OutQuad)
-            .OnComplete( ()=>
-            {
-                GridPosition = newPos;
-                _collider.enabled = true;
-            });
+        Move(newPos);
     }
 
     private void VertexMove(HexVertex moveDir)
@@ -71,12 +86,12 @@ public class PlayerController : BoardElement, IDeathTileInteractable
             if (Input.GetButton("Move_N"))
             {
                 SetDirIndicator(HexDirection.NORTHEAST);
-                Move(HexDirection.NORTHEAST);
+                MoveDir(HexDirection.NORTHEAST);
             }
             else if(Input.GetButton("Move_S"))
             {
                 SetDirIndicator(HexDirection.SOUTHEAST);
-                Move(HexDirection.SOUTHEAST);
+                MoveDir(HexDirection.SOUTHEAST);
             }
             return;
         }
@@ -85,12 +100,12 @@ public class PlayerController : BoardElement, IDeathTileInteractable
         {
             if (Input.GetButton("Move_N"))
             {
-                Move(HexDirection.NORTHWEST);
+                MoveDir(HexDirection.NORTHWEST);
                 SetDirIndicator(HexDirection.NORTHWEST);
             }
             else if (Input.GetButton("Move_S"))
             {
-                Move(HexDirection.SOUTHWEST);
+                MoveDir(HexDirection.SOUTHWEST);
                 SetDirIndicator(HexDirection.SOUTHWEST);
             }
             return;
@@ -99,13 +114,13 @@ public class PlayerController : BoardElement, IDeathTileInteractable
         if(Input.GetButtonDown("Move_N"))
         {
             SetDirIndicator(HexDirection.NORTH);
-            Move(HexDirection.NORTH);
+            MoveDir(HexDirection.NORTH);
         }        
         
         if(Input.GetButtonDown("Move_S"))
         {
             SetDirIndicator(HexDirection.SOUTH);
-            Move(HexDirection.SOUTH);
+            MoveDir(HexDirection.SOUTH);
         }
     }
 
