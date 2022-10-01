@@ -83,12 +83,12 @@ public class PlayerController : BoardElement, IDeathTileInteractable, IMover
     {
         if (Input.GetButton("Move_E"))
         {
-            if (Input.GetButton("Move_N"))
+            if (Input.GetButtonDown("Move_N"))
             {
                 SetDirIndicator(HexDirection.NORTHEAST);
                 MoveDir(HexDirection.NORTHEAST);
             }
-            else if(Input.GetButton("Move_S"))
+            else if(Input.GetButtonDown("Move_S"))
             {
                 SetDirIndicator(HexDirection.SOUTHEAST);
                 MoveDir(HexDirection.SOUTHEAST);
@@ -98,12 +98,12 @@ public class PlayerController : BoardElement, IDeathTileInteractable, IMover
 
         if (Input.GetButton("Move_W"))
         {
-            if (Input.GetButton("Move_N"))
+            if (Input.GetButtonDown("Move_N"))
             {
                 MoveDir(HexDirection.NORTHWEST);
                 SetDirIndicator(HexDirection.NORTHWEST);
             }
-            else if (Input.GetButton("Move_S"))
+            else if (Input.GetButtonDown("Move_S"))
             {
                 MoveDir(HexDirection.SOUTHWEST);
                 SetDirIndicator(HexDirection.SOUTHWEST);

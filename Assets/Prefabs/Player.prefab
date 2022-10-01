@@ -9,11 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2863341122590660967}
-  - component: {fileID: 2863341122590660966}
   - component: {fileID: 2863341122590660961}
+  - component: {fileID: 2863341122590660966}
   - component: {fileID: 2863341122590660960}
   - component: {fileID: 2863341122590660963}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35,6 +35,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2863341122590660961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2863341122590660964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03e0451795c1a6d49973742a2ea5fbaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dirIndicator: {fileID: 4265979484029446876}
+  _moveSpeed: 0.2
 --- !u!212 &2863341122590660966
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -86,20 +100,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2863341122590660961
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2863341122590660964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03e0451795c1a6d49973742a2ea5fbaf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _dirIndicator: {fileID: 4265979484029446876}
-  _moveSpeed: 0.2
 --- !u!58 &2863341122590660960
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -146,7 +146,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5364797164908017197}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Dir Indicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -178,7 +178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2291729151021766832}
   - component: {fileID: 6528331390305658109}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}

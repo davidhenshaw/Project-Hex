@@ -33,8 +33,18 @@ public class Board : MonoBehaviour
         Tile destination;
         tiles.TryGetValue(newPos, out destination);
 
+        // if there is no tile at the next grid position
         if (!destination)
             return false;
+
+        foreach(BoardElement b in destination.elements)
+        {
+            // if the element is contained within the mask. If so, movement is blocked
+            if( b.gameObject.layer == LayerMask.NameToLayer("Air"))
+            {
+                return false;
+            }
+        }
 
         Pipe pipe;
         destination.pipes.TryGetValue(HexUtil.Opposite(dir) , out pipe);
