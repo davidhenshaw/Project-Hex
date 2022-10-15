@@ -8,14 +8,14 @@ using UnityEngine;
 public class ElementMovement : BoardElement
 {
     public event Action<Vector3Int, Vector3Int> Moved;
-    Collider2D _collider;
+    Collider _collider;
 
     [SerializeField]
     float _moveSpeed = 0.3f;
 
     private void Awake()
     {
-        _collider = GetComponent<Collider2D>();
+        _collider = GetComponent<Collider>();
     }
 
     public void MoveDir(HexDirection moveDir)

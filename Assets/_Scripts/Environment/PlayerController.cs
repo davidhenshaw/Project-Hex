@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     public event Action Died;
     private ElementMovement _mover;
+    private BeeBehavior _beehaviour;
 
     [SerializeField]
     private GameObject _dirIndicator;
@@ -14,6 +15,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         _mover = GetComponent<ElementMovement>();
+        _beehaviour = GetComponent<BeeBehavior>();
     }
 
     private void Update()
@@ -63,6 +65,11 @@ public class PlayerController : MonoBehaviour
         {
             SetDirIndicator(HexDirection.SOUTH);
             _mover.MoveDir(HexDirection.SOUTH);
+        }
+
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            _beehaviour.TriggerInteract();
         }
     }
 
