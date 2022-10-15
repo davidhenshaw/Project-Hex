@@ -9,7 +9,7 @@ public interface IMover
     void Move(Vector3Int moveDir);
 }
 
-public class PlayerController : BoardElement, IDeathTileInteractable, IMover
+public class PlayerController : BoardElement, IMover
 {
     public event Action Died;
     public event Action<Vector3Int, Vector3Int> Moved;
@@ -57,26 +57,6 @@ public class PlayerController : BoardElement, IDeathTileInteractable, IMover
         Vector3Int newPos = GridPosition.Neighbor(moveDir);
 
         Move(newPos);
-    }
-
-    private void VertexMove(HexVertex moveDir)
-    {
-        if (!Board.CanMove(GridPosition, moveDir))
-            return;
-
-        Vector3Int newPos = GridPosition.Neighbor(moveDir);
-
-        var worldPos = Board.grid.CellToWorld(newPos);
-
-        _collider.enabled = false;
-        transform
-            .DOMove(worldPos, _moveSpeed)
-            .SetEase(Ease.OutQuad)
-            .OnComplete(() =>
-            {
-                GridPosition = newPos;
-                _collider.enabled = true;
-            });
     }
 
     void HandleInputs()

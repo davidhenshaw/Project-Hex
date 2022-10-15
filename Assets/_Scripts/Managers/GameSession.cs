@@ -27,7 +27,6 @@ public class GameSession : Singleton<GameSession>
         if (willSelfDestruct)
             return;
 
-        Goal.GoalReached += OnGoalReached;
         player.Died += OnPlayerDied;
     }
 
@@ -75,7 +74,6 @@ public class GameSession : Singleton<GameSession>
 
     private void OnDestroy()
     {
-        Goal.GoalReached -= OnGoalReached;
     }
 
     void HandleInput()

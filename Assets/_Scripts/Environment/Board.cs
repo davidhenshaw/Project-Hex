@@ -46,27 +46,7 @@ public class Board : MonoBehaviour
             }
         }
 
-        Pipe pipe;
-        destination.pipes.TryGetValue(HexUtil.Opposite(dir) , out pipe);
-
-        return (pipe == null);
+        return true;
     }
 
-    public bool CanMove(Vector3Int startPos, HexVertex dir)
-    {
-        if (isFrozen)
-            return false;
-
-        Vector3Int newPos = startPos.Neighbor(dir);
-        Tile destination;
-        tiles.TryGetValue(newPos, out destination);
-
-        if (!destination)
-            return false;
-
-        Pipe pipe;
-        destination.vertexPipes.TryGetValue(HexUtil.Opposite(dir), out pipe);
-
-        return (pipe != null);
-    }
 }

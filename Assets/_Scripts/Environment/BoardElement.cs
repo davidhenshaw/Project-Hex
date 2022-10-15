@@ -8,8 +8,6 @@ public abstract class BoardElement : MonoBehaviour
     public Vector3Int GridPosition {
         get
         {
-            _gridPos = Board.grid
-                        .WorldToCell(transform.position);
             return _gridPos;
         }
         set
