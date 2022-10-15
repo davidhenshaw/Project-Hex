@@ -3,26 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using metakazz.Hex;
 
-//[ExecuteAlways]
-public class Tile : BoardElement
+public class Tile : MonoBehaviour
 {
+    private Board _board;
+    public Vector3Int GridPosition
+    {
+        get;
+        private set;
+    }
+    private Vector3Int _currGridPos;
     public readonly List<BoardElement> elements = new List<BoardElement>();
 
-    public void SnapToNearestCell()
+    private void Awake()
     {
-        if (!Board.grid)
-            return;
+        _board = GetComponentInParent<Board>();
+    }
 
-        GridPosition = Board.grid
-            .WorldToCell(transform.position);
+    public void InitPosition()
+    {
+        GridPosition = _board.grid.WorldToCell(transform.position);
     }
 
     public void SnapToNearestCell(Vector3 inputPos)
     {
-        if (!Board.grid)
+        if (!_board.grid)
             return;
 
-        GridPosition = Board.grid.WorldToCell(
+        GridPosition = _board.grid.WorldToCell(
             inputPos);
     }
 

@@ -25,13 +25,13 @@ public class BoardFollower : BoardElement, IMover
 
         Moved?.Invoke(GridPosition, to);
 
+        SetGridPosition(to);
         _collider.enabled = false;
         transform
             .DOMove(worldPos, _moveSpeed)
             .SetEase(Ease.OutQuad)
             .OnComplete(() =>
             {
-                GridPosition = to;
                 _collider.enabled = true;
             });
     }

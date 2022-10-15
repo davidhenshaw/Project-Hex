@@ -3,28 +3,30 @@
 public abstract class BoardElement : MonoBehaviour
 {
     private Board _board;
-    private Vector3Int _gridPos;
-
-    public Vector3Int GridPosition {
-        get
-        {
-            return _gridPos;
-        }
-        set
-        {
-
-            Tile t;
-            Board.tiles.TryGetValue(_gridPos, out t);
-            t.Remove(this);
-
-            _gridPos = value;
-            transform.position = Board.grid
-                                    .CellToWorld(_gridPos);
-
-            Board.tiles.TryGetValue(value, out t);
-            t.Add(this);
-        }
+    public Vector3Int GridPosition 
+    {
+        get;
+        private set;
     }
+
+
+    public void SetGridPosition(Vector3Int value)
+    {
+        Tile fromTile;
+        Tile toTile;
+        Board.tiles.TryGetValue(GridPosition, out fromTile);
+        Board.tiles.TryGetValue(value, out toTile);
+
+        if (!toTile)
+            return;
+
+        fromTile.Remove(this);
+
+        GridPosition = value;
+
+        toTile.Add(this);
+    }
+
     protected Board Board {
         get
         {
@@ -38,15 +40,19 @@ public abstract class BoardElement : MonoBehaviour
 
     protected virtual void Start()
     {
-        _gridPos = Board.grid
+        GridPosition = Board.grid
             .WorldToCell(transform.position);
         Tile t;
-        Board.tiles.TryGetValue(_gridPos, out t);
+        Board.tiles.TryGetValue(GridPosition, out t);
 
         if (!t)
             return;
 
         t.Add(this);
+
+        //Snap to this tile's center
+        transform.position = Board.grid
+                                .CellToWorld(GridPosition);
     }
 
 }

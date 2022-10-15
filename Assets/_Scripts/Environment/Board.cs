@@ -13,13 +13,14 @@ public class Board : MonoBehaviour
     public Grid grid { get; private set; }
 
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
         var boardElements = GetComponentsInChildren<Tile>();
         grid = GetComponent<Grid>();
 
         foreach (Tile t in boardElements)
         {
+            t.InitPosition();
             tiles.Add(t.GridPosition, t);
         }
     }
