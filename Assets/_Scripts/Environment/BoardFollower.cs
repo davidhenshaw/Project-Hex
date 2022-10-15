@@ -52,11 +52,4 @@ public class BoardFollower : BoardElement, IMover
         base.Start();
         parentMover.Moved += OnParentMoved;
     }
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
