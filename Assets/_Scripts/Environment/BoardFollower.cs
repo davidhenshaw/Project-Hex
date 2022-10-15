@@ -5,51 +5,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoardFollower : BoardElement, IMover
+public class BoardFollower : MonoBehaviour
 {
-    private Collider2D _collider;
-
-    [SerializeField]
-    private float _moveSpeed = 0.3f;
-
     [SerializeField]
     BoardElement toFollow;
     
-    IMover parentMover;
-
-    public event Action<Vector3Int, Vector3Int> Moved;
-
-    public void Move(Vector3Int to)
-    {
-        var worldPos = Board.grid.CellToWorld(to);
-
-        Moved?.Invoke(GridPosition, to);
-
-        SetGridPosition(to);
-        _collider.enabled = false;
-        transform
-            .DOMove(worldPos, _moveSpeed)
-            .SetEase(Ease.OutQuad)
-            .OnComplete(() =>
-            {
-                _collider.enabled = true;
-            });
-    }
+    ElementMovement _parentMover;
+    ElementMovement _mover;
 
     private void OnParentMoved(Vector3Int from, Vector3Int to)
     {
-        Move(from);
+        _mover.Move(from);
     }
 
     private void Awake()
     {
-        _collider = GetComponent<Collider2D>();
-        parentMover = toFollow.GetComponent<IMover>();
+        _mover = GetComponent<ElementMovement>();
+        _parentMover = toFollow.GetComponentInParent<ElementMovement>();
     }
 
-    protected override void Start()
+    protected void Start()
     {
-        base.Start();
-        parentMover.Moved += OnParentMoved;
+        _parentMover.Moved += OnParentMoved;
+    }
+
+    private void OnDisable()
+    {
+        _parentMover.Moved -= OnParentMoved;
     }
 }

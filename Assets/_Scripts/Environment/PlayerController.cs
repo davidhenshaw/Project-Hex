@@ -3,61 +3,22 @@ using UnityEngine;
 using metakazz.Hex;
 using DG.Tweening;
 
-public interface IMover
-{
-    event Action<Vector3Int, Vector3Int> Moved;
-    void Move(Vector3Int moveDir);
-}
-
-public class PlayerController : BoardElement, IMover
+public class PlayerController : MonoBehaviour
 {
     public event Action Died;
-    public event Action<Vector3Int, Vector3Int> Moved;
-
-    private Collider2D _collider;
+    private ElementMovement _mover;
 
     [SerializeField]
     private GameObject _dirIndicator;
 
-    [SerializeField]
-    private float _moveSpeed = 0.3f;
-
     private void Awake()
     {
-        _collider = GetComponent<Collider2D>();
+        _mover = GetComponent<ElementMovement>();
     }
 
     private void Update()
     {
         HandleInputs();
-    }
-
-    public void Move(Vector3Int to)
-    {
-        var worldPos = Board.grid.CellToWorld(to);
-
-        Moved?.Invoke(GridPosition, to);
-
-        SetGridPosition(to);
-
-        _collider.enabled = false;
-        transform
-            .DOMove(worldPos, _moveSpeed)
-            .SetEase(Ease.OutQuad)
-            .OnComplete(() =>
-            {
-                _collider.enabled = true;
-            });
-    }
-
-    private void MoveDir(HexDirection moveDir)
-    {
-        if (!Board.CanMove(GridPosition, moveDir))
-            return;
-
-        Vector3Int newPos = GridPosition.Neighbor(moveDir);
-
-        Move(newPos);
     }
 
     void HandleInputs()
@@ -67,12 +28,12 @@ public class PlayerController : BoardElement, IMover
             if (Input.GetButtonDown("Move_N"))
             {
                 SetDirIndicator(HexDirection.NORTHEAST);
-                MoveDir(HexDirection.NORTHEAST);
+                _mover.MoveDir(HexDirection.NORTHEAST);
             }
             else if(Input.GetButtonDown("Move_S"))
             {
                 SetDirIndicator(HexDirection.SOUTHEAST);
-                MoveDir(HexDirection.SOUTHEAST);
+                _mover.MoveDir(HexDirection.SOUTHEAST);
             }
             return;
         }
@@ -81,12 +42,12 @@ public class PlayerController : BoardElement, IMover
         {
             if (Input.GetButtonDown("Move_N"))
             {
-                MoveDir(HexDirection.NORTHWEST);
+                _mover.MoveDir(HexDirection.NORTHWEST);
                 SetDirIndicator(HexDirection.NORTHWEST);
             }
             else if (Input.GetButtonDown("Move_S"))
             {
-                MoveDir(HexDirection.SOUTHWEST);
+                _mover.MoveDir(HexDirection.SOUTHWEST);
                 SetDirIndicator(HexDirection.SOUTHWEST);
             }
             return;
@@ -95,13 +56,13 @@ public class PlayerController : BoardElement, IMover
         if(Input.GetButtonDown("Move_N"))
         {
             SetDirIndicator(HexDirection.NORTH);
-            MoveDir(HexDirection.NORTH);
+            _mover.MoveDir(HexDirection.NORTH);
         }        
         
         if(Input.GetButtonDown("Move_S"))
         {
             SetDirIndicator(HexDirection.SOUTH);
-            MoveDir(HexDirection.SOUTH);
+            _mover.MoveDir(HexDirection.SOUTH);
         }
     }
 
