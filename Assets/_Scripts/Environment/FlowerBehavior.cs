@@ -29,8 +29,18 @@ public class FlowerBehavior : MonoBehaviour, IInteractive
     {
         if(caller.TryGetComponent(out BeeBehavior bee))
         {
-            bee.SetPollen(type);
-            this.ClearPollen();
+            if (!this.IsPollenated)
+                return;
+
+            if(bee.IsPollenated)
+            {
+                CrossBreed(bee.PollenType);
+            }
+            else
+            {
+                bee.SetPollen(type);
+                this.ClearPollen();
+            }
         }
     }
 
@@ -40,4 +50,12 @@ public class FlowerBehavior : MonoBehaviour, IInteractive
         IsPollenated = false;
     }
 
+    public void CrossBreed(FlowerType other)
+    {
+        GameObject offspring;
+        FlowerManager.Instance.TryGetCrossbreed(this.type, other, out offspring);
+
+        Instantiate(offspring, transform.position, transform.rotation);
+        Destroy(gameObject);
+    }
 }

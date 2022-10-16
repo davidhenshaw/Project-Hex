@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b0fc16129a83a204aa9f220c3e6fe02a, type: 3}
-  m_Name: Sunflower
+  m_Name: Coleus
   m_EditorClassIdentifier: 
-  displayName: 
-  particles: {fileID: 0}
+  displayName: Coleus
+  particlePrefab: {fileID: 6015798234222321658, guid: 300c6614918a0374c9e102fd500d1ad7, type: 3}

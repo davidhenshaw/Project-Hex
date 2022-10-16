@@ -16,6 +16,8 @@ public class BeeBehavior : MonoBehaviour
     [SerializeField]
     FlowerType pollenType;
 
+    public FlowerType PollenType { get => pollenType; }
+    
     private void Awake()
     {
 
