@@ -13,6 +13,9 @@ public class BeeBehavior : MonoBehaviour
     [SerializeField]
     ParticleSystem pollenParticles;
 
+    [SerializeField]
+    FlowerType pollenType;
+
     private void Awake()
     {
 
