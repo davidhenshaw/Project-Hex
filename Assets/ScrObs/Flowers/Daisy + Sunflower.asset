@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flowerA: {fileID: 11400000, guid: 477432258b944dd40bd8f129d2f792e8, type: 2}
   flowerB: {fileID: 11400000, guid: 9496e3f42d23c7643b34877d866a6133, type: 2}
-  result: {fileID: 0}
+  result: {fileID: 7102745446879505200, guid: b40deb2dfa4f9e44d98b9be42525b304, type: 3}

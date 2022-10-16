@@ -16,36 +16,33 @@ public class BeeBehavior : MonoBehaviour
     [SerializeField]
     FlowerType pollenType;
 
+    public BeeBehavior headBee;
+    public BeeBehavior followerBee;
+
     public FlowerType PollenType { get => pollenType; }
     
-    private void Awake()
-    {
-
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void TriggerInteract()
     {
-        Collider[] collisions = Physics.OverlapBox(transform.position, new Vector3(0.5f, 0.5f, 1));
+        BoardElement[] overlappingObjects = GetOverlappingObjects();
 
-        foreach(Collider col in collisions)
+        foreach (BoardElement obj in overlappingObjects)
         {
-            if(col.TryGetComponent(out IInteractive interactable))
+            if(obj.TryGetComponent(out IInteractive interactable))
             {
                 interactable.OnInteract(gameObject);
             }
         }
+
+        if (followerBee)
+            followerBee.TriggerInteract();
+    }
+
+    public void ClearPollen()
+    {
+        this.pollenType = null;
+        IsPollenated = false;
+
+        Destroy(pollenParticles);
     }
 
     public void SetPollen(FlowerType type)
@@ -53,6 +50,14 @@ public class BeeBehavior : MonoBehaviour
         this.pollenType = type;
         IsPollenated = true;
 
-        Instantiate(type.ParticlesPrefab, gameObject.transform);
+        pollenParticles = Instantiate(type.ParticlesPrefab, gameObject.transform);
+    }
+
+    BoardElement[] GetOverlappingObjects()
+    {
+        var myBoardElement = GetComponentInParent<BoardElement>();
+        var overlappingObjects = myBoardElement.GetOverlappingObjects();
+
+        return overlappingObjects;
     }
 }

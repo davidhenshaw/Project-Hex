@@ -55,4 +55,16 @@ public abstract class BoardElement : MonoBehaviour
                                 .CellToWorld(GridPosition);
     }
 
+    private void OnDisable()
+    {
+        Tile currTile;
+        Board.tiles.TryGetValue(GridPosition, out currTile);
+
+        currTile.Remove(this);
+    }
+
+    public virtual BoardElement[] GetOverlappingObjects()
+    {
+        return _board.GetObjectsAtPosition(GridPosition);
+    }
 }

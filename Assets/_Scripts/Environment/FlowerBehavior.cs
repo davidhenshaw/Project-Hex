@@ -7,7 +7,7 @@ public interface IInteractive
     void OnInteract(GameObject caller);
 }
 
-public class FlowerBehavior : MonoBehaviour, IInteractive
+public class FlowerBehavior : BoardElement, IInteractive
 {
     public bool IsPollenated
     {
@@ -35,6 +35,7 @@ public class FlowerBehavior : MonoBehaviour, IInteractive
             if(bee.IsPollenated)
             {
                 CrossBreed(bee.PollenType);
+                bee.ClearPollen();
             }
             else
             {
@@ -55,7 +56,7 @@ public class FlowerBehavior : MonoBehaviour, IInteractive
         GameObject offspring;
         FlowerManager.Instance.TryGetCrossbreed(this.type, other, out offspring);
 
-        Instantiate(offspring, transform.position, transform.rotation);
+        Instantiate(offspring, transform.position, transform.rotation, Board.grid.transform);
         Destroy(gameObject);
     }
 }

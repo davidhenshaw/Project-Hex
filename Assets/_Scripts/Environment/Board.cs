@@ -50,4 +50,10 @@ public class Board : MonoBehaviour
         return true;
     }
 
+    public BoardElement[] GetObjectsAtPosition(Vector3Int gridPos)
+    {
+        var tile = tiles[gridPos];
+
+        return tile.elements.ToArray();
+    }
 }
