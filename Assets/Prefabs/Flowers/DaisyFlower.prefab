@@ -132,7 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62ddfb3d9fbddd1468c08e8d142d7d96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pollenParticles: {fileID: 0}
+  type: {fileID: 11400000, guid: 477432258b944dd40bd8f129d2f792e8, type: 2}
 --- !u!65 &9055528683109766077
 BoxCollider:
   m_ObjectHideFlags: 0

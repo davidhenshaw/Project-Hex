@@ -15,31 +15,29 @@ public class FlowerBehavior : MonoBehaviour, IInteractive
         private set;
     } = true;
 
-    [SerializeField]
     ParticleSystem pollenParticles;
 
+    [SerializeField]
+    FlowerType type;
+
+    private void Awake()
+    {
+        pollenParticles = GetComponentInChildren<ParticleSystem>();
+    }
 
     public void OnInteract(GameObject caller)
     {
         if(caller.TryGetComponent(out BeeBehavior bee))
         {
-            bee.SetPollen(true);
-            this.SetPollen(false);
+            bee.SetPollen(type);
+            this.ClearPollen();
         }
     }
 
-    public void SetPollen(bool value)
+    public void ClearPollen()
     {
-        if (!IsPollenated && value)//If off then turned on
-        {
-            pollenParticles.Play();
-        }
-
-        if (value == false)
-        {
-            pollenParticles.Stop();
-        }
-
-        IsPollenated = value;
+        pollenParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        IsPollenated = false;
     }
+
 }

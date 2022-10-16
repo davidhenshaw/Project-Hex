@@ -11,7 +11,7 @@ public class BeeBehavior : MonoBehaviour
     } = false;
 
     [SerializeField]
-    ParticleSystem pollenParticles;
+    GameObject pollenParticles;
 
     [SerializeField]
     FlowerType pollenType;
@@ -46,18 +46,11 @@ public class BeeBehavior : MonoBehaviour
         }
     }
 
-    public void SetPollen(bool value)
+    public void SetPollen(FlowerType type)
     {
-        if(!IsPollenated && value)//If off then turned on
-        {
-            pollenParticles.Play();
-        }
+        this.pollenType = type;
+        IsPollenated = true;
 
-        if(value == false)
-        {
-            pollenParticles.Stop();
-        }
-
-        IsPollenated = value;
+        Instantiate(type.ParticlesPrefab, gameObject.transform);
     }
 }
