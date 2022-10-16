@@ -7,8 +7,7 @@ using UnityEngine;
 
 public class BoardFollower : MonoBehaviour
 {
-    [SerializeField]
-    BoardElement toFollow;
+    public BoardElement toFollow;
     
     ElementMovement _parentMover;
     ElementMovement _mover;

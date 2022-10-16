@@ -52,6 +52,59 @@ public class BeeBehavior : MonoBehaviour
 
         pollenParticles = Instantiate(type.ParticlesPrefab, gameObject.transform);
     }
+    
+    [ContextMenu("Kill Bee")]
+    public void Kill()
+    {
+        gameObject.SetActive(false);
+    }
+
+    public void RemoveFromBeeline()
+    {
+        if(headBee)
+        {
+            headBee.followerBee = null;
+            headBee.OnBeelineUpdated();
+        }
+
+        if (followerBee)
+        {
+            followerBee.headBee = null;
+            followerBee.OnBeelineUpdated();
+        }
+
+    }
+
+    public void OnBeelineUpdated()
+    {
+        if(!headBee)
+        {
+            if(!TryGetComponent(out PlayerController controller))
+            {
+                //This object is now a leader bee
+                gameObject.AddComponent<PlayerController>();
+            }
+            return;
+        }
+        else
+        {
+            if (TryGetComponent(out PlayerController controller))
+            {
+                Destroy(controller);
+                //This object is now a follower bee
+                var follower = gameObject.AddComponent<BoardFollower>();
+                var leader = headBee.GetComponent<ElementMovement>();
+
+                follower.toFollow = leader;
+            }
+            return;
+        }
+    }
+
+    private void OnDisable()
+    {
+        RemoveFromBeeline();
+    }
 
     BoardElement[] GetOverlappingObjects()
     {
