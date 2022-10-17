@@ -31,10 +31,24 @@ public class Tile : MonoBehaviour
     public void Add(BoardElement b)
     {
         elements.Add(b);
+        foreach(BoardElement obj in elements)
+        {
+            if (obj.Equals(b))
+                continue;
+
+            obj.OnTileEnter(b);
+        }
     }
 
     public void Remove(BoardElement b)
     {
         elements.Remove(b);
+        foreach (BoardElement obj in elements)
+        {
+            if (obj.Equals(b))
+                continue;
+
+            obj.OnTileExit(b);
+        }
     }
 }

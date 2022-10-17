@@ -10,6 +10,11 @@ public class BeeBehavior : MonoBehaviour
         private set;
     } = false;
 
+    public bool IsLeader
+    {
+        get { return (!headBee && GetComponent<PlayerController>()); }
+    }
+
     [SerializeField]
     GameObject pollenParticles;
 
@@ -56,23 +61,24 @@ public class BeeBehavior : MonoBehaviour
     [ContextMenu("Kill Bee")]
     public void Kill()
     {
-        gameObject.SetActive(false);
+        Destroy(gameObject);
     }
 
-    public void RemoveFromBeeline()
+    public void RemoveFromBeeline(bool updateNeighbors)
     {
-        if(headBee)
+        if (headBee)
         {
             headBee.followerBee = null;
-            headBee.OnBeelineUpdated();
+            if(updateNeighbors)
+                headBee.OnBeelineUpdated();
         }
 
         if (followerBee)
         {
             followerBee.headBee = null;
-            followerBee.OnBeelineUpdated();
+            if (updateNeighbors)
+                followerBee.OnBeelineUpdated();
         }
-
     }
 
     public void OnBeelineUpdated()
@@ -108,7 +114,12 @@ public class BeeBehavior : MonoBehaviour
 
     private void OnDisable()
     {
-        RemoveFromBeeline();
+        RemoveFromBeeline(false);
+    }
+
+    private void OnDestroy()
+    {
+        RemoveFromBeeline(true);
     }
 
     BoardElement[] GetOverlappingObjects()

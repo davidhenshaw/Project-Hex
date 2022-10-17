@@ -12,21 +12,17 @@ public class Goal : BoardElement
     [Space]
 
     public List<FlowerCount> flowerRequirements;
-
+    [Min(1)]
+    public int RequiredBees;
+    
     public int CurrentBees
     {
         get;
         private set;
     }
 
-    public int RequiredBees
-    {
-        get;
-        set;
-    }
 
     public Dictionary<FlowerType, int> CurrentFlowers = new Dictionary<FlowerType, int>();
-    public Dictionary<FlowerType, int> RequiredFlowers = new Dictionary<FlowerType, int>();
 
     protected override void Start()
     {
@@ -79,14 +75,20 @@ public class Goal : BoardElement
         return true;
     }
 
-    void OnBeeEntered()
+    void OnBeeEntered(BeeBehavior bee)
     {
         CurrentBees++;
+        Debug.Log("bee entered goal");
 
+        if(bee.IsLeader)
+        {
+            StartCoroutine(AbsorbFollowerBees(bee));
+        }
+        
         if(CurrentBees >= RequiredBees)
         {
             GameEvents.Instance.GoalReached?.Invoke();
-            UnlockGoal();
+            Debug.Log("Congratulations! Level Complete.");
         }
     }
 
@@ -98,6 +100,35 @@ public class Goal : BoardElement
         gameObject.layer = unlockedLayer;
 
         Debug.Log("Goal Unlocked");
+    }
+
+    IEnumerator AbsorbFollowerBees(BeeBehavior head)
+    {
+        BeeBehavior currBee = head.followerBee;
+
+        yield return new WaitForSeconds(0.2f);
+        head.gameObject.SetActive(false); //assumes head be is already on the goal tile
+
+        while(currBee)
+        {
+            ElementMovement mover = currBee.GetComponent<ElementMovement>();
+            mover.Move(GridPosition);
+
+            yield return new WaitForSeconds(0.2f);
+
+            currBee.gameObject.SetActive(false);
+            currBee = currBee.followerBee;
+            
+            yield return new WaitForSeconds(0.25f);
+        }
+    }
+
+    public override void OnTileEnter(BoardElement other)
+    {
+        if(other.TryGetComponent(out BeeBehavior bee))
+        {
+            OnBeeEntered(bee);
+        }
     }
 }
 

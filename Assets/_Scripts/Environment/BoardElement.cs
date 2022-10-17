@@ -67,4 +67,14 @@ public abstract class BoardElement : MonoBehaviour
     {
         return _board.GetObjectsAtPosition(GridPosition);
     }
+
+    public virtual void OnTileEnter(BoardElement other)
+    {
+
+    }
+
+    public virtual void OnTileExit(BoardElement other)
+    {
+
+    }
 }
