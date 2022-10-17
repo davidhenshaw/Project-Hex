@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,8 @@ public interface IInteractive
 
 public class FlowerBehavior : BoardElement, IInteractive
 {
+    public static Action<FlowerType> flowerCrossbred;
+
     public bool IsPollenated
     {
         get;
@@ -57,6 +60,10 @@ public class FlowerBehavior : BoardElement, IInteractive
         FlowerManager.Instance.TryGetCrossbreed(this.type, other, out offspring);
 
         Instantiate(offspring, transform.position, transform.rotation, Board.grid.transform);
+
+        var offspringType = offspring.GetComponent<FlowerBehavior>().type;
+        flowerCrossbred?.Invoke(offspringType);
+        
         Destroy(gameObject);
     }
 }

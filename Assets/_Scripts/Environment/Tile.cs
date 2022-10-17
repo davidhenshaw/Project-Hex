@@ -11,7 +11,6 @@ public class Tile : MonoBehaviour
         get;
         private set;
     }
-    private Vector3Int _currGridPos;
     public readonly List<BoardElement> elements = new List<BoardElement>();
 
     public void InitPosition()

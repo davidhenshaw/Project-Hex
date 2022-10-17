@@ -42,7 +42,7 @@ public class Board : Singleton<Board>
         foreach(BoardElement b in destination.elements)
         {
             // if the element is contained within the mask. If so, movement is blocked
-            if( b.gameObject.layer == LayerMask.NameToLayer("Air"))
+            if( b.gameObject.layer == LayerMask.NameToLayer("TileBlocking"))
             {
                 return false;
             }
