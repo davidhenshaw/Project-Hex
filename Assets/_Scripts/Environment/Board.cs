@@ -5,7 +5,7 @@ using UnityEngine;
 
 using metakazz.Hex;
 
-public class Board : MonoBehaviour
+public class Board : Singleton<Board>
 {
     public bool isFrozen;
     public readonly Dictionary<Vector3Int, Tile> tiles = new Dictionary<Vector3Int, Tile>();
@@ -13,8 +13,9 @@ public class Board : MonoBehaviour
     public Grid grid { get; private set; }
 
     // Start is called before the first frame update
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         var boardElements = GetComponentsInChildren<Tile>();
         grid = GetComponent<Grid>();
 

@@ -14,13 +14,9 @@ public class Tile : MonoBehaviour
     private Vector3Int _currGridPos;
     public readonly List<BoardElement> elements = new List<BoardElement>();
 
-    private void Awake()
-    {
-        _board = GetComponentInParent<Board>();
-    }
-
     public void InitPosition()
     {
+        _board = Board.Instance;
         GridPosition = _board.grid.WorldToCell(transform.position);
     }
 

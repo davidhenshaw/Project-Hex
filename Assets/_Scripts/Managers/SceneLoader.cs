@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : PersistentSingleton<SceneLoader>
 {
-    Scene gameplayScene;
+    int gameplayScene;
 
     protected override void Awake()
     {
@@ -21,26 +21,17 @@ public class SceneLoader : PersistentSingleton<SceneLoader>
             return;
 
         if(scene.name.Contains("Level"))
-            gameplayScene = scene;
+            gameplayScene = scene.buildIndex;
     }
 
     private void Start()
     {
-        gameplayScene = SceneManager.GetActiveScene();
-
-        Scene uiScene = SceneManager.GetSceneByName("Gameplay UI");
-        if (!uiScene.isLoaded)
-        {
-            SceneManager.LoadSceneAsync("Gameplay UI", LoadSceneMode.Additive);
-        }
+        gameplayScene = SceneManager.GetActiveScene().buildIndex;
     }
 
     public void LoadLevel(int buildIndex)
     {
-        SceneManager.UnloadSceneAsync(gameplayScene);
-        var op = SceneManager.LoadSceneAsync(buildIndex, LoadSceneMode.Additive);
-
-        gameplayScene = SceneManager.GetSceneByBuildIndex(buildIndex);
+        var op = SceneManager.LoadSceneAsync(buildIndex, LoadSceneMode.Single);
     }
 
     public void LoadLevel(string name)
@@ -52,7 +43,7 @@ public class SceneLoader : PersistentSingleton<SceneLoader>
 
     public void LoadNextLevel()
     {
-        var currIndex = gameplayScene.buildIndex;
+        var currIndex = gameplayScene;
         var nextIndex = currIndex + 1;
 
         if (nextIndex >= SceneManager.sceneCountInBuildSettings - 1)
@@ -63,7 +54,7 @@ public class SceneLoader : PersistentSingleton<SceneLoader>
 
     public void LoadPrevLevel()
     {
-        var currIndex = gameplayScene.buildIndex;
+        var currIndex = gameplayScene;
         var prevIndex = currIndex - 1;
 
         if (prevIndex < 0)
@@ -75,6 +66,6 @@ public class SceneLoader : PersistentSingleton<SceneLoader>
     [ContextMenu("Reload Scene")]
     public void ReloadLevel()
     {
-        LoadLevel(gameplayScene.name);
+        LoadLevel(gameplayScene);
     }
 }
