@@ -77,25 +77,30 @@ public class BeeBehavior : MonoBehaviour
 
     public void OnBeelineUpdated()
     {
-        if(!headBee)
+        if(headBee)
         {
-            if(!TryGetComponent(out PlayerController controller))
-            {
-                //This object is now a leader bee
-                gameObject.AddComponent<PlayerController>();
-            }
-            return;
-        }
-        else
-        {
+                //This object is now a follower bee
             if (TryGetComponent(out PlayerController controller))
             {
                 Destroy(controller);
-                //This object is now a follower bee
                 var follower = gameObject.AddComponent<BoardFollower>();
                 var leader = headBee.GetComponent<ElementMovement>();
 
                 follower.toFollow = leader;
+            }
+            return;
+        }       
+        else 
+        {
+                //This object is now a leader bee
+            if(!TryGetComponent(out PlayerController controller))
+            {
+                gameObject.AddComponent<PlayerController>();
+            }
+
+            if(TryGetComponent(out BoardFollower follower))
+            {
+                Destroy(follower);
             }
             return;
         }

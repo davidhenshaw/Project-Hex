@@ -75,6 +75,9 @@ public class PlayerController : MonoBehaviour
 
     void SetDirIndicator(HexDirection dir)
     {
+        if (!_dirIndicator)
+            return;
+
         _dirIndicator.transform.rotation = Quaternion.Euler(0,0, HexUtil.ToAngle(dir));
     }
     public void Interact()
