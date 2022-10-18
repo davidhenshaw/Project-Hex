@@ -7,9 +7,18 @@ using UnityEngine;
 
 public class ElementMovement : BoardElement
 {
+    /// <summary>
+    /// arg1 = from  
+    /// arg2 = to
+    /// </summary>
     public event Action<Vector3Int, Vector3Int> Moved;
-    Collider _collider;
+    /// <summary>
+    /// arg1 = from 
+    /// arg2 = to
+    /// </summary>
+    public event Action<Vector3Int, Vector3Int> MoveBlocked;
 
+    Collider _collider;
     [SerializeField]
     float _moveSpeed = 0.3f;
 
@@ -20,10 +29,14 @@ public class ElementMovement : BoardElement
 
     public void MoveDir(HexDirection moveDir)
     {
-        if (!Board.CanMove(GridPosition, moveDir))
-            return;
-
         Vector3Int newPos = GridPosition.Neighbor(moveDir);
+
+        if (!Board.CanMove(GridPosition, moveDir))
+        {
+            MoveBlocked?.Invoke(GridPosition, newPos);
+            return;
+        }
+
 
         Move(newPos);
     }

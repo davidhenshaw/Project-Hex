@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +12,7 @@ public class FlowerManager : Singleton<FlowerManager>
 
     private void Start()
     {
-        BuildFlowerDictionary();        
+        BuildFlowerDictionary();
     }
 
     public bool TryGetCrossbreed(FlowerType parentA, FlowerType parentB, out GameObject offspringPrefab)

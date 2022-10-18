@@ -15,6 +15,11 @@ public class BeeBehavior : MonoBehaviour
         get { return (!headBee && GetComponent<PlayerController>()); }
     }
 
+    public bool IsLast
+    {
+        get { return (headBee && !followerBee); }
+    }
+
     [SerializeField]
     GameObject pollenParticles;
 
@@ -23,9 +28,49 @@ public class BeeBehavior : MonoBehaviour
 
     public BeeBehavior headBee;
     public BeeBehavior followerBee;
+    ElementMovement _mover;
 
     public FlowerType PollenType { get => pollenType; }
-    
+
+    private void Start()
+    {
+        _mover = GetComponent<ElementMovement>();
+    }
+    private void OnEnable()
+    {
+        _mover.MoveBlocked += OnMoveBlocked;
+    }
+
+    private void OnDisable()
+    {
+        _mover.MoveBlocked -= OnMoveBlocked;
+
+        RemoveFromBeeline(false);
+    }
+
+    private void OnMoveBlocked(Vector3Int from, Vector3Int to)
+    {
+        var destinationObjs = Board.Instance.GetObjectsAtPosition(to);
+
+        foreach(BoardElement obj in destinationObjs)
+        {
+            if(obj.TryGetComponent(out BeeBehavior bee))
+            {
+                TryBump(bee);
+            }
+        }
+    }
+
+    bool TryBump(BeeBehavior bee)
+    {
+        if(!bee.IsLast)
+            return false;
+
+
+        //TODO: insert logic for joining beelines after movement validation is refactored
+        return false;
+    }
+
     public void TriggerInteract()
     {
         BoardElement[] overlappingObjects = GetOverlappingObjects();
@@ -110,11 +155,6 @@ public class BeeBehavior : MonoBehaviour
             }
             return;
         }
-    }
-
-    private void OnDisable()
-    {
-        RemoveFromBeeline(false);
     }
 
     private void OnDestroy()
