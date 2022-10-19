@@ -59,55 +59,11 @@ public class Board : Singleton<Board>
         {
             mover.ExecuteMove();
         }
-    }
 
-    public bool CanMove(Vector3Int startPos, HexDirection dir)
-    {
-        if (isFrozen)
-            return false;
-
-        Vector3Int newPos = startPos.Neighbor(dir);
-        Tile destination;
-        tiles.TryGetValue(newPos, out destination);
-
-        // if there is no tile at the next grid position
-        if (!destination)
-            return false;
-
-        foreach(BoardElement b in destination.elements)
+        foreach (MovementController mover in moveControllers)
         {
-            // if the element is contained within the mask. If so, movement is blocked
-            if( b.gameObject.layer == LayerMask.NameToLayer("TileBlocking"))
-            {
-                return false;
-            }
+            mover.PostMoveUpdate();
         }
-
-        return true;
-    }
-
-    public bool CanMove(Vector3Int startPos, Vector3Int destPos)
-    {
-        if (isFrozen)
-            return false;
-
-        Tile destinationTile;
-        tiles.TryGetValue(destPos, out destinationTile);
-
-        // if there is no tile at the next grid position
-        if (!destinationTile)
-            return false;
-
-        foreach (BoardElement b in destinationTile.elements)
-        {
-            // if the element is contained within the mask. If so, movement is blocked
-            if (b.gameObject.layer == LayerMask.NameToLayer("TileBlocking"))
-            {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     public BoardElement[] GetObjectsAtPosition(Vector3Int gridPos)

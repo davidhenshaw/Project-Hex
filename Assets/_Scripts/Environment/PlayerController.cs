@@ -91,6 +91,13 @@ public class PlayerController : MovementController
         return NextMove;
     }
 
+    public override void PostMoveUpdate()
+    {
+        base.PostMoveUpdate();
+
+        _beehaviour.OnPostMoveUpdate();
+    }
+
     void SetNextMove(HexDirection dir)
     {
         SetDirIndicator(dir);

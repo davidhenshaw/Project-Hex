@@ -17,8 +17,13 @@ public class BeeBehavior : MonoBehaviour
 
     public bool IsLast
     {
-        get { return (headBee && !followerBee); }
+        get { return (!followerBee); }
     }
+
+    /// <summary>
+    /// Flag to determine whether this object will disable itself after it validates its movement and moves
+    /// </summary>
+    public bool DeferredDisable { get; protected set; } = false;
 
     [SerializeField]
     GameObject pollenParticles;
@@ -28,26 +33,34 @@ public class BeeBehavior : MonoBehaviour
 
     public BeeBehavior headBee;
     public BeeBehavior followerBee;
-    ElementMovement _mover;
+    MovementController _movementController;
+
+
+    [Header("Prefabs")]
+    [SerializeField]
+    GameObject followerPrefab;
+
+    [SerializeField]
+    GameObject leaderPrefab;
 
     public FlowerType PollenType { get => pollenType; }
 
-    private void Start()
+    private void Awake()
     {
-        _mover = GetComponent<ElementMovement>();
+        _movementController = GetComponent<MovementController>();
     }
 
     private void OnEnable()
     {
-        if (!_mover)
+        if (!_movementController)
             return;
 
-        _mover.MoveBlocked += OnMoveBlocked;
+        _movementController.MoveBlocked += OnMoveBlocked;
     }
 
     private void OnDisable()
     {
-        _mover.MoveBlocked -= OnMoveBlocked;
+        _movementController.MoveBlocked -= OnMoveBlocked;
 
         RemoveFromBeeline(false);
     }
@@ -58,21 +71,53 @@ public class BeeBehavior : MonoBehaviour
 
         foreach(BoardElement obj in destinationObjs)
         {
-            if(obj.TryGetComponent(out BeeBehavior bee))
-            {
-                TryBump(bee);
-            }
+            TryBump(obj);
         }
     }
 
-    bool TryBump(BeeBehavior bee)
+    bool TryBump(BoardElement obj)
     {
-        if(!bee.IsLast)
+        if (!obj.TryGetComponent(out BeeBehavior otherBee))
             return false;
 
+        if (!otherBee.IsLast)
+            return false;
 
-        //TODO: insert logic for joining beelines after movement validation is refactored
+        JoinBeeline(otherBee);
+
         return false;
+    }
+
+    void JoinBeeline(BeeBehavior receiverTail)
+    {
+        if (!receiverTail.IsLast)
+            return;
+
+        if (!IsLeader)
+            return;
+
+        var newFollowerObj = Instantiate(followerPrefab, transform.position, transform.rotation, Board.Instance.grid.transform);
+        var newBeeBehavior = newFollowerObj.GetComponent<BeeBehavior>();
+
+        if(this.followerBee)
+        {
+            this.followerBee.SetHead(newBeeBehavior);
+            newBeeBehavior.SetFollower(this.followerBee);
+        }
+        receiverTail.SetFollower(newBeeBehavior);
+
+        headBee = null;
+        followerBee = null;
+
+        DeferredDisable = true;
+    }
+
+    public void OnPostMoveUpdate()
+    {
+        if(DeferredDisable)
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     public void TriggerInteract()
@@ -111,6 +156,26 @@ public class BeeBehavior : MonoBehaviour
     public void Kill()
     {
         Destroy(gameObject);
+    }
+
+    public void SetHead(BeeBehavior otherBee)
+    {
+        headBee = otherBee;
+
+        if (TryGetComponent(out BoardFollower followerComponent))
+        {
+            followerComponent.toFollow = otherBee.GetComponent<BoardElement>();
+        }
+    }
+
+    public void SetFollower(BeeBehavior otherBee)
+    {
+        followerBee = otherBee;
+
+        if(otherBee.TryGetComponent(out BoardFollower followerComponent))
+        {
+            followerComponent.SetToFollow(this.GetComponent<BoardElement>());
+        }
     }
 
     public void RemoveFromBeeline(bool updateNeighbors)

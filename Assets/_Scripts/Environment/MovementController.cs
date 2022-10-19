@@ -1,9 +1,21 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class MovementController : MonoBehaviour
 {
+    /// <summary>
+    /// arg1 = from  
+    /// arg2 = to
+    /// </summary>
+    public event Action<Vector3Int, Vector3Int> Moved;
+    /// <summary>
+    /// arg1 = from 
+    /// arg2 = to
+    /// </summary>
+    public event Action<Vector3Int, Vector3Int> MoveBlocked;
+
     public Vector3Int NextMove { get; set; }
     public bool IsNextPositionDirty { get; set; } = true;
 
@@ -18,8 +30,11 @@ public abstract class MovementController : MonoBehaviour
 
     public virtual void ExecuteMove()
     {
+        var from = GetCurrentPosition();
         _mover.Move(NextMove);
         IsNextPositionDirty = true;
+        
+        Moved?.Invoke(from, NextMove);
     }
 
     public virtual bool ValidateNextMove()
@@ -43,8 +58,11 @@ public abstract class MovementController : MonoBehaviour
             return true;
         }
 
+        MoveBlocked?.Invoke(GetCurrentPosition(), NextMove);
+        
         NextMove = GetCurrentPosition();
         IsNextPositionDirty = false;
+
         return false;
     }
 
@@ -165,4 +183,8 @@ public abstract class MovementController : MonoBehaviour
         return true;
     }
 
+    public virtual void PostMoveUpdate()
+    {
+
+    }
 }

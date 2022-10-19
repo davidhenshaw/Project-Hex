@@ -51,6 +51,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pollenParticles: {fileID: 0}
   pollenType: {fileID: 0}
+  headBee: {fileID: 0}
+  followerBee: {fileID: 0}
+  followerPrefab: {fileID: 5641578117823148381}
+  leaderPrefab: {fileID: 2863341122590660964, guid: 242f4bfa9f487eb48a3433e271ebc35d, type: 3}
 --- !u!114 &5641578117823148376
 MonoBehaviour:
   m_ObjectHideFlags: 0
