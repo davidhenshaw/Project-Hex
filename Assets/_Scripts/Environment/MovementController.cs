@@ -13,6 +13,8 @@ public abstract class MovementController : MonoBehaviour
     /// <summary>
     /// arg1 = from 
     /// arg2 = to
+    /// </summary>
+    public virtual event Action<Vector3Int, Vector3Int> MoveBlocked;
 
     public Vector3Int NextMove { get; set; }
     public bool IsNextPositionDirty { get; set; } = true;
