@@ -61,7 +61,10 @@ namespace metakazz.Hex
             };
             return output;
         }
-        
+        public static bool IsOpposite(HexDirection dirA, HexDirection dirB)
+        {
+            return Opposite(dirA).Equals(dirB);
+        }
         /// <summary>
         /// Converts Hex Direction to an angle in degrees (clockwise). 0 degrees is the same as Vector2.Up
         /// </summary>

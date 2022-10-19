@@ -44,7 +44,7 @@ public class PlayerController : MovementController
             _beehaviour.TriggerInteract();
         }
     }
-    
+
     public override Vector3Int GetCurrentPosition()
     {
         return _mover.GridPosition;

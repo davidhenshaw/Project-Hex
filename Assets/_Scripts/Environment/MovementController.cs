@@ -24,6 +24,13 @@ public abstract class MovementController : MonoBehaviour
 
     public virtual bool ValidateNextMove()
     {
+        if(!ValidateMovementOverlap())
+        {
+            IsNextPositionDirty = false;
+            NextMove = GetCurrentPosition();
+            return false;
+        }
+
         if (CanMoveImmediate(NextMove))
         {
             IsNextPositionDirty = false;
@@ -36,7 +43,7 @@ public abstract class MovementController : MonoBehaviour
             return true;
         }
 
-        NextMove = _mover.GridPosition;
+        NextMove = GetCurrentPosition();
         IsNextPositionDirty = false;
         return false;
     }
@@ -108,7 +115,7 @@ public abstract class MovementController : MonoBehaviour
             {
                 if(b.TryGetComponent(out MovementController blocker))
                 {
-                    if(IsNextPositionDirty)
+                    if(blocker.IsNextPositionDirty)
                     {
                         IsNextPositionDirty = false;
                         return blocker.ValidateNextMove();
@@ -118,6 +125,40 @@ public abstract class MovementController : MonoBehaviour
                         return blocker.NextMove != this.NextMove;
                     }
                 }
+            }
+        }
+
+        return true;
+    }
+
+    public bool ValidateMovementOverlap()
+    {
+        var board = Board.Instance;
+
+        if (board.isFrozen)
+            return false;
+
+        Tile destinationTile;
+
+        // if there is no tile at the next grid position, you can't move there
+        if (!board.tiles.TryGetValue(NextMove, out destinationTile))
+        {
+            return false;
+        }
+
+        foreach (BoardElement b in destinationTile.elements)
+        {
+            // if the element is trying to move in the opposite direction (swap places) with me, validation fails
+            if (b.TryGetComponent(out MovementController other))
+            {
+                Vector3 moveDir = NextMove - GetCurrentPosition();
+                Vector3 otherMoveDir = other.NextMove - other.GetCurrentPosition();
+                
+                if(Vector3.Dot(moveDir.normalized, otherMoveDir.normalized) <= -0.9f)
+                {
+                    return false;
+                }
+
             }
         }
 

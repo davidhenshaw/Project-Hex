@@ -12,6 +12,11 @@ public class StaticElementController : MovementController
         staticElement = GetComponent<BoardElement>();
     }
 
+    public override Vector3Int GetCurrentPosition()
+    {
+        return staticElement.GridPosition;
+    }
+
     public override bool ValidateNextMove()
     {
         return false;

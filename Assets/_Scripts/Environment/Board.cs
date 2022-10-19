@@ -47,14 +47,7 @@ public class Board : Singleton<Board>
 
         foreach(MovementController moveController in moveControllers)
         {
-            var nextMove = moveController.CalculateNextPosition();
-
-            //if next move is a valid board position
-            if(tiles.TryGetValue(nextMove, out Tile nextTile))
-            {
-                nextTile.speculativeElements
-                    .Add(moveController.GetBoardElement());
-            }
+            moveController.CalculateNextPosition();
         }
 
         foreach(MovementController mover in moveControllers)
@@ -65,11 +58,6 @@ public class Board : Singleton<Board>
         foreach(MovementController mover in moveControllers)
         {
             mover.ExecuteMove();
-        }
-
-        foreach(Tile tile in tiles.Values)
-        {
-            tile.speculativeElements.Clear();
         }
     }
 
