@@ -18,6 +18,17 @@ public class ElementMovement : BoardElement
     /// </summary>
     public event Action<Vector3Int, Vector3Int> MoveBlocked;
 
+    public Vector3Int NextPosition
+    {
+        get;
+        private set;
+    }
+
+    public bool IsNextPositionDirty {
+        get;
+        private set;
+    }
+
     Collider _collider;
     [SerializeField]
     float _moveSpeed = 0.3f;
@@ -25,20 +36,6 @@ public class ElementMovement : BoardElement
     private void Awake()
     {
         _collider = GetComponent<Collider>();
-    }
-
-    public void MoveDir(HexDirection moveDir)
-    {
-        Vector3Int newPos = GridPosition.Neighbor(moveDir);
-
-        if (!Board.CanMove(GridPosition, moveDir))
-        {
-            MoveBlocked?.Invoke(GridPosition, newPos);
-            return;
-        }
-
-
-        Move(newPos);
     }
 
     public void Move(Vector3Int to)

@@ -107,6 +107,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1900987728296726052}
   - component: {fileID: 1900987728296726053}
+  - component: {fileID: 509404106730789757}
   m_Layer: 6
   m_Name: Goal
   m_TagString: Untagged
@@ -148,3 +149,15 @@ MonoBehaviour:
     m_Bits: 1
   flowerRequirements: []
   RequiredBees: 1
+--- !u!114 &509404106730789757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1900987728296726055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 901f60d7b340db54f98a371ccf9e7aad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

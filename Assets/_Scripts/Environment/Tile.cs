@@ -12,6 +12,10 @@ public class Tile : MonoBehaviour
         private set;
     }
     public readonly List<BoardElement> elements = new List<BoardElement>();
+    /// <summary>
+    /// A list of BoardElements that want to move to this tile
+    /// </summary>
+    public readonly List<BoardElement> speculativeElements = new List<BoardElement>();
 
     public void InitPosition()
     {

@@ -36,8 +36,12 @@ public class BeeBehavior : MonoBehaviour
     {
         _mover = GetComponent<ElementMovement>();
     }
+
     private void OnEnable()
     {
+        if (!_mover)
+            return;
+
         _mover.MoveBlocked += OnMoveBlocked;
     }
 
