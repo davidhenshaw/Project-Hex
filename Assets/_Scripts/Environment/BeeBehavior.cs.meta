@@ -3,7 +3,13 @@ guid: c06b5c38fed99634aa7bc41e46bd9a47
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - pollenParticles: {instanceID: 0}
+  - pollenType: {instanceID: 0}
+  - headBee: {instanceID: 0}
+  - followerBee: {instanceID: 0}
+  - followerPrefab: {fileID: 5641578117823148381, guid: 117ac04fd68f9ad4883b7772933634e3, type: 3}
+  - leaderPrefab: {fileID: 2863341122590660964, guid: 242f4bfa9f487eb48a3433e271ebc35d, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

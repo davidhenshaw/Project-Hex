@@ -30,8 +30,11 @@ public abstract class MovementController : MonoBehaviour
 
     public virtual void ExecuteMove()
     {
+        var from = GetCurrentPosition();
         _mover.Move(NextMove);
         IsNextPositionDirty = true;
+        
+        Moved?.Invoke(from, NextMove);
     }
 
     public virtual bool ValidateNextMove()
@@ -55,8 +58,11 @@ public abstract class MovementController : MonoBehaviour
             return true;
         }
 
+        MoveBlocked?.Invoke(GetCurrentPosition(), NextMove);
+        
         NextMove = GetCurrentPosition();
         IsNextPositionDirty = false;
+
         return false;
     }
 
@@ -177,4 +183,8 @@ public abstract class MovementController : MonoBehaviour
         return true;
     }
 
+    public virtual void PostMoveUpdate()
+    {
+
+    }
 }

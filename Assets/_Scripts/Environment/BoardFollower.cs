@@ -19,7 +19,8 @@ public class BoardFollower : MovementController
     protected override void Awake()
     {
         base.Awake();
-        _parentMover = toFollow.GetComponentInParent<ElementMovement>();
+        if(toFollow != null)
+            _parentMover = toFollow.GetComponent<ElementMovement>();
     }
 
     //protected void Start()
@@ -31,6 +32,12 @@ public class BoardFollower : MovementController
     //{
     //    _parentMover.Moved -= OnParentMoved;
     //}
+
+    public void SetToFollow(BoardElement leader)
+    {
+        toFollow = leader;
+        _parentMover = leader.GetComponent<ElementMovement>();
+    }
 
     public override Vector3Int CalculateNextPosition()
     {
