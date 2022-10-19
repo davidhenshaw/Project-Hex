@@ -1,9 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class MovementController : MonoBehaviour
 {
+    /// <summary>
+    /// arg1 = from  
+    /// arg2 = to
+    /// </summary>
+    public virtual event Action<Vector3Int, Vector3Int> Moved;
+    /// <summary>
+    /// arg1 = from 
+    /// arg2 = to
+
     public Vector3Int NextMove { get; set; }
     public bool IsNextPositionDirty { get; set; } = true;
 

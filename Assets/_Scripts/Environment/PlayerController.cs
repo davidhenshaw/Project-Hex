@@ -3,25 +3,6 @@ using UnityEngine;
 using metakazz.Hex;
 using DG.Tweening;
 
-public interface IMovementController
-{
-    Vector3Int NextMove { get; set; }
-
-    bool IsNextPositionDirty
-    {
-        get;
-    }
-
-    Vector3Int CalculateNextPosition();
-
-    void ValidateNextMove();
-
-    void ExecuteMove();
-
-    BoardElement GetBoardElement();
-    Vector3Int GetCurrentPosition();
-}
-
 public class PlayerController : MovementController
 {
     public event Action Died;
@@ -29,6 +10,8 @@ public class PlayerController : MovementController
 
     [SerializeField]
     private GameObject _dirIndicator;
+
+    public override event Action<Vector3Int, Vector3Int> MoveBlocked;
 
     protected override void Awake()
     {
@@ -43,6 +26,46 @@ public class PlayerController : MovementController
         {
             _beehaviour.TriggerInteract();
         }
+    }
+
+    public override bool ValidateNextMove()
+    {
+        if(!ValidateBeeOverlap())
+        {
+            NextMove = GetCurrentPosition();
+            IsNextPositionDirty = false;
+
+            MoveBlocked?.Invoke(GetCurrentPosition(), NextMove);
+            return false;
+        }
+        return base.ValidateNextMove();
+    }
+
+    public bool ValidateBeeOverlap()
+    {
+        var board = Board.Instance;
+
+        if (board.isFrozen)
+            return false;
+
+        Tile destinationTile;
+
+        // if there is no tile at the next grid position, you can't move there
+        if (!board.tiles.TryGetValue(NextMove, out destinationTile))
+        {
+            return false;
+        }
+
+        foreach (BoardElement b in destinationTile.elements)
+        {
+            // if the element is trying to move in the opposite direction (swap places) with me, validation fails
+            if (b.TryGetComponent(out BeeBehavior other))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public override Vector3Int GetCurrentPosition()

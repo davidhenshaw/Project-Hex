@@ -29,7 +29,7 @@ public class StaticElementController : MovementController
 
     public override Vector3Int CalculateNextPosition()
     {
-        return staticElement.GridPosition;
+        return NextMove = staticElement.GridPosition;
     }
 
     public override bool WillBlockerMove(Vector3Int destPos)
