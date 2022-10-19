@@ -12,8 +12,9 @@ public class StaticElementController : MovementController
         staticElement = GetComponent<BoardElement>();
     }
 
-    public override void ValidateNextMove()
+    public override bool ValidateNextMove()
     {
+        return false;
     }
 
     public override BoardElement GetBoardElement()
@@ -26,7 +27,7 @@ public class StaticElementController : MovementController
         return staticElement.GridPosition;
     }
 
-    public override bool CanMove(Vector3Int destPos)
+    public override bool WillBlockerMove(Vector3Int destPos)
     {
         return false;
     }

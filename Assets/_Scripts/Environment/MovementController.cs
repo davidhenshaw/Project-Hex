@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class MovementController : MonoBehaviour
 {
     public Vector3Int NextMove { get; set; }
-    public bool IsNextPositionDirty { get; set; }
+    public bool IsNextPositionDirty { get; set; } = true;
 
     protected ElementMovement _mover;
 
@@ -19,12 +19,26 @@ public abstract class MovementController : MonoBehaviour
     public virtual void ExecuteMove()
     {
         _mover.Move(NextMove);
+        IsNextPositionDirty = true;
     }
 
-    public virtual void ValidateNextMove()
+    public virtual bool ValidateNextMove()
     {
-        if (!CanMove(NextMove))
-            NextMove = _mover.GridPosition;
+        if (CanMoveImmediate(NextMove))
+        {
+            IsNextPositionDirty = false;
+            return true;
+        }
+
+        if (WillBlockerMove(NextMove))
+        {
+            IsNextPositionDirty = false;
+            return true;
+        }
+
+        NextMove = _mover.GridPosition;
+        IsNextPositionDirty = false;
+        return false;
     }
 
     public virtual BoardElement GetBoardElement()
@@ -37,7 +51,7 @@ public abstract class MovementController : MonoBehaviour
         return _mover.GridPosition;
     }
 
-    public virtual bool CanMove(Vector3Int destPos)
+    public virtual bool CanMoveImmediate(Vector3Int destPos)
     {
         var board = Board.Instance;
 
@@ -52,7 +66,7 @@ public abstract class MovementController : MonoBehaviour
             return false;
         }
 
-        foreach (BoardElement b in destinationTile.speculativeElements)
+        foreach (BoardElement b in destinationTile.elements)
         {
             //don't check if the object is itself
             if (b.Equals(this.GetBoardElement()))
@@ -62,6 +76,48 @@ public abstract class MovementController : MonoBehaviour
             if (b.gameObject.layer == LayerMask.NameToLayer("TileBlocking"))
             {
                 return false;
+            }
+        }
+
+        return true;
+    }
+
+    public virtual bool WillBlockerMove(Vector3Int destPos)
+    {
+        var board = Board.Instance;
+
+        if (board.isFrozen)
+            return false;
+
+        Tile destinationTile;
+
+        // if there is no tile at the next grid position, you can't move there
+        if (!board.tiles.TryGetValue(destPos, out destinationTile))
+        {
+            return false;
+        }
+
+        foreach (BoardElement b in destinationTile.elements)
+        {
+            //don't check if the object is itself
+            if (b.Equals(this.GetBoardElement()))
+                continue;
+
+            // if the element is contained within the mask. If so, movement is blocked
+            if (b.gameObject.layer == LayerMask.NameToLayer("TileBlocking"))
+            {
+                if(b.TryGetComponent(out MovementController blocker))
+                {
+                    if(IsNextPositionDirty)
+                    {
+                        IsNextPositionDirty = false;
+                        return blocker.ValidateNextMove();
+                    }
+                    else
+                    {
+                        return blocker.NextMove != this.NextMove;
+                    }
+                }
             }
         }
 

@@ -55,10 +55,6 @@ public class Board : Singleton<Board>
                 nextTile.speculativeElements
                     .Add(moveController.GetBoardElement());
             }
-            else
-            {
-                moveController.NextMove = moveController.GetCurrentPosition();
-            }
         }
 
         foreach(MovementController mover in moveControllers)
