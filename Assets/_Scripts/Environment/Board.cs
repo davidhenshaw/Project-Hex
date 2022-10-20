@@ -68,7 +68,8 @@ public class Board : Singleton<Board>
 
     public BoardElement[] GetObjectsAtPosition(Vector3Int gridPos)
     {
-        var tile = tiles[gridPos];
+        if (!tiles.TryGetValue(gridPos, out Tile tile))
+            return null;
 
         return tile.elements.ToArray();
     }

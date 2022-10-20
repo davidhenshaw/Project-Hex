@@ -23,7 +23,7 @@ public class BeeBehavior : MonoBehaviour
     /// <summary>
     /// Flag to determine whether this object will disable itself after it validates its movement and moves
     /// </summary>
-    public bool DeferredDisable { get; protected set; } = false;
+    public bool DeferredDisable { get; set; } = false;
 
     [SerializeField]
     GameObject pollenParticles;
@@ -61,13 +61,13 @@ public class BeeBehavior : MonoBehaviour
     private void OnDisable()
     {
         _movementController.MoveBlocked -= OnMoveBlocked;
-
-        RemoveFromBeeline(false);
     }
 
     private void OnMoveBlocked(Vector3Int from, Vector3Int to)
     {
         var destinationObjs = Board.Instance.GetObjectsAtPosition(to);
+        if (destinationObjs == null)
+            return;
 
         foreach(BoardElement obj in destinationObjs)
         {
@@ -83,33 +83,14 @@ public class BeeBehavior : MonoBehaviour
         if (!otherBee.IsLast)
             return false;
 
-        JoinBeeline(otherBee);
+        if (otherBee.GetBeelineController().Equals(this.GetBeelineController()))
+            return false;
+
+        StartCoroutine(
+            BeelineController.Merge(GetBeelineController(), otherBee.GetBeelineController())
+            );
 
         return false;
-    }
-
-    void JoinBeeline(BeeBehavior receiverTail)
-    {
-        if (!receiverTail.IsLast)
-            return;
-
-        if (!IsLeader)
-            return;
-
-        var newFollowerObj = Instantiate(followerPrefab, transform.position, transform.rotation, Board.Instance.grid.transform);
-        var newBeeBehavior = newFollowerObj.GetComponent<BeeBehavior>();
-
-        if(this.followerBee)
-        {
-            this.followerBee.SetHead(newBeeBehavior);
-            newBeeBehavior.SetFollower(this.followerBee);
-        }
-        receiverTail.SetFollower(newBeeBehavior);
-
-        headBee = null;
-        followerBee = null;
-
-        DeferredDisable = true;
     }
 
     public void OnPostMoveUpdate()
@@ -178,57 +159,9 @@ public class BeeBehavior : MonoBehaviour
         }
     }
 
-    public void RemoveFromBeeline(bool updateNeighbors)
+    public BeelineController GetBeelineController()
     {
-        if (headBee)
-        {
-            headBee.followerBee = null;
-            if(updateNeighbors)
-                headBee.OnBeelineUpdated();
-        }
-
-        if (followerBee)
-        {
-            followerBee.headBee = null;
-            if (updateNeighbors)
-                followerBee.OnBeelineUpdated();
-        }
-    }
-
-    public void OnBeelineUpdated()
-    {
-        if(headBee)
-        {
-                //This object is now a follower bee
-            if (TryGetComponent(out PlayerController controller))
-            {
-                Destroy(controller);
-                var follower = gameObject.AddComponent<BoardFollower>();
-                var leader = headBee.GetComponent<ElementMovement>();
-
-                follower.toFollow = leader;
-            }
-            return;
-        }       
-        else 
-        {
-                //This object is now a leader bee
-            if(!TryGetComponent(out PlayerController controller))
-            {
-                gameObject.AddComponent<PlayerController>();
-            }
-
-            if(TryGetComponent(out BoardFollower follower))
-            {
-                Destroy(follower);
-            }
-            return;
-        }
-    }
-
-    private void OnDestroy()
-    {
-        RemoveFromBeeline(true);
+        return GetComponentInParent<BeelineController>();
     }
 
     BoardElement[] GetOverlappingObjects()

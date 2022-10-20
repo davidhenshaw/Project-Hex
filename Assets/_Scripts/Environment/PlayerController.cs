@@ -32,10 +32,11 @@ public class PlayerController : MovementController
     {
         if(!ValidateBeeOverlap())
         {
+            MoveBlocked?.Invoke(GetCurrentPosition(), NextMove);
+            
             NextMove = GetCurrentPosition();
             IsNextPositionDirty = false;
 
-            MoveBlocked?.Invoke(GetCurrentPosition(), NextMove);
             return false;
         }
         return base.ValidateNextMove();
