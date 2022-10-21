@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d02a91e219095c4abc942a2ff30636d, type: 3}
+  m_Name: Blue + Coleus Combo
+  m_EditorClassIdentifier: 
+  flowerA: {fileID: 11400000, guid: 477432258b944dd40bd8f129d2f792e8, type: 2}
+  flowerB: {fileID: 11400000, guid: 927954c5126a4f54b813261abaa56847, type: 2}
+  result: {fileID: 6035324363275731046, guid: f3655b721ec2c5c40b4d7ea7f855d99b, type: 3}

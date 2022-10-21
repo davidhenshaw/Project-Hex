@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &5120321508236579364
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 499720113036971511, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -725286801, guid: 6802ab6e5d96c524bb989f474e300300, type: 3}
+    - target: {fileID: 499720113891058492, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 499720113891058492, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 499720113891058492, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 499720113891058492, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 499720113891058492, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 499720113891058492, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 499720113891058492, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 499720113891058492, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 499720113891058492, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 499720113891058492, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 499720113891058492, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 499720113891058493, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: type
+      value: 
+      objectReference: {fileID: 11400000, guid: 24b101f729181574bbca2c363e652d85, type: 2}
+    - target: {fileID: 499720113891058494, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: m_Name
+      value: Blue + Sunflower Flower
+      objectReference: {fileID: 0}
+    - target: {fileID: 4184900651088777302, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: sprites.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4184900651088777302, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: sprites.Array.data[0]
+      value: 
+      objectReference: {fileID: -725286801, guid: 6802ab6e5d96c524bb989f474e300300, type: 3}
+    - target: {fileID: 4184900651088777302, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: sprites.Array.data[1]
+      value: 
+      objectReference: {fileID: 2038738537, guid: 6802ab6e5d96c524bb989f474e300300, type: 3}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}

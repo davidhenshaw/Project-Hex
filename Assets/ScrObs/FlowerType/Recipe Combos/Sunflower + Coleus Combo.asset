@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d02a91e219095c4abc942a2ff30636d, type: 3}
-  m_Name: Daisy + Sunflower
+  m_Name: Sunflower + Coleus Combo
   m_EditorClassIdentifier: 
-  flowerA: {fileID: 11400000, guid: 477432258b944dd40bd8f129d2f792e8, type: 2}
-  flowerB: {fileID: 11400000, guid: 9496e3f42d23c7643b34877d866a6133, type: 2}
-  result: {fileID: 7102745446879505200, guid: b40deb2dfa4f9e44d98b9be42525b304, type: 3}
+  flowerA: {fileID: 11400000, guid: 9496e3f42d23c7643b34877d866a6133, type: 2}
+  flowerB: {fileID: 11400000, guid: 927954c5126a4f54b813261abaa56847, type: 2}
+  result: {fileID: 6866768414867264845, guid: 4af4e5b429f4afe4a8d72856e6598a5d, type: 3}
