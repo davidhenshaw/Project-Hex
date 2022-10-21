@@ -7,7 +7,6 @@ public class GameSession : Singleton<GameSession>
 {
     public event Action<GameState, GameState> StateChanged;
 
-    [SerializeField] PlayerController player;
     GameState _currentState;
 
     private float _loadDelay = 1.2f;
@@ -35,7 +34,8 @@ public class GameSession : Singleton<GameSession>
 
     private void OnDisable()
     {
-        GameEvents.Instance.AllBeesDied.RemoveListener(OnPlayerDied);
+        if(GameEvents.Instance)
+            GameEvents.Instance.AllBeesDied.RemoveListener(OnPlayerDied);
     }
 
     private void Start()

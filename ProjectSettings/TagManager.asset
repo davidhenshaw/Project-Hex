@@ -44,6 +44,9 @@ TagManager:
   - name: Board
     uniqueID: 2155756317
     locked: 0
+  - name: Props
+    uniqueID: 1830432395
+    locked: 0
   - name: Actors
     uniqueID: 3943258523
     locked: 0
