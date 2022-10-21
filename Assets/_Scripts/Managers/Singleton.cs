@@ -30,8 +30,8 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        Instance = null;
         Destroy(gameObject);
+        Instance = null;
     }
 }
 
