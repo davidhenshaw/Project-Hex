@@ -53,8 +53,6 @@ MonoBehaviour:
   pollenType: {fileID: 0}
   headBee: {fileID: 0}
   followerBee: {fileID: 0}
-  followerPrefab: {fileID: 5641578117823148381}
-  leaderPrefab: {fileID: 2863341122590660964, guid: 242f4bfa9f487eb48a3433e271ebc35d, type: 3}
 --- !u!114 &5641578117823148376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,7 +137,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6228474011777503688}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: -0.27}
+  m_LocalPosition: {x: 0, y: 0, z: -0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -187,9 +185,9 @@ SpriteRenderer:
   m_SortingLayerID: -351708773
   m_SortingLayer: -1
   m_SortingOrder: 10
-  m_Sprite: {fileID: 21300000, guid: 3b4a2ed0838cb174bb04f0af4c6b8e26, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c13319e63e33e66439318a0e9a5fd16f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1, y: 1}

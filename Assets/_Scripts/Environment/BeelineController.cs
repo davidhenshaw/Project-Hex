@@ -6,15 +6,6 @@ public class BeelineController : MonoBehaviour
 {
     public BeeBehavior Leader { get; set; }
 
-    [SerializeField]
-    GameObject emptyControllerPrefab;
-    
-    [SerializeField]
-    GameObject leaderPrefab;
-
-    [SerializeField]
-    GameObject followerPrefab;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -30,7 +21,7 @@ public class BeelineController : MonoBehaviour
     public static IEnumerator Merge(BeelineController donor, BeelineController receiver)
     {
         //We must "convert" the donor's leader to a follower before moving the donor's original followers
-        var newDonorLeader = Instantiate(donor.followerPrefab,
+        var newDonorLeader = Instantiate(BeelineManager.Instance.FollowerPrefab,
                                 donor.Leader.transform.position,
                                 donor.Leader.transform.rotation,
                                 receiver.transform);
