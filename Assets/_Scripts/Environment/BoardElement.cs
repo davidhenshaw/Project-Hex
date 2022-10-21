@@ -9,7 +9,6 @@ public abstract class BoardElement : MonoBehaviour
         private set;
     }
 
-
     public void SetGridPosition(Vector3Int value)
     {
         Tile fromTile;
@@ -65,7 +64,7 @@ public abstract class BoardElement : MonoBehaviour
 
     public virtual BoardElement[] GetOverlappingObjects()
     {
-        return _board.GetObjectsAtPosition(GridPosition);
+        return Board.GetObjectsAtPosition(GridPosition);
     }
 
     public virtual void OnTileEnter(BoardElement other)

@@ -3,18 +3,19 @@ using UnityEngine;
 using metakazz.Hex;
 using DG.Tweening;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MovementController
 {
     public event Action Died;
-    private ElementMovement _mover;
     private BeeBehavior _beehaviour;
 
     [SerializeField]
     private GameObject _dirIndicator;
 
-    private void Awake()
+    public override event Action<Vector3Int, Vector3Int> MoveBlocked;
+
+    protected override void Awake()
     {
-        _mover = GetComponent<ElementMovement>();
+        base.Awake();
         _beehaviour = GetComponent<BeeBehavior>();
     }
 
@@ -25,52 +26,110 @@ public class PlayerController : MonoBehaviour
 
     void HandleInputs()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            _beehaviour.TriggerInteract();
+        }
+    }
+
+    public override bool ValidateNextMove()
+    {
+        if(!ValidateBeeOverlap())
+        {
+            MoveBlocked?.Invoke(GetCurrentPosition(), NextMove);
+            
+            NextMove = GetCurrentPosition();
+            IsNextPositionDirty = false;
+
+            return false;
+        }
+        return base.ValidateNextMove();
+    }
+
+    public bool ValidateBeeOverlap()
+    {
+        var board = Board.Instance;
+
+        if (board.isFrozen)
+            return false;
+
+        Tile destinationTile;
+
+        // if there is no tile at the next grid position, you can't move there
+        if (!board.tiles.TryGetValue(NextMove, out destinationTile))
+        {
+            return false;
+        }
+
+        foreach (BoardElement b in destinationTile.elements)
+        {
+            // if the element is trying to move in the opposite direction (swap places) with me, validation fails
+            if (b.TryGetComponent(out BeeBehavior other))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public override Vector3Int GetCurrentPosition()
+    {
+        return _mover.GridPosition;
+    }
+    
+    public override Vector3Int CalculateNextPosition()
+    {
         if (Input.GetButton("Move_E"))
         {
             if (Input.GetButtonDown("Move_N"))
             {
-                SetDirIndicator(HexDirection.NORTHEAST);
-                _mover.MoveDir(HexDirection.NORTHEAST);
+                SetNextMove(HexDirection.NORTHEAST);
             }
             else if(Input.GetButtonDown("Move_S"))
             {
-                SetDirIndicator(HexDirection.SOUTHEAST);
-                _mover.MoveDir(HexDirection.SOUTHEAST);
+                SetNextMove(HexDirection.SOUTHEAST);
             }
-            return;
+            return NextMove;
         }
 
         if (Input.GetButton("Move_W"))
         {
             if (Input.GetButtonDown("Move_N"))
             {
-                _mover.MoveDir(HexDirection.NORTHWEST);
-                SetDirIndicator(HexDirection.NORTHWEST);
+                SetNextMove(HexDirection.NORTHWEST);
             }
             else if (Input.GetButtonDown("Move_S"))
             {
-                _mover.MoveDir(HexDirection.SOUTHWEST);
-                SetDirIndicator(HexDirection.SOUTHWEST);
+                SetNextMove(HexDirection.SOUTHWEST);
             }
-            return;
+            return NextMove;
         }
 
         if(Input.GetButtonDown("Move_N"))
         {
-            SetDirIndicator(HexDirection.NORTH);
-            _mover.MoveDir(HexDirection.NORTH);
+            SetNextMove(HexDirection.NORTH);
         }        
         
         if(Input.GetButtonDown("Move_S"))
         {
-            SetDirIndicator(HexDirection.SOUTH);
-            _mover.MoveDir(HexDirection.SOUTH);
+            SetNextMove(HexDirection.SOUTH);
         }
 
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            _beehaviour.TriggerInteract();
-        }
+        return NextMove;
+    }
+
+    public override void PostMoveUpdate()
+    {
+        base.PostMoveUpdate();
+
+        _beehaviour.OnPostMoveUpdate();
+    }
+
+    void SetNextMove(HexDirection dir)
+    {
+        SetDirIndicator(dir);
+        NextMove = _mover.GridPosition.Neighbor(dir);
     }
 
     void SetDirIndicator(HexDirection dir)
@@ -80,8 +139,5 @@ public class PlayerController : MonoBehaviour
 
         _dirIndicator.transform.rotation = Quaternion.Euler(0,0, HexUtil.ToAngle(dir));
     }
-    public void Interact()
-    {
-        Died?.Invoke();
-    }
+
 }

@@ -5,31 +5,53 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoardFollower : MonoBehaviour
+public class BoardFollower : MovementController
 {
     public BoardElement toFollow;
     
     ElementMovement _parentMover;
-    ElementMovement _mover;
 
-    private void OnParentMoved(Vector3Int from, Vector3Int to)
+    //private void OnParentMoved(Vector3Int from, Vector3Int to)
+    //{
+    //    _mover.Move(from);
+    //}
+
+    protected override void Awake()
     {
-        _mover.Move(from);
+        base.Awake();
+        if(toFollow != null)
+            _parentMover = toFollow.GetComponent<ElementMovement>();
     }
 
-    private void Awake()
+    //protected void Start()
+    //{
+    //    _parentMover.Moved += OnParentMoved;
+    //}
+
+    //private void OnDisable()
+    //{
+    //    _parentMover.Moved -= OnParentMoved;
+    //}
+
+    public void SetToFollow(BoardElement leader)
     {
-        _mover = GetComponent<ElementMovement>();
-        _parentMover = toFollow.GetComponentInParent<ElementMovement>();
+        toFollow = leader;
+        _parentMover = leader.GetComponent<ElementMovement>();
     }
 
-    protected void Start()
+    public void ClearLeader()
     {
-        _parentMover.Moved += OnParentMoved;
+        toFollow = null;
+        _parentMover = null;
     }
 
-    private void OnDisable()
+    public override Vector3Int CalculateNextPosition()
     {
-        _parentMover.Moved -= OnParentMoved;
+        if (_parentMover == null)
+            return GetCurrentPosition();
+
+        NextMove = _parentMover.GridPosition;
+        return NextMove;
     }
+
 }

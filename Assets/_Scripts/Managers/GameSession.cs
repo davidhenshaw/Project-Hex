@@ -26,8 +26,16 @@ public class GameSession : Singleton<GameSession>
         base.Awake();
         if (willSelfDestruct)
             return;
+    }
 
-        player.Died += OnPlayerDied;
+    private void OnEnable()
+    {
+        GameEvents.Instance.AllBeesDied.AddListener(OnPlayerDied);
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.Instance.AllBeesDied.RemoveListener(OnPlayerDied);
     }
 
     private void Start()

@@ -15,6 +15,16 @@ public class BeeBehavior : MonoBehaviour
         get { return (!headBee && GetComponent<PlayerController>()); }
     }
 
+    public bool IsLast
+    {
+        get { return (!followerBee); }
+    }
+
+    /// <summary>
+    /// Flag to determine whether this object will disable itself after it validates its movement and moves
+    /// </summary>
+    public bool DeferredDisable { get; set; } = false;
+
     [SerializeField]
     GameObject pollenParticles;
 
@@ -23,12 +33,73 @@ public class BeeBehavior : MonoBehaviour
 
     public BeeBehavior headBee;
     public BeeBehavior followerBee;
+    MovementController _movementController;
 
     public FlowerType PollenType { get => pollenType; }
-    
+
+    private void Awake()
+    {
+        _movementController = GetComponent<MovementController>();
+    }
+
+    private void OnEnable()
+    {
+        if (!_movementController)
+            return;
+
+        _movementController.MoveBlocked += OnMoveBlocked;
+    }
+
+    private void OnDisable()
+    {
+        _movementController.MoveBlocked -= OnMoveBlocked;
+    }
+
+    private void OnMoveBlocked(Vector3Int from, Vector3Int to)
+    {
+        var destinationObjs = Board.Instance.GetObjectsAtPosition(to);
+        if (destinationObjs == null)
+            return;
+
+        foreach(BoardElement obj in destinationObjs)
+        {
+            TryBump(obj);
+        }
+    }
+
+    bool TryBump(BoardElement obj)
+    {
+        if (!obj.TryGetComponent(out BeeBehavior otherBee))
+            return false;
+
+        if (!otherBee.IsLast)
+            return false;
+
+        if (otherBee.GetBeelineController().Equals(this.GetBeelineController()))
+            return false;
+
+        StartCoroutine(
+            BeelineController.Merge(GetBeelineController(), otherBee.GetBeelineController())
+            );
+
+        return false;
+    }
+
+    public void OnPostMoveUpdate()
+    {
+        if(DeferredDisable)
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
     public void TriggerInteract()
     {
         BoardElement[] overlappingObjects = GetOverlappingObjects();
+
+        if (overlappingObjects == null)
+            return;
+
 
         foreach (BoardElement obj in overlappingObjects)
         {
@@ -40,6 +111,26 @@ public class BeeBehavior : MonoBehaviour
 
         if (followerBee)
             followerBee.TriggerInteract();
+    }
+
+    public void TriggerInteract(bool propogateToChildren)
+    {
+        BoardElement[] overlappingObjects = GetOverlappingObjects();
+
+        if (overlappingObjects == null)
+            return;
+
+        if (followerBee && propogateToChildren)
+            followerBee.TriggerInteract();
+
+        foreach (BoardElement obj in overlappingObjects)
+        {
+            if (obj.TryGetComponent(out IInteractive interactable))
+            {
+                interactable.OnInteract(gameObject);
+            }
+        }
+
     }
 
     public void ClearPollen()
@@ -61,72 +152,72 @@ public class BeeBehavior : MonoBehaviour
     [ContextMenu("Kill Bee")]
     public void Kill()
     {
-        Destroy(gameObject);
+        GetBeelineController().RemoveBee(this);
     }
 
-    public void RemoveFromBeeline(bool updateNeighbors)
+    public void SetLeader(BeeBehavior otherBee)
     {
-        if (headBee)
-        {
-            headBee.followerBee = null;
-            if(updateNeighbors)
-                headBee.OnBeelineUpdated();
-        }
+        headBee = otherBee;
 
-        if (followerBee)
+        if (TryGetComponent(out BoardFollower followerComponent))
         {
-            followerBee.headBee = null;
-            if (updateNeighbors)
-                followerBee.OnBeelineUpdated();
+            followerComponent.toFollow = otherBee.GetComponent<BoardElement>();
         }
     }
 
-    public void OnBeelineUpdated()
+    public void SetFollower(BeeBehavior otherBee)
     {
-        if(headBee)
-        {
-                //This object is now a follower bee
-            if (TryGetComponent(out PlayerController controller))
-            {
-                Destroy(controller);
-                var follower = gameObject.AddComponent<BoardFollower>();
-                var leader = headBee.GetComponent<ElementMovement>();
+        followerBee = otherBee;
 
-                follower.toFollow = leader;
-            }
-            return;
-        }       
-        else 
+        if (otherBee.TryGetComponent(out BoardFollower followerComponent))
         {
-                //This object is now a leader bee
-            if(!TryGetComponent(out PlayerController controller))
-            {
-                gameObject.AddComponent<PlayerController>();
-            }
-
-            if(TryGetComponent(out BoardFollower follower))
-            {
-                Destroy(follower);
-            }
-            return;
+            followerComponent.SetToFollow(this.GetComponent<BoardElement>());
         }
     }
 
-    private void OnDisable()
+    public void RemoveLeader()
     {
-        RemoveFromBeeline(false);
+        if (TryGetComponent(out BoardFollower followerComponent))
+        {
+            followerComponent.toFollow = null;
+        }
+        headBee = null;
     }
 
-    private void OnDestroy()
+    public void RemoveFollower()
     {
-        RemoveFromBeeline(true);
+        followerBee = null;
+    }
+
+    public BeelineController GetBeelineController()
+    {
+        return GetComponentInParent<BeelineController>();
     }
 
     BoardElement[] GetOverlappingObjects()
     {
         var myBoardElement = GetComponentInParent<BoardElement>();
-        var overlappingObjects = myBoardElement.GetOverlappingObjects();
 
+        if (myBoardElement == null)
+            return null;
+
+        var overlappingObjects = myBoardElement.GetOverlappingObjects();
         return overlappingObjects;
+    }
+
+    public void CopyState(BeeBehavior other)
+    {
+        other.IsPollenated = true;
+        other.pollenParticles = pollenParticles;
+        other.pollenType = pollenType;
+
+        if(pollenParticles)
+        {
+            Instantiate(pollenParticles, 
+                other.transform.position, 
+                other.transform.rotation, 
+                other.transform);
+        }
+
     }
 }

@@ -26,34 +26,50 @@ public class Board : Singleton<Board>
         }
     }
 
-    public bool CanMove(Vector3Int startPos, HexDirection dir)
+    private void Update()
     {
-        if (isFrozen)
-            return false;
+        HandleInputs();
+    }
 
-        Vector3Int newPos = startPos.Neighbor(dir);
-        Tile destination;
-        tiles.TryGetValue(newPos, out destination);
-
-        // if there is no tile at the next grid position
-        if (!destination)
-            return false;
-
-        foreach(BoardElement b in destination.elements)
+    void HandleInputs()
+    {
+        // In the original movement code, diagonal movements are confirmed by North and South button presses
+        // meaning we don't need to check East and West at all
+        if (Input.GetButtonDown("Move_N") || Input.GetButtonDown("Move_S"))
         {
-            // if the element is contained within the mask. If so, movement is blocked
-            if( b.gameObject.layer == LayerMask.NameToLayer("TileBlocking"))
-            {
-                return false;
-            }
+            ResolveMoves();
+        }
+    }
+
+    public void ResolveMoves()
+    {
+        var moveControllers = GetComponentsInChildren<MovementController>();
+
+        foreach(MovementController moveController in moveControllers)
+        {
+            moveController.CalculateNextPosition();
         }
 
-        return true;
+        foreach(MovementController mover in moveControllers)
+        {
+            mover.ValidateNextMove();
+        }
+
+        foreach(MovementController mover in moveControllers)
+        {
+            mover.ExecuteMove();
+        }
+
+        foreach (MovementController mover in moveControllers)
+        {
+            mover.PostMoveUpdate();
+        }
     }
 
     public BoardElement[] GetObjectsAtPosition(Vector3Int gridPos)
     {
-        var tile = tiles[gridPos];
+        if (!tiles.TryGetValue(gridPos, out Tile tile))
+            return null;
 
         return tile.elements.ToArray();
     }
