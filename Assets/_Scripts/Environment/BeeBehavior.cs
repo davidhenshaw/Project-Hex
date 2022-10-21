@@ -35,14 +35,6 @@ public class BeeBehavior : MonoBehaviour
     public BeeBehavior followerBee;
     MovementController _movementController;
 
-
-    [Header("Prefabs")]
-    [SerializeField]
-    GameObject followerPrefab;
-
-    [SerializeField]
-    GameObject leaderPrefab;
-
     public FlowerType PollenType { get => pollenType; }
 
     private void Awake()
@@ -105,6 +97,10 @@ public class BeeBehavior : MonoBehaviour
     {
         BoardElement[] overlappingObjects = GetOverlappingObjects();
 
+        if (overlappingObjects == null)
+            return;
+
+
         foreach (BoardElement obj in overlappingObjects)
         {
             if(obj.TryGetComponent(out IInteractive interactable))
@@ -115,6 +111,26 @@ public class BeeBehavior : MonoBehaviour
 
         if (followerBee)
             followerBee.TriggerInteract();
+    }
+
+    public void TriggerInteract(bool propogateToChildren)
+    {
+        BoardElement[] overlappingObjects = GetOverlappingObjects();
+
+        if (overlappingObjects == null)
+            return;
+
+        if (followerBee && propogateToChildren)
+            followerBee.TriggerInteract();
+
+        foreach (BoardElement obj in overlappingObjects)
+        {
+            if (obj.TryGetComponent(out IInteractive interactable))
+            {
+                interactable.OnInteract(gameObject);
+            }
+        }
+
     }
 
     public void ClearPollen()
@@ -136,10 +152,10 @@ public class BeeBehavior : MonoBehaviour
     [ContextMenu("Kill Bee")]
     public void Kill()
     {
-        Destroy(gameObject);
+        GetBeelineController().RemoveBee(this);
     }
 
-    public void SetHead(BeeBehavior otherBee)
+    public void SetLeader(BeeBehavior otherBee)
     {
         headBee = otherBee;
 
@@ -153,10 +169,24 @@ public class BeeBehavior : MonoBehaviour
     {
         followerBee = otherBee;
 
-        if(otherBee.TryGetComponent(out BoardFollower followerComponent))
+        if (otherBee.TryGetComponent(out BoardFollower followerComponent))
         {
             followerComponent.SetToFollow(this.GetComponent<BoardElement>());
         }
+    }
+
+    public void RemoveLeader()
+    {
+        if (TryGetComponent(out BoardFollower followerComponent))
+        {
+            followerComponent.toFollow = null;
+        }
+        headBee = null;
+    }
+
+    public void RemoveFollower()
+    {
+        followerBee = null;
     }
 
     public BeelineController GetBeelineController()
@@ -167,8 +197,27 @@ public class BeeBehavior : MonoBehaviour
     BoardElement[] GetOverlappingObjects()
     {
         var myBoardElement = GetComponentInParent<BoardElement>();
-        var overlappingObjects = myBoardElement.GetOverlappingObjects();
 
+        if (myBoardElement == null)
+            return null;
+
+        var overlappingObjects = myBoardElement.GetOverlappingObjects();
         return overlappingObjects;
+    }
+
+    public void CopyState(BeeBehavior other)
+    {
+        other.IsPollenated = true;
+        other.pollenParticles = pollenParticles;
+        other.pollenType = pollenType;
+
+        if(pollenParticles)
+        {
+            Instantiate(pollenParticles, 
+                other.transform.position, 
+                other.transform.rotation, 
+                other.transform);
+        }
+
     }
 }

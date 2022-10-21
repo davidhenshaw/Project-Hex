@@ -7,6 +7,9 @@ public class BeelineController : MonoBehaviour
     public BeeBehavior Leader { get; set; }
 
     [SerializeField]
+    GameObject emptyControllerPrefab;
+    
+    [SerializeField]
     GameObject leaderPrefab;
 
     [SerializeField]
@@ -37,6 +40,7 @@ public class BeelineController : MonoBehaviour
         //Transfer the all donor bees to receiver parent
         BeeBehavior currBee = donor.Leader.followerBee;
         donor.Leader.DeferredDisable = true;
+        donor.Leader.CopyState(newDonorLeader.GetComponent<BeeBehavior>());
 
         while (currBee != null)
         {
@@ -63,6 +67,78 @@ public class BeelineController : MonoBehaviour
         return currBee;
     }
 
+    public void RemoveBee(BeeBehavior toRemove)
+    {
+        StartCoroutine(HandleBeelineSplit(toRemove));
+    }
+
+    public static IEnumerator HandleBeelineSplit(BeeBehavior toRemove)
+    {
+        BeelineController newBeeline = null;
+        //Find the bee to remove
+        if(toRemove.followerBee)
+        {
+            newBeeline = GenerateNewBeeline(toRemove.followerBee);
+        }
+        
+        ClearNeighborReferences(toRemove);
+        Destroy(toRemove.gameObject);
+
+        yield return new WaitForEndOfFrame();
+
+        Debug.Log("balls");
+        if(newBeeline != null)
+            newBeeline.GenerateLinkedList();
+
+        newBeeline.Leader.TriggerInteract();
+    }
+
+    private static void ClearNeighborReferences(BeeBehavior bee)
+    {
+        if(bee.headBee)
+        {
+            bee.headBee.RemoveFollower();
+            bee.RemoveLeader();
+        }
+
+        if(bee.followerBee)
+        {
+            bee.followerBee.RemoveLeader();
+            bee.RemoveFollower();
+        }
+    }
+
+    private static BeelineController GenerateNewBeeline(BeeBehavior rootBee)
+    {
+        if (!rootBee)
+            return null;
+
+        var newController = Instantiate(BeelineManager.Instance.EmptyBeelinePrefab, Board.Instance.grid.transform);
+        
+        //Replace previous root bee with a leader bee. There's a chance it already was one but whatever
+        var newLeader = Instantiate(BeelineManager.Instance.LeaderPrefab, 
+            rootBee.transform.position, 
+            rootBee.transform.rotation, 
+            newController.gameObject.transform);
+
+        if(rootBee.followerBee)
+            newLeader.GetComponent<BeeBehavior>().SetFollower(rootBee.followerBee);
+
+        //Transfer rest of old beeline to the new one
+        var currBee = rootBee.followerBee;
+        while (currBee != null)
+        {
+            currBee.transform.SetParent(newController.transform, true);
+            currBee = currBee.followerBee;
+        }
+
+        //dispose of old leader (19th century france be like >:))
+        ClearNeighborReferences(rootBee);
+        Destroy(rootBee.gameObject);
+
+        return newController.GetComponent<BeelineController>();
+    }
+
     void GenerateLinkedList()
     {
         BeeBehavior prev = null;
@@ -75,7 +151,7 @@ public class BeelineController : MonoBehaviour
 
                 if(prev != null)
                 {
-                    currentBee.SetHead(prev);
+                    currentBee.SetLeader(prev);
                     prev.SetFollower(currentBee);
                 }
 

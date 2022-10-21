@@ -8,6 +8,7 @@ public class GameEvents : PersistentSingleton<GameEvents>
 {
     public UnityEvent GoalReached;
     public UnityEvent FlowersReached;
+    public UnityEvent AllBeesDied;
 
     [ContextMenu("Goal Reached")]
     public void TriggerGoalReached()

@@ -39,8 +39,17 @@ public class BoardFollower : MovementController
         _parentMover = leader.GetComponent<ElementMovement>();
     }
 
+    public void ClearLeader()
+    {
+        toFollow = null;
+        _parentMover = null;
+    }
+
     public override Vector3Int CalculateNextPosition()
     {
+        if (_parentMover == null)
+            return GetCurrentPosition();
+
         NextMove = _parentMover.GridPosition;
         return NextMove;
     }

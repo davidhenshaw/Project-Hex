@@ -21,7 +21,11 @@ public class PlayerController : MovementController
 
     private void Update()
     {
-        //Handle inputs
+        HandleInputs();
+    }
+
+    void HandleInputs()
+    {
         if (Input.GetKeyDown(KeyCode.Space))
         {
             _beehaviour.TriggerInteract();
