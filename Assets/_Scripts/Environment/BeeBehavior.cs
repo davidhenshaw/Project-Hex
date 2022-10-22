@@ -130,7 +130,6 @@ public class BeeBehavior : MonoBehaviour
                 interactable.OnInteract(gameObject);
             }
         }
-
     }
 
     public void ClearPollen()
@@ -152,6 +151,8 @@ public class BeeBehavior : MonoBehaviour
     [ContextMenu("Kill Bee")]
     public void Kill()
     {
+        AudioManager.PlayOneShot(AudioManager.Instance.beeDied);
+
         GetBeelineController().RemoveBee(this);
     }
 
@@ -209,7 +210,7 @@ public class BeeBehavior : MonoBehaviour
     {
         other.IsPollenated = true;
         other.pollenParticles = pollenParticles;
-        other.pollenType = pollenType;
+        other.SetPollen(pollenType);
 
         if(pollenParticles)
         {

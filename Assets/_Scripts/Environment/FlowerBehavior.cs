@@ -12,7 +12,7 @@ public class FlowerBehavior : BoardElement, IInteractive
 {
     public static Action<FlowerType> flowerCrossbred;
 
-    public bool IsPollenated
+    public bool HasPollen
     {
         get;
         private set;
@@ -32,26 +32,32 @@ public class FlowerBehavior : BoardElement, IInteractive
     {
         if(caller.TryGetComponent(out BeeBehavior bee))
         {
-            if (!this.IsPollenated)
-                return;
+            TryPollenate(bee);
+        }
+    }
 
-            if(bee.IsPollenated)
-            {
-                CrossBreed(bee.PollenType);
-                bee.ClearPollen();
-            }
-            else
-            {
-                bee.SetPollen(type);
-                this.ClearPollen();
-            }
+    void TryPollenate(BeeBehavior bee)
+    {
+        if (!this.HasPollen)
+            return;
+
+        if (bee.IsPollenated)
+        {
+            CrossBreed(bee.PollenType);
+            bee.ClearPollen();
+            AudioManager.PlayOneShot(AudioManager.Instance.flowerPollenated);
+        }
+        else
+        {
+            bee.SetPollen(type);
+            this.ClearPollen();
         }
     }
 
     public void ClearPollen()
     {
         pollenParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-        IsPollenated = false;
+        HasPollen = false;
     }
 
     public void CrossBreed(FlowerType other)

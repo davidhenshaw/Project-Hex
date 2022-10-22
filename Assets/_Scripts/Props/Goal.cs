@@ -21,7 +21,6 @@ public class Goal : BoardElement
         private set;
     }
 
-
     public Dictionary<FlowerType, int> CurrentFlowers = new Dictionary<FlowerType, int>();
 
     protected override void Start()
@@ -47,6 +46,8 @@ public class Goal : BoardElement
         {
             GameEvents.Instance.FlowersReached?.Invoke();
             UnlockGoal();
+
+            AudioManager.PlayOneShot(AudioManager.Instance.allFlowersPollenated);
         }
     }
 
@@ -85,9 +86,10 @@ public class Goal : BoardElement
             StartCoroutine(AbsorbFollowerBees(bee));
         }
         
-        if(CurrentBees >= RequiredBees)
+        if(CurrentBees == RequiredBees)
         {
             GameEvents.Instance.GoalReached?.Invoke();
+            AudioManager.PlayOneShot(AudioManager.Instance.levelComplete);
             Debug.Log("Congratulations! Level Complete.");
         }
     }

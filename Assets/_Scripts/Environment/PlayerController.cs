@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using metakazz.Hex;
-using DG.Tweening;
 
 public class PlayerController : MovementController
 {
@@ -29,7 +28,14 @@ public class PlayerController : MovementController
         if (Input.GetKeyDown(KeyCode.Space))
         {
             _beehaviour.TriggerInteract();
+            AudioManager.PlayOneShot(AudioManager.Instance.beeLand);
         }
+    }
+
+    public override void ExecuteMove()
+    {
+        base.ExecuteMove();
+        AudioManager.PlayOneShot(AudioManager.Instance.beeMoved);
     }
 
     public override bool ValidateNextMove()
