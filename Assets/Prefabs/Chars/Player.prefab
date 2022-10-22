@@ -184,8 +184,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveSpeed: 0.3
-  _sprite: {fileID: 33072694580755799}
-  _rotateSpeed: 0.5
 --- !u!114 &1357668688771826078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -472,6 +470,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4616409520406038504, guid: b7d681e854d61ce4899dfdf1b43a5653, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5834998632933659960, guid: b7d681e854d61ce4899dfdf1b43a5653, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
