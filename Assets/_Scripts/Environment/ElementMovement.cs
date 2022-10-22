@@ -11,6 +11,7 @@ public class ElementMovement : BoardElement
     [SerializeField]
     float _moveSpeed = 0.3f;
 
+
     private void Awake()
     {
         _collider = GetComponent<Collider>();
@@ -31,4 +32,5 @@ public class ElementMovement : BoardElement
                 _collider.enabled = true;
             });
     }
+
 }

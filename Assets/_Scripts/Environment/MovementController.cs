@@ -1,7 +1,9 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using metakazz.Hex;
 
 public abstract class MovementController : MonoBehaviour
 {
@@ -21,6 +23,11 @@ public abstract class MovementController : MonoBehaviour
 
     protected ElementMovement _mover;
 
+    [SerializeField]
+    GameObject _sprite;
+
+    bool isFacingRight = true;
+
     protected virtual void Awake()
     {
         _mover = GetComponent<ElementMovement>();
@@ -33,6 +40,9 @@ public abstract class MovementController : MonoBehaviour
         var from = GetCurrentPosition();
         _mover.Move(NextMove);
         IsNextPositionDirty = true;
+
+        if(from != NextMove)
+            UpdateSpriteDir(from, NextMove);
         
         Moved?.Invoke(from, NextMove);
     }
@@ -186,5 +196,31 @@ public abstract class MovementController : MonoBehaviour
     public virtual void PostMoveUpdate()
     {
 
+    }
+
+    protected void UpdateSpriteDir(Vector3Int from, Vector3Int to)
+    {
+        var moveDir = to.YXZ() - from.YXZ();
+        var dotProduct = Vector3.Dot(Vector3.right, moveDir);
+
+        if (dotProduct > 0 && !isFacingRight || dotProduct < 0 && isFacingRight)
+            FlipSprite();
+    }
+
+    [ContextMenu("Flip")]
+    protected void FlipSprite()
+    {
+        if (!_sprite)
+            return;
+
+        Vector3 target = isFacingRight ? new Vector3(0, 0, 180) : Vector3.zero ;
+
+        _sprite.transform
+            .DOLocalRotate(target, 0.5f)
+            .SetEase(Ease.OutBack)
+            .OnComplete(() =>
+            {
+                isFacingRight = !isFacingRight;
+            });
     }
 }

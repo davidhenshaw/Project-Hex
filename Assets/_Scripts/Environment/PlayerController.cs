@@ -37,7 +37,8 @@ public class PlayerController : MovementController
         if(!ValidateBeeOverlap())
         {
             MoveBlocked?.Invoke(GetCurrentPosition(), NextMove);
-            
+            UpdateSpriteDir(GetCurrentPosition(), NextMove);
+
             NextMove = GetCurrentPosition();
             IsNextPositionDirty = false;
 

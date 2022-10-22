@@ -43,6 +43,11 @@ namespace metakazz.Hex
             return vec + movement;
         }
 
+        public static Vector3Int YXZ(this Vector3Int vec)
+        {
+            return new Vector3Int(vec.y, vec.x, vec.z);
+        }
+
         public static Vector3Int Neighbor(this Vector3Int vec, HexVertex dir)
         {
             Vector3Int ret = vec;
