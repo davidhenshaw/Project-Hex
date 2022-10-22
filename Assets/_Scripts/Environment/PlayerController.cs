@@ -4,7 +4,6 @@ using metakazz.Hex;
 
 public class PlayerController : MovementController
 {
-    float deezNuts;
     public event Action Died;
     private BeeBehavior _beehaviour;
 
