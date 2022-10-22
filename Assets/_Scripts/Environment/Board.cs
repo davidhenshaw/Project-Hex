@@ -17,12 +17,23 @@ public class Board : Singleton<Board>
     {
         base.Awake();
         var boardElements = GetComponentsInChildren<Tile>();
+        List<Tile> rejected = new List<Tile>();
+
         grid = GetComponent<Grid>();
 
         foreach (Tile t in boardElements)
         {
             t.InitPosition();
-            tiles.Add(t.GridPosition, t);
+            
+            if(!tiles.TryAdd(t.GridPosition, t))
+            {//If the position is already taken, destroy the tile
+                rejected.Add(t);
+            }
+        }
+
+        foreach(Tile t in rejected)
+        {
+            Destroy(t);
         }
     }
 
