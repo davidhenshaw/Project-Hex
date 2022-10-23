@@ -4,10 +4,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class BoardFollower : MovementController
 {
-    public BoardElement toFollow;
+    [FormerlySerializedAs("toFollow")]
+    public BoardElement Leader;
     
     ElementMovement _parentMover;
 
@@ -19,29 +21,19 @@ public class BoardFollower : MovementController
     protected override void Awake()
     {
         base.Awake();
-        if(toFollow != null)
-            _parentMover = toFollow.GetComponent<ElementMovement>();
+        if(Leader != null)
+            _parentMover = Leader.GetComponent<ElementMovement>();
     }
-
-    //protected void Start()
-    //{
-    //    _parentMover.Moved += OnParentMoved;
-    //}
-
-    //private void OnDisable()
-    //{
-    //    _parentMover.Moved -= OnParentMoved;
-    //}
 
     public void SetToFollow(BoardElement leader)
     {
-        toFollow = leader;
+        Leader = leader;
         _parentMover = leader.GetComponent<ElementMovement>();
     }
 
     public void ClearLeader()
     {
-        toFollow = null;
+        Leader = null;
         _parentMover = null;
     }
 

@@ -81,7 +81,7 @@ public class Goal : BoardElement
         CurrentBees++;
         Debug.Log("bee entered goal");
 
-        if(bee.IsLeader)
+        if(bee.IsFirst)
         {
             StartCoroutine(AbsorbFollowerBees(bee));
         }

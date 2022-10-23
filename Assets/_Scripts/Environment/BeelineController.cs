@@ -86,9 +86,9 @@ public class BeelineController : MonoBehaviour
 
     private static void ClearNeighborReferences(BeeBehavior bee)
     {
-        if(bee.headBee)
+        if(bee.leaderBee)
         {
-            bee.headBee.RemoveFollower();
+            bee.leaderBee.RemoveFollower();
             bee.RemoveLeader();
         }
 

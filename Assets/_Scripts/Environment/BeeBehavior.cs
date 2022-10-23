@@ -10,9 +10,9 @@ public class BeeBehavior : MonoBehaviour
         private set;
     } = false;
 
-    public bool IsLeader
+    public bool IsFirst
     {
-        get { return (!headBee && GetComponent<PlayerController>()); }
+        get { return (!leaderBee && GetComponent<PlayerController>()); }
     }
 
     public bool IsLast
@@ -31,7 +31,7 @@ public class BeeBehavior : MonoBehaviour
     [SerializeField]
     FlowerType pollenType;
 
-    public BeeBehavior headBee;
+    public BeeBehavior leaderBee;
     public BeeBehavior followerBee;
     MovementController _movementController;
 
@@ -158,11 +158,11 @@ public class BeeBehavior : MonoBehaviour
 
     public void SetLeader(BeeBehavior otherBee)
     {
-        headBee = otherBee;
+        leaderBee = otherBee;
 
         if (TryGetComponent(out BoardFollower followerComponent))
         {
-            followerComponent.toFollow = otherBee.GetComponent<BoardElement>();
+            followerComponent.Leader = otherBee.GetComponent<BoardElement>();
         }
     }
 
@@ -180,9 +180,9 @@ public class BeeBehavior : MonoBehaviour
     {
         if (TryGetComponent(out BoardFollower followerComponent))
         {
-            followerComponent.toFollow = null;
+            followerComponent.Leader = null;
         }
-        headBee = null;
+        leaderBee = null;
     }
 
     public void RemoveFollower()
