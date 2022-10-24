@@ -247,6 +247,53 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0fb6a7aff08c87341af84d879e6ef51f, type: 3}
+--- !u!1 &631050392
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 631050394}
+  - component: {fileID: 631050393}
+  m_Layer: 0
+  m_Name: BeelineManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &631050393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631050392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e241a63df2e6d9143bd68bff8c7e5516, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EmptyBeelinePrefab: {fileID: 2892984043887094121, guid: 29c94362949668c47943954f249377ce, type: 3}
+  FollowerPrefab: {fileID: 5641578117823148381, guid: 117ac04fd68f9ad4883b7772933634e3, type: 3}
+  LeaderPrefab: {fileID: 2863341122590660964, guid: 242f4bfa9f487eb48a3433e271ebc35d, type: 3}
+--- !u!4 &631050394
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631050392}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 349.7469, y: 477.40723, z: 4.0973725}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &678898789
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -77,11 +77,11 @@ public class BeelineController : MonoBehaviour
 
         yield return new WaitForEndOfFrame();
 
-        Debug.Log("balls");
         if(newBeeline != null)
+        {
             newBeeline.GenerateLinkedList();
-
-        newBeeline.Leader.TriggerInteract();
+            newBeeline.Leader.TriggerInteract();
+        }
     }
 
     private static void ClearNeighborReferences(BeeBehavior bee)

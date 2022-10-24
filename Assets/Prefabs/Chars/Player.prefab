@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 33072694580755799}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0, z: -0.83}
+  m_LocalPosition: {x: 0, y: -0, z: -0.33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -199,7 +199,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pollenParticles: {fileID: 0}
   pollenType: {fileID: 0}
-  headBee: {fileID: 0}
+  leaderBee: {fileID: 0}
   followerBee: {fileID: 0}
 --- !u!54 &7424036443388765081
 Rigidbody:
@@ -455,7 +455,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4616409520406038504, guid: b7d681e854d61ce4899dfdf1b43a5653, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.15
+      value: -0.06
       objectReference: {fileID: 0}
     - target: {fileID: 4616409520406038504, guid: b7d681e854d61ce4899dfdf1b43a5653, type: 3}
       propertyPath: m_LocalRotation.w
