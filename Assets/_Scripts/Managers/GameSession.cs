@@ -5,20 +5,9 @@ using System;
 
 public class GameSession : Singleton<GameSession>
 {
-    public event Action<GameState, GameState> StateChanged;
-
-    GameState _currentState;
-
     private float _loadDelay = 1.2f;
 
-    public GameState CurrentState {
-        get => _currentState;
-        set {
-            var oldState = _currentState;
-            _currentState = value;
-            StateChanged?.Invoke(oldState, _currentState);
-        }
-    }
+    bool IsPaused { get; set; }
 
     protected override void Awake()
     {
@@ -38,12 +27,6 @@ public class GameSession : Singleton<GameSession>
             GameEvents.Instance.AllBeesDied.RemoveListener(OnPlayerDied);
     }
 
-    private void Start()
-    {
-        Reset();
-        CurrentState = GameState.PLAY;
-    }
-
     private void Update()
     {
         HandleInput();
@@ -51,33 +34,25 @@ public class GameSession : Singleton<GameSession>
 
     private void OnGoalReached()
     {
-        CurrentState = GameState.WIN;
         StartCoroutine(LoadNextLevel_co());
     }
 
     private void OnPlayerDied()
     {
-        CurrentState = GameState.LOST;
         StartCoroutine(ResetLevel_co());
     }
 
     IEnumerator ResetLevel_co()
     {
         yield return new WaitForSeconds(_loadDelay);
-        Reset();
+
         SceneLoader.Instance.ReloadLevel();
     }
 
     IEnumerator LoadNextLevel_co()
     {
         yield return new WaitForSeconds(_loadDelay);
-        Reset();
         SceneLoader.Instance.LoadNextLevel();
-    }
-
-    private void Reset()
-    {
-        CurrentState = GameState.PLAY;
     }
 
     private void OnDestroy()
@@ -88,13 +63,12 @@ public class GameSession : Singleton<GameSession>
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            Reset();
             SceneLoader.Instance.ReloadLevel();
         }
-    }
-}
 
-public enum GameState
-{
-    PLAY, LOST, WIN
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            GameEvents.Instance.TogglePause();
+        }
+    }
 }

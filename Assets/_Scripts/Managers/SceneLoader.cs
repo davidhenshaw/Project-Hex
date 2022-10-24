@@ -11,10 +11,16 @@ public class SceneLoader : PersistentSingleton<SceneLoader>
 
     public List<LevelInfo> levels = new List<LevelInfo>();
 
-    protected override void Awake()
+    private void Start()
     {
-        base.Awake();
+        currLevel = SceneManager.GetActiveScene().buildIndex;
+
+        GameEvents.Instance.NextLevelLoadTrigger.AddListener( LoadNextLevel );
         SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    private void OnDisable()
+    {
+        //GameEvents.Instance.NextLevelLoadTrigger.RemoveListener( LoadNextLevel );
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -29,24 +35,31 @@ public class SceneLoader : PersistentSingleton<SceneLoader>
     {
         SceneManager.SetActiveScene(scene);
 
-        yield return null;
-
         Instantiate(levels[currLevel].LevelPrefab);
-    }
 
-    private void Start()
-    {
-        currLevel = SceneManager.GetActiveScene().buildIndex;
+        yield return null;
     }
 
     public void LoadLevel(LevelInfo levelInfo)
     {
+        if (!levelInfo)
+        { 
+            SceneManager.LoadSceneAsync("Main Menu");
+            return;
+        }
+
         LoadLevelBase();
         currLevel = levels.IndexOf(levelInfo);
     }
 
     public void LoadLevel(int levelNum)
     {
+        if (levelNum <= 0)
+        {
+            SceneManager.LoadSceneAsync("Main Menu");
+            return;
+        }
+
         LoadLevelBase();
         currLevel = levelNum;
     }

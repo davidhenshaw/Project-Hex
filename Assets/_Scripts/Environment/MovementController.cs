@@ -90,9 +90,6 @@ public abstract class MovementController : MonoBehaviour
     {
         var board = Board.Instance;
 
-        if (board.isFrozen)
-            return false;
-
         Tile destinationTile;
 
         // if there is no tile at the next grid position, you can't move there
@@ -120,9 +117,6 @@ public abstract class MovementController : MonoBehaviour
     public virtual bool WillBlockerMove(Vector3Int destPos)
     {
         var board = Board.Instance;
-
-        if (board.isFrozen)
-            return false;
 
         Tile destinationTile;
 
@@ -162,9 +156,6 @@ public abstract class MovementController : MonoBehaviour
     public bool ValidateMovementOverlap()
     {
         var board = Board.Instance;
-
-        if (board.isFrozen)
-            return false;
 
         Tile destinationTile;
 

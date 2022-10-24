@@ -7,7 +7,6 @@ using metakazz.Hex;
 
 public class Board : Singleton<Board>
 {
-    public bool isFrozen;
     public readonly Dictionary<Vector3Int, Tile> tiles = new Dictionary<Vector3Int, Tile>();
 
     public Grid grid { get; private set; }
@@ -54,6 +53,9 @@ public class Board : Singleton<Board>
 
     public void ResolveMoves()
     {
+        if (GameEvents.Instance.IsPaused)
+            return;
+
         var moveControllers = GetComponentsInChildren<MovementController>();
 
         foreach(MovementController moveController in moveControllers)

@@ -57,9 +57,6 @@ public class PlayerController : MovementController
     {
         var board = Board.Instance;
 
-        if (board.isFrozen)
-            return false;
-
         Tile destinationTile;
 
         // if there is no tile at the next grid position, you can't move there

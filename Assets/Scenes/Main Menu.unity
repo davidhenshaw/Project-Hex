@@ -123,6 +123,63 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &191568753
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5906882799316878844, guid: 5d60e119497894d48ab32143d200a0be, type: 3}
+      propertyPath: m_Name
+      value: Game Events
+      objectReference: {fileID: 0}
+    - target: {fileID: 5906882799316878845, guid: 5d60e119497894d48ab32143d200a0be, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5906882799316878845, guid: 5d60e119497894d48ab32143d200a0be, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5906882799316878845, guid: 5d60e119497894d48ab32143d200a0be, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5906882799316878845, guid: 5d60e119497894d48ab32143d200a0be, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5906882799316878845, guid: 5d60e119497894d48ab32143d200a0be, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5906882799316878845, guid: 5d60e119497894d48ab32143d200a0be, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5906882799316878845, guid: 5d60e119497894d48ab32143d200a0be, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5906882799316878845, guid: 5d60e119497894d48ab32143d200a0be, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5906882799316878845, guid: 5d60e119497894d48ab32143d200a0be, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5906882799316878845, guid: 5d60e119497894d48ab32143d200a0be, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5906882799316878845, guid: 5d60e119497894d48ab32143d200a0be, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5d60e119497894d48ab32143d200a0be, type: 3}
 --- !u!1 &243956159
 GameObject:
   m_ObjectHideFlags: 0
@@ -496,7 +553,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7906344660893382264, guid: a98d2400f0bec67429e6e1174a01fa15, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7906344660893382264, guid: a98d2400f0bec67429e6e1174a01fa15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -538,30 +595,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7906344660893382265, guid: a98d2400f0bec67429e6e1174a01fa15, type: 3}
-      propertyPath: levels.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7906344660893382265, guid: a98d2400f0bec67429e6e1174a01fa15, type: 3}
-      propertyPath: levels.Array.data[0]
-      value: 
-      objectReference: {fileID: 11400000, guid: fd36a3923a2d84f43ab3524944626bf3, type: 2}
-    - target: {fileID: 7906344660893382265, guid: a98d2400f0bec67429e6e1174a01fa15, type: 3}
-      propertyPath: levels.Array.data[1]
-      value: 
-      objectReference: {fileID: 11400000, guid: 9d3c9879dec0d2d4b87084add549072a, type: 2}
-    - target: {fileID: 7906344660893382265, guid: a98d2400f0bec67429e6e1174a01fa15, type: 3}
-      propertyPath: levels.Array.data[2]
-      value: 
-      objectReference: {fileID: 11400000, guid: 3fa4672a43089c54e8f8c77e83020fd2, type: 2}
-    - target: {fileID: 7906344660893382265, guid: a98d2400f0bec67429e6e1174a01fa15, type: 3}
-      propertyPath: levels.Array.data[3]
-      value: 
-      objectReference: {fileID: 11400000, guid: c0530721e67d7084588c4f80ce33806b, type: 2}
-    - target: {fileID: 7906344660893382265, guid: a98d2400f0bec67429e6e1174a01fa15, type: 3}
-      propertyPath: levels.Array.data[4]
-      value: 
-      objectReference: {fileID: 11400000, guid: b27184bee9654f44e8efc9f32f0a4692, type: 2}
     - target: {fileID: 7906344660893382267, guid: a98d2400f0bec67429e6e1174a01fa15, type: 3}
       propertyPath: m_Name
       value: Scene Loader
