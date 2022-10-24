@@ -27,6 +27,9 @@ public class Goal : BoardElement
     {
         base.Start();
 
+        GameEvents.Instance.GoalInit?.Invoke(flowerRequirements.ToArray());
+        GameEvents.Instance.BeeProgressUpdated?.Invoke(CurrentBees, RequiredBees);
+
         FlowerBehavior.flowerCrossbred += OnFlowerCrossbred;
     }
 
@@ -41,6 +44,8 @@ public class Goal : BoardElement
         CurrentFlowers.TryAdd(type, 0);
 
         CurrentFlowers[type] += 1;
+
+        
 
         if (CheckRequiredFlowers())
         {
@@ -62,6 +67,8 @@ public class Goal : BoardElement
             //This flower type might not exist in the current flowers dict yet if it hasn't been crossbred yet
             if(CurrentFlowers.TryGetValue(type, out currentCount))
             {
+                GameEvents.Instance.FlowerProgressUpdated?.Invoke(type, currentCount, reqCount);
+
                 if (currentCount >= reqCount)
                     continue;
                 else
@@ -80,6 +87,7 @@ public class Goal : BoardElement
     {
         CurrentBees++;
         Debug.Log("bee entered goal");
+        GameEvents.Instance.BeeProgressUpdated?.Invoke(CurrentBees, RequiredBees);
 
         if(bee.IsFirst)
         {

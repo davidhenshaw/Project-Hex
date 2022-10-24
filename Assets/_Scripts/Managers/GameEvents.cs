@@ -7,9 +7,13 @@ using UnityEngine.Events;
 public class GameEvents : PersistentSingleton<GameEvents>
 {
     public UnityEvent GoalReached;
+    public UnityEvent<FlowerCount[]> GoalInit;
     public UnityEvent FlowersReached;
     public UnityEvent AllBeesDied;
     public UnityEvent NextLevelLoadTrigger;
+
+    public UnityEvent<FlowerType, int, int> FlowerProgressUpdated;
+    public UnityEvent<int, int> BeeProgressUpdated;
 
     public UnityEvent PauseTriggered;
     public UnityEvent UnpauseTriggered;

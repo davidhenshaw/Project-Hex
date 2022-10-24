@@ -12,6 +12,10 @@ public class FlowerType : ScriptableObject
     [SerializeField]
     GameObject particlePrefab;
 
+    [SerializeField]
+    Sprite icon;
+
     public string DisplayName { get => displayName;  }
     public GameObject ParticlesPrefab { get => particlePrefab; }
+    public Sprite Icon { get => icon; }
 }
