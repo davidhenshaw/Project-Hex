@@ -22,7 +22,7 @@ public class PauseView : UIView
 
     void OnResume()
     {
-        GameEvents.Instance.Unpause();
+        GameSession.Instance.Unpause();
     }
 
     void OnMainMenu()

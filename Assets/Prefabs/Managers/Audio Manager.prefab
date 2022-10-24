@@ -50,16 +50,16 @@ MonoBehaviour:
   sfxSource: {fileID: 5780969024665857375}
   musicSource: {fileID: 5780969024311060389}
   ambienceSource: {fileID: 5780969023889635199}
-  menuMusic: {fileID: 0}
-  gameplayMusic: {fileID: 0}
-  meadowAmbience: {fileID: 0}
+  menuMusic: {fileID: 8300000, guid: d45275882f824a24e9196115d530102e, type: 3}
+  gameplayMusic: {fileID: 8300000, guid: 22a46d42759a46e4294a47ef9a72e32f, type: 3}
+  meadowAmbience: {fileID: 8300000, guid: 83e4878e7354aa24f80a406684932d8b, type: 3}
   beeMoved: {fileID: 8300000, guid: 37b60305fe2411a46b17f3748e9e5336, type: 3}
   beeDied: {fileID: 8300000, guid: 4c9e1a479351bd842bfb52b313e208a9, type: 3}
   beeLand: {fileID: 8300000, guid: 37b60305fe2411a46b17f3748e9e5336, type: 3}
   beeEnteredHive: {fileID: 8300000, guid: b0f4608b36ef4d74ca69cae1e68b625e, type: 3}
   flowerPollenated: {fileID: 8300000, guid: 5d1b40fd4a5be0f428c1336ef0aa2b2b, type: 3}
-  allFlowersPollenated: {fileID: 8300000, guid: 74b1a104ec506f849aeb175d869bef55, type: 3}
-  levelComplete: {fileID: 8300000, guid: f1a14ed037062454b8d36486afa2db95, type: 3}
+  allFlowersPollenated: {fileID: 8300000, guid: f1a14ed037062454b8d36486afa2db95, type: 3}
+  levelComplete: {fileID: 8300000, guid: 74b1a104ec506f849aeb175d869bef55, type: 3}
   _mixer: {fileID: 24100000, guid: 866aa2422c9a29e4eb6d055a3b76d4ea, type: 2}
 --- !u!1 &5780969023889635198
 GameObject:
@@ -104,10 +104,10 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -1121716794515455255, guid: 866aa2422c9a29e4eb6d055a3b76d4ea, type: 2}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 0
+  m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -232,10 +232,10 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -4938537817525192363, guid: 866aa2422c9a29e4eb6d055a3b76d4ea, type: 2}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 0
+  m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0

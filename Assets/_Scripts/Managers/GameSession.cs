@@ -7,7 +7,7 @@ public class GameSession : Singleton<GameSession>
 {
     private float _loadDelay = 1.2f;
 
-    bool IsPaused { get; set; }
+    public bool IsPaused { get; private set; }
 
     protected override void Awake()
     {
@@ -32,31 +32,30 @@ public class GameSession : Singleton<GameSession>
         HandleInput();
     }
 
-    private void OnGoalReached()
+
+    public void TogglePause()
     {
-        StartCoroutine(LoadNextLevel_co());
+        if (IsPaused)
+            Unpause();
+        else
+            Pause();
     }
 
-    private void OnPlayerDied()
+    public void Unpause()
     {
-        StartCoroutine(ResetLevel_co());
+        IsPaused = false;
+        GameEvents.Instance.UnpauseTriggered?.Invoke();
     }
 
-    IEnumerator ResetLevel_co()
+    public void Pause()
     {
-        yield return new WaitForSeconds(_loadDelay);
-
-        SceneLoader.Instance.ReloadLevel();
+        IsPaused = true;
+        GameEvents.Instance.PauseTriggered?.Invoke();
     }
 
-    IEnumerator LoadNextLevel_co()
+    void OnPlayerDied()
     {
-        yield return new WaitForSeconds(_loadDelay);
-        SceneLoader.Instance.LoadNextLevel();
-    }
 
-    private void OnDestroy()
-    {
     }
 
     void HandleInput()
@@ -68,7 +67,7 @@ public class GameSession : Singleton<GameSession>
 
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            GameEvents.Instance.TogglePause();
+            TogglePause();
         }
     }
 }

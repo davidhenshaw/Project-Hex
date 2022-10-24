@@ -53,7 +53,7 @@ public class Board : Singleton<Board>
 
     public void ResolveMoves()
     {
-        if (GameEvents.Instance.IsPaused)
+        if (GameSession.Instance.IsPaused)
             return;
 
         var moveControllers = GetComponentsInChildren<MovementController>();

@@ -14,31 +14,12 @@ public class GameEvents : PersistentSingleton<GameEvents>
     public UnityEvent PauseTriggered;
     public UnityEvent UnpauseTriggered;
 
-    public bool IsPaused { get; private set; }
+    public UnityEvent MainMenuLoaded;
+    public UnityEvent LevelSceneLoaded;
 
     [ContextMenu("Goal Reached")]
     public void TriggerGoalReached()
     {
         GoalReached?.Invoke();
-    }
-
-    public void TogglePause()
-    {
-        if (IsPaused)
-            Unpause();
-        else
-            Pause();
-    }
-
-    public void Unpause()
-    {
-        IsPaused = false;
-        UnpauseTriggered?.Invoke();
-    }
-
-    public void Pause()
-    {
-        IsPaused = true;
-        PauseTriggered?.Invoke();
     }
 }
