@@ -41,8 +41,8 @@ public abstract class MovementController : MonoBehaviour
         _mover.Move(NextMove);
         IsNextPositionDirty = true;
 
-        if(from != NextMove)
-            UpdateSpriteDir(from, NextMove);
+        //if(from != NextMove)
+        //    UpdateSpriteDir(from, NextMove);
         
         Moved?.Invoke(from, NextMove);
     }

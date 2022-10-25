@@ -124,6 +124,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ColeusFlower Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 3285406503305362617, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4184900651088777302, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
       propertyPath: sprites.Array.size
       value: 2
@@ -144,6 +148,34 @@ PrefabInstance:
       propertyPath: sprites.Array.data[3]
       value: 
       objectReference: {fileID: -800940665, guid: 858da0c65f374484fb764bec138a3dba, type: 3}
+    - target: {fileID: 4242663853149916069, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: sprites.Array.data[0]
+      value: 
+      objectReference: {fileID: 1733257559, guid: 858da0c65f374484fb764bec138a3dba, type: 3}
+    - target: {fileID: 4242663853149916069, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: sprites.Array.data[1]
+      value: 
+      objectReference: {fileID: -800940665, guid: 858da0c65f374484fb764bec138a3dba, type: 3}
+    - target: {fileID: 5007347416499281857, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 1733257559, guid: 858da0c65f374484fb764bec138a3dba, type: 3}
+    - target: {fileID: 5381321283678504234, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: sprites.Array.data[0]
+      value: 
+      objectReference: {fileID: 1733257559, guid: 858da0c65f374484fb764bec138a3dba, type: 3}
+    - target: {fileID: 5381321283678504234, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: sprites.Array.data[1]
+      value: 
+      objectReference: {fileID: -800940665, guid: 858da0c65f374484fb764bec138a3dba, type: 3}
+    - target: {fileID: 5391321090536862311, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 1733257559, guid: 858da0c65f374484fb764bec138a3dba, type: 3}
+    - target: {fileID: 8018027561603880516, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
 --- !u!4 &1879587417547361464 stripped

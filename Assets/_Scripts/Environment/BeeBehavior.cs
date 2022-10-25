@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class BeeBehavior : MonoBehaviour
 {
@@ -35,11 +36,26 @@ public class BeeBehavior : MonoBehaviour
     public BeeBehavior followerBee;
     MovementController _movementController;
 
+    Sequence _landingSequence;
+    public float landAmount = -0.3f;
+    public float landingDuration = 0.7f;
     public FlowerType PollenType { get => pollenType; }
 
     private void Awake()
     {
         _movementController = GetComponent<MovementController>();
+        var beeSprite = GetComponentInChildren<BeelineSprite>();
+
+        //Set up DOTween sequences
+        _landingSequence = DOTween.Sequence();
+        _landingSequence.Append(beeSprite.transform.DOScale(0.5f, landingDuration/2));
+        _landingSequence.Insert(0, beeSprite.transform.DOLocalMoveY(landAmount, landingDuration));
+        _landingSequence.SetLoops(2, LoopType.Yoyo);
+        _landingSequence.Rewind();
+
+        var _hoverSequence = DOTween.Sequence();
+        _hoverSequence.Append(beeSprite.transform.DOLocalMoveY(-0.2f, 0.5f));
+        _hoverSequence.SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutQuad);
     }
 
     private void OnEnable()
@@ -100,6 +116,14 @@ public class BeeBehavior : MonoBehaviour
         if (overlappingObjects == null)
             return;
 
+        if (followerBee)
+            followerBee.TriggerInteract();
+
+        _landingSequence.Play().OnComplete(()=> 
+        { 
+            _landingSequence.Rewind(); 
+        });
+
 
         foreach (BoardElement obj in overlappingObjects)
         {
@@ -109,27 +133,6 @@ public class BeeBehavior : MonoBehaviour
             }
         }
 
-        if (followerBee)
-            followerBee.TriggerInteract();
-    }
-
-    public void TriggerInteract(bool propogateToChildren)
-    {
-        BoardElement[] overlappingObjects = GetOverlappingObjects();
-
-        if (overlappingObjects == null)
-            return;
-
-        if (followerBee && propogateToChildren)
-            followerBee.TriggerInteract();
-
-        foreach (BoardElement obj in overlappingObjects)
-        {
-            if (obj.TryGetComponent(out IInteractive interactable))
-            {
-                interactable.OnInteract(gameObject);
-            }
-        }
     }
 
     public void ClearPollen()

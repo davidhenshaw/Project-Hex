@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class FlowerRequirementUI : MonoBehaviour
+public class FlowerRequirementWidget : MonoBehaviour
 {
     [SerializeField]
     FlowerType type;
@@ -16,10 +16,6 @@ public class FlowerRequirementUI : MonoBehaviour
     {
         GameEvents.Instance.GoalInit.AddListener(OnRequirementsInit);
         GameEvents.Instance.FlowerProgressUpdated.AddListener(OnFlowerCrossbred);
-    }
-
-    private void Start()
-    {
         text = GetComponentInChildren<TMP_Text>();
     }
 

@@ -83,6 +83,30 @@ PrefabInstance:
       propertyPath: sprites.Array.data[3]
       value: 
       objectReference: {fileID: -1197776707, guid: e8aed745c2bd7e142beb1ca0a994e67d, type: 3}
+    - target: {fileID: 4242663853149916069, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: sprites.Array.data[0]
+      value: 
+      objectReference: {fileID: 1012901514, guid: e8aed745c2bd7e142beb1ca0a994e67d, type: 3}
+    - target: {fileID: 4242663853149916069, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: sprites.Array.data[1]
+      value: 
+      objectReference: {fileID: -1197776707, guid: e8aed745c2bd7e142beb1ca0a994e67d, type: 3}
+    - target: {fileID: 5007347416499281857, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 1012901514, guid: e8aed745c2bd7e142beb1ca0a994e67d, type: 3}
+    - target: {fileID: 5381321283678504234, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: sprites.Array.data[0]
+      value: 
+      objectReference: {fileID: 1012901514, guid: e8aed745c2bd7e142beb1ca0a994e67d, type: 3}
+    - target: {fileID: 5381321283678504234, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: sprites.Array.data[1]
+      value: 
+      objectReference: {fileID: -1197776707, guid: e8aed745c2bd7e142beb1ca0a994e67d, type: 3}
+    - target: {fileID: 5391321090536862311, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 1012901514, guid: e8aed745c2bd7e142beb1ca0a994e67d, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
 --- !u!1 &6035324363275731046 stripped
@@ -102,4 +126,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a948920f05e179746991bffe7bc4a47f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activeCamera: {fileID: 0}
+  _rotationOffset: {x: 100, y: 0, z: 0}
