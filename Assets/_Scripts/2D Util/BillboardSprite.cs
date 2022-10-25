@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BeelineSprite : MonoBehaviour
+public class BillboardSprite : MonoBehaviour
 {
     private Camera activeCamera;
 
