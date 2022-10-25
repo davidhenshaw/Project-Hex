@@ -35,6 +35,7 @@ public class BeeBehavior : MonoBehaviour
     public BeeBehavior leaderBee;
     public BeeBehavior followerBee;
     MovementController _movementController;
+    [Space]
 
     Sequence _landingSequence;
     public float landAmount = -0.3f;
@@ -44,7 +45,7 @@ public class BeeBehavior : MonoBehaviour
     private void Awake()
     {
         _movementController = GetComponent<MovementController>();
-        var beeSprite = GetComponentInChildren<BeelineSprite>();
+        var beeSprite = GetComponentInChildren<BillboardSprite>();
 
         //Set up DOTween sequences
         _landingSequence = DOTween.Sequence();
@@ -54,7 +55,7 @@ public class BeeBehavior : MonoBehaviour
         _landingSequence.Rewind();
 
         var _hoverSequence = DOTween.Sequence();
-        _hoverSequence.Append(beeSprite.transform.DOLocalMoveY(-0.2f, 0.5f));
+        _hoverSequence.Append(beeSprite.transform.DOLocalMoveY(-0.2f, 0.8f));
         _hoverSequence.SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutQuad);
     }
 
@@ -146,6 +147,8 @@ public class BeeBehavior : MonoBehaviour
     public void SetPollen(FlowerType type)
     {
         this.pollenType = type;
+        if (!type)
+            return;
         IsPollenated = true;
 
         pollenParticles = Instantiate(type.ParticlesPrefab, gameObject.transform);

@@ -19,6 +19,9 @@ public class ElementMovement : BoardElement
 
     public void Move(Vector3Int to)
     {
+        if (to.Equals(GridPosition))
+            return;
+
         var worldPos = Board.grid.CellToWorld(to);
 
         SetGridPosition(to);
@@ -30,6 +33,30 @@ public class ElementMovement : BoardElement
             .OnComplete(() =>
             {
                 _collider.enabled = true;
+            });
+    }
+
+    public void OnMoveBlocked(Vector3Int to)
+    {
+        var worldPos = Board.grid.CellToWorld(to);
+        var originalPos = transform.position;
+
+        var positionExtreme = (worldPos - transform.position) * 0.2f;
+        positionExtreme += transform.position;
+
+        _collider.enabled = false;
+
+        if (DOTween.IsTweening(transform, true))
+            return;
+
+        transform
+            .DOMove(positionExtreme, _moveSpeed/2)
+            .SetEase(Ease.OutQuad)
+            .SetLoops(2, LoopType.Yoyo)
+            .OnComplete(() =>
+            {
+                _collider.enabled = true;
+                transform.position = originalPos;
             });
     }
 

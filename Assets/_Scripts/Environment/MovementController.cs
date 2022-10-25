@@ -41,9 +41,6 @@ public abstract class MovementController : MonoBehaviour
         _mover.Move(NextMove);
         IsNextPositionDirty = true;
 
-        //if(from != NextMove)
-        //    UpdateSpriteDir(from, NextMove);
-        
         Moved?.Invoke(from, NextMove);
     }
 
@@ -69,21 +66,12 @@ public abstract class MovementController : MonoBehaviour
         }
 
         MoveBlocked?.Invoke(GetCurrentPosition(), NextMove);
-        
+        _mover.OnMoveBlocked(NextMove);
+
         NextMove = GetCurrentPosition();
         IsNextPositionDirty = false;
 
         return false;
-    }
-
-    public virtual BoardElement GetBoardElement()
-    {
-        return _mover;
-    }
-
-    public virtual Vector3Int GetCurrentPosition()
-    {
-        return _mover.GridPosition;
     }
 
     public virtual bool CanMoveImmediate(Vector3Int destPos)
@@ -189,29 +177,14 @@ public abstract class MovementController : MonoBehaviour
 
     }
 
-    protected void UpdateSpriteDir(Vector3Int from, Vector3Int to)
+    public virtual BoardElement GetBoardElement()
     {
-        var moveDir = to.YXZ() - from.YXZ();
-        var dotProduct = Vector3.Dot(Vector3.right, moveDir);
-
-        if (dotProduct > 0 && !isFacingRight || dotProduct < 0 && isFacingRight)
-            FlipSprite();
+        return _mover;
     }
 
-    [ContextMenu("Flip")]
-    protected void FlipSprite()
+    public virtual Vector3Int GetCurrentPosition()
     {
-        if (!_sprite)
-            return;
-
-        Vector3 target = isFacingRight ? new Vector3(0, 0, 180) : Vector3.zero ;
-
-        _sprite.transform
-            .DOLocalRotate(target, 0.5f)
-            .SetEase(Ease.OutBack)
-            .OnComplete(() =>
-            {
-                isFacingRight = !isFacingRight;
-            });
+        return _mover.GridPosition;
     }
+
 }
