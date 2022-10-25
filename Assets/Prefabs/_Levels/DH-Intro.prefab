@@ -976,6 +976,10 @@ PrefabInstance:
       propertyPath: followerBee
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 1357668688771826078, guid: 242f4bfa9f487eb48a3433e271ebc35d, type: 3}
+      propertyPath: landingDuration
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 1503153347352517224, guid: 242f4bfa9f487eb48a3433e271ebc35d, type: 3}
       propertyPath: m_FlipX
       value: 0

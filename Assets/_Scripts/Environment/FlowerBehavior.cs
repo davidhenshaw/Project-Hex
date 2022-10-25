@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public interface IInteractive
 {
@@ -19,6 +20,9 @@ public class FlowerBehavior : BoardElement, IInteractive
     } = true;
 
     ParticleSystem pollenParticles;
+    
+    [SerializeField]
+    GameObject pollenBurstPrefab;
 
     [SerializeField]
     FlowerType type;
@@ -66,6 +70,7 @@ public class FlowerBehavior : BoardElement, IInteractive
         FlowerManager.Instance.TryGetCrossbreed(this.type, other, out offspring);
 
         Instantiate(offspring, transform.position, transform.rotation, Board.grid.transform);
+        Instantiate(pollenBurstPrefab, transform.position, transform.rotation, Board.grid.transform);
 
         var offspringType = offspring.GetComponent<FlowerBehavior>().type;
         flowerCrossbred?.Invoke(offspringType);
