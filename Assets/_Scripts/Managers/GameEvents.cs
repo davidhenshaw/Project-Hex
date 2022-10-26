@@ -21,6 +21,8 @@ public class GameEvents : PersistentSingleton<GameEvents>
     public UnityEvent MainMenuLoaded;
     public UnityEvent LevelSceneLoaded;
 
+    public UnityEvent<GameplayUIScreen> GameplayUIInit;
+
     [ContextMenu("Goal Reached")]
     public void TriggerGoalReached()
     {

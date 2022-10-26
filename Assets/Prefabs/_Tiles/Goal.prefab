@@ -148,6 +148,8 @@ MonoBehaviour:
   unlockedLayer:
     serializedVersion: 2
     m_Bits: 1
+  lockIcon: {fileID: 4120157110156991132, guid: 45b71837a6c1dd54eb2322f853136d3b, type: 3}
+  unlockIcon: {fileID: -7668404348379362283, guid: 45b71837a6c1dd54eb2322f853136d3b, type: 3}
   flowerRequirements: []
   RequiredBees: 1
 --- !u!114 &509404106730789757

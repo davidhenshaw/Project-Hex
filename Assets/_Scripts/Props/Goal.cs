@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Goal : BoardElement
 {
@@ -8,10 +9,17 @@ public class Goal : BoardElement
 
     [SerializeField]
     LayerMask unlockedLayer;
+    [SerializeField]
+    Sprite lockIcon;
+    [SerializeField]
+    Sprite unlockIcon;
+
+    UIMarkerWidget _uiLockMarker;
 
     [Space]
 
     public List<FlowerCount> flowerRequirements;
+    
     [Min(1)]
     public int RequiredBees;
     
@@ -23,6 +31,12 @@ public class Goal : BoardElement
 
     public Dictionary<FlowerType, int> CurrentFlowers = new Dictionary<FlowerType, int>();
 
+    private void Awake()
+    {
+        GameEvents.Instance.GameplayUIInit.AddListener(OnGameplayUIInit);
+        FlowerBehavior.flowerCrossbred += OnFlowerCrossbred;
+    }
+
     protected override void Start()
     {
         base.Start();
@@ -30,12 +44,16 @@ public class Goal : BoardElement
         GameEvents.Instance.GoalInit?.Invoke(flowerRequirements.ToArray());
         GameEvents.Instance.BeeProgressUpdated?.Invoke(CurrentBees, RequiredBees);
 
-        FlowerBehavior.flowerCrossbred += OnFlowerCrossbred;
     }
 
     private void OnDisable()
     {
         FlowerBehavior.flowerCrossbred -= OnFlowerCrossbred;
+    }
+
+    void OnGameplayUIInit(GameplayUIScreen gameplayUI)
+    {
+        _uiLockMarker = gameplayUI.CreateUIMarker(transform, lockIcon);
     }
 
     void OnFlowerCrossbred(FlowerType type)
@@ -109,7 +127,18 @@ public class Goal : BoardElement
 
         gameObject.layer = unlockedLayer;
 
+        StartCoroutine(OnGoalUnlock());
         Debug.Log("Goal Unlocked");
+    }
+
+    IEnumerator OnGoalUnlock()
+    {
+        _uiLockMarker.SetIcon(unlockIcon);
+        _uiLockMarker.transform.DOShakeRotation(0.5f);
+
+        yield return new WaitForSeconds(0.8f);
+
+        Destroy(_uiLockMarker.gameObject);
     }
 
     IEnumerator AbsorbFollowerBees(BeeBehavior head)
