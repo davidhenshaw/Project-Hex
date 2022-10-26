@@ -167,6 +167,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pollenBurstPrefab: {fileID: 1446413176097606744, guid: 2f01025089f79484bbf01ed34b2cf0d0, type: 3}
   type: {fileID: 11400000, guid: 477432258b944dd40bd8f129d2f792e8, type: 2}
+  fadeColor: {r: 0.305, g: 0.305, b: 0.305, a: 1}
 --- !u!65 &2840148386571780577
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PauseView : UIView
+public class PauseView : UIScreen
 {
     [SerializeField]
     Button resumeButton;

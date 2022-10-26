@@ -7,20 +7,16 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : PersistentSingleton<SceneLoader>
 {
-    int currLevel = 0;
+    public int CurrentLevel { get; private set; } = 0;
 
     public List<LevelInfo> levels = new List<LevelInfo>();
 
     private void Start()
     {
-        currLevel = SceneManager.GetActiveScene().buildIndex;
+        CurrentLevel = SceneManager.GetActiveScene().buildIndex;
 
         GameEvents.Instance.NextLevelLoadTrigger.AddListener( LoadNextLevel );
         SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-    private void OnDisable()
-    {
-        //GameEvents.Instance.NextLevelLoadTrigger.RemoveListener( LoadNextLevel );
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -35,9 +31,17 @@ public class SceneLoader : PersistentSingleton<SceneLoader>
     {
         SceneManager.SetActiveScene(scene);
 
-        Instantiate(levels[currLevel].LevelPrefab);
+        Instantiate(levels[CurrentLevel].LevelPrefab);
 
         yield return null;
+    }
+
+    public LevelInfo GetLevelInfo()
+    {
+        if (CurrentLevel <= 0)
+            return null;
+
+        return levels[CurrentLevel];
     }
 
     public void LoadLevel(LevelInfo levelInfo)
@@ -49,7 +53,7 @@ public class SceneLoader : PersistentSingleton<SceneLoader>
         }
 
         LoadLevelBase();
-        currLevel = levels.IndexOf(levelInfo);
+        CurrentLevel = levels.IndexOf(levelInfo);
     }
 
     public void LoadLevel(int levelNum)
@@ -61,7 +65,7 @@ public class SceneLoader : PersistentSingleton<SceneLoader>
         }
 
         LoadLevelBase();
-        currLevel = levelNum;
+        CurrentLevel = levelNum;
     }
 
     public void LoadLevelBase()
@@ -71,18 +75,17 @@ public class SceneLoader : PersistentSingleton<SceneLoader>
 
     public void LoadNextLevel()
     {
-        var currIndex = currLevel;
-        var nextIndex = currIndex + 1;
+        var nextLevel = CurrentLevel + 1;
 
-        if (nextIndex >= SceneManager.sceneCountInBuildSettings - 1)
+        if (nextLevel > levels.Count)
             return;
 
-        LoadLevel(nextIndex);
+        LoadLevel(nextLevel);
     }
 
     public void LoadPrevLevel()
     {
-        var currIndex = currLevel;
+        var currIndex = CurrentLevel;
         var prevIndex = currIndex - 1;
 
         if (prevIndex < 0)
@@ -94,6 +97,6 @@ public class SceneLoader : PersistentSingleton<SceneLoader>
     [ContextMenu("Reload Scene")]
     public void ReloadLevel()
     {
-        LoadLevel(currLevel);
+        LoadLevel(CurrentLevel);
     }
 }

@@ -1527,7 +1527,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1900987728296726053, guid: e41c257c4d652c64092688adea27f671, type: 3}
       propertyPath: RequiredBees
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1900987728296726053, guid: e41c257c4d652c64092688adea27f671, type: 3}
       propertyPath: flowerRequirements.Array.size

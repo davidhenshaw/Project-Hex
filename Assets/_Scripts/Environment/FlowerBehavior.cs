@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using DG.Tweening;
 
 public interface IInteractive
 {
@@ -20,16 +21,22 @@ public class FlowerBehavior : BoardElement, IInteractive
     } = true;
 
     ParticleSystem pollenParticles;
-    
+
     [SerializeField]
     GameObject pollenBurstPrefab;
 
     [SerializeField]
     FlowerType type;
 
+    [SerializeField]
+    Color fadeColor;
+
+    SpriteRenderer[] childSprites;
+
     private void Awake()
     {
         pollenParticles = GetComponentInChildren<ParticleSystem>();
+        childSprites = GetComponentsInChildren<SpriteRenderer>();
     }
 
     public void OnInteract(GameObject caller)
@@ -37,6 +44,24 @@ public class FlowerBehavior : BoardElement, IInteractive
         if(caller.TryGetComponent(out BeeBehavior bee))
         {
             TryPollenate(bee);
+        }
+    }
+
+    void PlayFlowerWiggle()
+    {
+        float punchAmount = 1;
+
+        foreach(SpriteRenderer sprite in childSprites)
+        {
+            sprite.transform.DOPunchScale(new Vector3(0, punchAmount, 0), 0.3f);
+        }
+    }
+
+    void FadeFlowerColor()
+    {
+        foreach (SpriteRenderer sprite in childSprites)
+        {
+            sprite.DOColor(fadeColor, 0.3f);
         }
     }
 
@@ -54,6 +79,8 @@ public class FlowerBehavior : BoardElement, IInteractive
         else
         {
             bee.SetPollen(type);
+            PlayFlowerWiggle();
+            FadeFlowerColor();
             this.ClearPollen();
         }
     }
