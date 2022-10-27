@@ -4,6 +4,8 @@ using metakazz.Hex;
 
 public class PlayerController : MovementController
 {
+    bool _isInteracting = false;
+
     public event Action Died;
     private BeeBehavior _beehaviour;
 
@@ -16,6 +18,12 @@ public class PlayerController : MovementController
     {
         base.Awake();
         _beehaviour = GetComponent<BeeBehavior>();
+        _beehaviour.InteractFinished += OnInteractFinished;
+    }
+
+    private void OnInteractFinished()
+    {
+        _isInteracting = false;
     }
 
     private void Update()
@@ -28,18 +36,25 @@ public class PlayerController : MovementController
         if (Input.GetKeyDown(KeyCode.Space))
         {
             _beehaviour.TriggerInteract();
+            _isInteracting = true;
             AudioManager.PlayOneShot(AudioManager.Instance.beeLand);
         }
     }
 
     public override void ExecuteMove()
     {
+        if (_isInteracting)
+            return;
+
         base.ExecuteMove();
         AudioManager.PlayOneShot(AudioManager.Instance.beeMoved);
     }
 
     public override bool ValidateNextMove()
     {
+        if (_isInteracting)
+            return false;
+
         if(!ValidateBeeOverlap())
         {
             MoveBlocked?.Invoke(GetCurrentPosition(), NextMove);

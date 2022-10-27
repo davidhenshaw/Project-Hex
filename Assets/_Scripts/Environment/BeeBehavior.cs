@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using System;
 
 public class BeeBehavior : MonoBehaviour
 {
@@ -37,6 +38,8 @@ public class BeeBehavior : MonoBehaviour
 
     Sequence _landingSequence;
     Sequence _hoverSequence;
+
+    public event Action InteractFinished;
 
     public float landAmount = -0.3f;
     public float landingDuration = 0.7f;
@@ -129,12 +132,15 @@ public class BeeBehavior : MonoBehaviour
         //Play the interact animation and wait for the descend animation to play
         yield return _landingSequence.Play().WaitForElapsedLoops(1);
 
-        Interact();
+        DoInteraction();
 
         Debug.Log("End Interact");
+
+
         //Wait for ascent animation to play
         yield return _landingSequence.WaitForElapsedLoops(1);
         _landingSequence.Rewind();
+        InteractFinished?.Invoke();
     }
 
     IEnumerator DeathSequence()
@@ -164,7 +170,7 @@ public class BeeBehavior : MonoBehaviour
 
     }
 
-    public void Interact()
+    public void DoInteraction()
     {
         BoardElement[] overlappingObjects = GetOverlappingObjects();
 

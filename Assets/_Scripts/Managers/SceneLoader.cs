@@ -13,8 +13,6 @@ public class SceneLoader : PersistentSingleton<SceneLoader>
 
     private void Start()
     {
-        CurrentLevel = SceneManager.GetActiveScene().buildIndex;
-
         GameEvents.Instance.NextLevelLoadTrigger.AddListener( LoadNextLevel );
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
@@ -58,7 +56,7 @@ public class SceneLoader : PersistentSingleton<SceneLoader>
 
     public void LoadLevel(int levelNum)
     {
-        if (levelNum <= 0)
+        if (levelNum < 0)
         {
             SceneManager.LoadSceneAsync("Main Menu");
             return;

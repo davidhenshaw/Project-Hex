@@ -79,7 +79,7 @@ public class BeelineController : MonoBehaviour
         if(newBeeline != null)
         {
             newBeeline.GenerateLinkedList();
-            newBeeline.Leader.Interact();
+            newBeeline.Leader.DoInteraction();
         }
     }
 

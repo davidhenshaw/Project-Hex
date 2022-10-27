@@ -29,12 +29,15 @@ public class VictoryScreen : UIScreen
         }
 
         if (mainMenuButton)
-            mainMenuButton.onClick.AddListener(() => { SceneLoader.Instance.LoadLevel(0); });
+            mainMenuButton.onClick.AddListener(() => { SceneLoader.Instance.LoadLevel(-1); });
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Open()
     {
-        
+        base.Open();
+        if (SceneLoader.Instance.CurrentLevel + 1 > SceneLoader.Instance.levels.Count-1)
+        {
+            Destroy(nextLevelButton.gameObject);
+        }
     }
 }

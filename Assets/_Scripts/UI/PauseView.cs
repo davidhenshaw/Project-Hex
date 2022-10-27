@@ -28,6 +28,6 @@ public class PauseView : UIScreen
     void OnMainMenu()
     {
         // Load main menu
-        SceneLoader.Instance.LoadLevel(0);
+        SceneLoader.Instance.LoadLevel(-1);
     }
 }
