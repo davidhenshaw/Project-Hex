@@ -163,10 +163,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4207280759887746692, guid: 22d793a8a1cb2d844894a100ffe0fbcf, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 5aed0db0bfe1a8d42b57cfe0528e17cb, type: 3}
     - target: {fileID: 4207280759887746694, guid: 22d793a8a1cb2d844894a100ffe0fbcf, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -263,10 +259,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5411084745681178944, guid: 22d793a8a1cb2d844894a100ffe0fbcf, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: da7be29cf3486974d8f7a1b3b074ea89, type: 3}
     - target: {fileID: 5411084745681178946, guid: 22d793a8a1cb2d844894a100ffe0fbcf, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -427,12 +419,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: Level Reqs Panel
       objectReference: {fileID: 0}
-    - target: {fileID: 7006902064999714335, guid: 22d793a8a1cb2d844894a100ffe0fbcf, type: 3}
-      propertyPath: type
-      value: 
-      objectReference: {fileID: 11400000, guid: 24b101f729181574bbca2c363e652d85, type: 2}
-    m_RemovedComponents:
-    - {fileID: 5411084746410167602, guid: 22d793a8a1cb2d844894a100ffe0fbcf, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 22d793a8a1cb2d844894a100ffe0fbcf, type: 3}
 --- !u!224 &4429683815120384588 stripped
 RectTransform:
