@@ -26,18 +26,18 @@ public class BeeBehavior : MonoBehaviour
     /// </summary>
     public bool DeferredDisable { get; set; } = false;
 
-    [SerializeField]
     GameObject pollenParticles;
-
-    [SerializeField]
     FlowerType pollenType;
 
     public BeeBehavior leaderBee;
     public BeeBehavior followerBee;
     MovementController _movementController;
+    
     [Space]
 
     Sequence _landingSequence;
+    Sequence _hoverSequence;
+
     public float landAmount = -0.3f;
     public float landingDuration = 0.7f;
     public FlowerType PollenType { get => pollenType; }
@@ -54,7 +54,7 @@ public class BeeBehavior : MonoBehaviour
         _landingSequence.SetLoops(2, LoopType.Yoyo);
         _landingSequence.Rewind();
 
-        var _hoverSequence = DOTween.Sequence();
+        _hoverSequence = DOTween.Sequence();
         _hoverSequence.Append(beeSprite.transform.DOLocalMoveY(-0.2f, 0.8f));
         _hoverSequence.SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutQuad);
     }
@@ -112,28 +112,69 @@ public class BeeBehavior : MonoBehaviour
 
     public void TriggerInteract()
     {
+        StartCoroutine(InteractSequence());
+    }
+
+    IEnumerator InteractSequence()
+    {
         BoardElement[] overlappingObjects = GetOverlappingObjects();
 
         if (overlappingObjects == null)
-            return;
+            yield break;
 
         if (followerBee)
             followerBee.TriggerInteract();
 
-        _landingSequence.Play().OnComplete(()=> 
-        { 
-            _landingSequence.Rewind(); 
-        });
+        Debug.Log("Start Interact");
+        //Play the interact animation and wait for the descend animation to play
+        yield return _landingSequence.Play().WaitForElapsedLoops(1);
 
+        Interact();
+
+        Debug.Log("End Interact");
+        //Wait for ascent animation to play
+        yield return _landingSequence.WaitForElapsedLoops(1);
+        _landingSequence.Rewind();
+    }
+
+    IEnumerator DeathSequence()
+    {
+        //Unparent the sprite so I can screw with it without it being destroyed
+        var billboard = GetComponentInChildren<BillboardSprite>();
+        var spriteGO = billboard.gameObject;
+
+
+        var killed = billboard.transform.DOKill();
+        _landingSequence.Kill();
+        _hoverSequence.Kill();
+
+        spriteGO.transform.SetParent(BeelineManager.Instance.transform, true);
+
+        GetBeelineController().RemoveBee(this);
+
+        spriteGO.transform.DORotate(new Vector3(360, 0, 0), 0.1f)
+            .SetEase(Ease.Linear)
+            .SetLoops(3, LoopType.Incremental)
+            .OnComplete(() => {
+                Destroy(spriteGO);
+            });
+        
+        Destroy(billboard);
+        yield return null;
+
+    }
+
+    public void Interact()
+    {
+        BoardElement[] overlappingObjects = GetOverlappingObjects();
 
         foreach (BoardElement obj in overlappingObjects)
         {
-            if(obj.TryGetComponent(out IInteractive interactable))
+            if (obj.TryGetComponent(out IInteractive interactable))
             {
                 interactable.OnInteract(gameObject);
             }
         }
-
     }
 
     public void ClearPollen()
@@ -159,7 +200,7 @@ public class BeeBehavior : MonoBehaviour
     {
         AudioManager.PlayOneShot(AudioManager.Instance.beeDied);
 
-        GetBeelineController().RemoveBee(this);
+        StartCoroutine(DeathSequence());
     }
 
     public void SetLeader(BeeBehavior otherBee)

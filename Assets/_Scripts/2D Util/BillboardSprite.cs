@@ -11,14 +11,14 @@ public class BillboardSprite : MonoBehaviour
     bool isFacingRight;
 
     [SerializeField]
-    Vector3 _rotationOffset = new Vector3(100, 0, 0);
+    public Vector3 rotationOffset = new Vector3(0, 0, 0);
 
     MovementController _movementController;
 
     void Update ( )
     {
         transform.LookAt(activeCamera.transform, Vector3.up);
-        transform.Rotate ( _rotationOffset );
+        transform.Rotate ( rotationOffset );
         // 10 degrees more for debugging porpoises: so yewell bee able two sea tha sprite
     }
 
@@ -72,7 +72,7 @@ public class BillboardSprite : MonoBehaviour
 
     IEnumerator FlipSprite(Vector3 targetRotation, float time)
     {
-        var startRotation = _rotationOffset;
+        var startRotation = rotationOffset;
         var rotationPerSecond = (targetRotation - startRotation ) / time;
         float t = 0;
         float elapsed = 0;
@@ -80,8 +80,8 @@ public class BillboardSprite : MonoBehaviour
         while(t <= 1)
         {
             t = elapsed / time;
-            var lerpValue = Vector3.Slerp(_rotationOffset, targetRotation, t);
-            _rotationOffset = lerpValue;
+            var lerpValue = Vector3.Slerp(rotationOffset, targetRotation, t);
+            rotationOffset = lerpValue;
 
             yield return new WaitForFixedUpdate();
             elapsed += Time.fixedDeltaTime;

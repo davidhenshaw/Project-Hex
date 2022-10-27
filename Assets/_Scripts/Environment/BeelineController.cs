@@ -43,7 +43,6 @@ public class BeelineController : MonoBehaviour
 
         receiver.GenerateLinkedList();
 
-
         Destroy(donor.gameObject);
     }
 
@@ -80,7 +79,7 @@ public class BeelineController : MonoBehaviour
         if(newBeeline != null)
         {
             newBeeline.GenerateLinkedList();
-            newBeeline.Leader.TriggerInteract();
+            newBeeline.Leader.Interact();
         }
     }
 
