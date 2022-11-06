@@ -81,13 +81,13 @@ public class BeeBehavior : MonoBehaviour
         if (destinationObjs == null)
             return;
 
-        foreach(BoardElement obj in destinationObjs)
+        foreach(GridEntity obj in destinationObjs)
         {
             TryBump(obj);
         }
     }
 
-    bool TryBump(BoardElement obj)
+    bool TryBump(GridEntity obj)
     {
         if (!obj.TryGetComponent(out BeeBehavior otherBee))
             return false;
@@ -120,7 +120,7 @@ public class BeeBehavior : MonoBehaviour
 
     IEnumerator InteractSequence()
     {
-        BoardElement[] overlappingObjects = GetOverlappingObjects();
+        GridEntity[] overlappingObjects = GetOverlappingObjects();
 
         if (overlappingObjects == null)
             yield break;
@@ -172,9 +172,9 @@ public class BeeBehavior : MonoBehaviour
 
     public void DoInteraction()
     {
-        BoardElement[] overlappingObjects = GetOverlappingObjects();
+        GridEntity[] overlappingObjects = GetOverlappingObjects();
 
-        foreach (BoardElement obj in overlappingObjects)
+        foreach (GridEntity obj in overlappingObjects)
         {
             if (obj.TryGetComponent(out IInteractive interactable))
             {
@@ -215,7 +215,7 @@ public class BeeBehavior : MonoBehaviour
 
         if (TryGetComponent(out BoardFollower followerComponent))
         {
-            followerComponent.Leader = otherBee.GetComponent<BoardElement>();
+            followerComponent.Leader = otherBee.GetComponent<GridEntity>();
         }
     }
 
@@ -225,7 +225,7 @@ public class BeeBehavior : MonoBehaviour
 
         if (otherBee.TryGetComponent(out BoardFollower followerComponent))
         {
-            followerComponent.SetToFollow(this.GetComponent<BoardElement>());
+            followerComponent.SetToFollow(this.GetComponent<GridEntity>());
         }
     }
 
@@ -248,9 +248,9 @@ public class BeeBehavior : MonoBehaviour
         return GetComponentInParent<BeelineController>();
     }
 
-    BoardElement[] GetOverlappingObjects()
+    GridEntity[] GetOverlappingObjects()
     {
-        var myBoardElement = GetComponentInParent<BoardElement>();
+        var myBoardElement = GetComponentInParent<GridEntity>();
 
         if (myBoardElement == null)
             return null;

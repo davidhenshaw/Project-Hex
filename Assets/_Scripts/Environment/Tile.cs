@@ -11,11 +11,11 @@ public class Tile : MonoBehaviour
         get;
         private set;
     }
-    public readonly List<BoardElement> elements = new List<BoardElement>();
+    public readonly List<GridEntity> entities = new List<GridEntity>();
     /// <summary>
     /// A list of BoardElements that want to move to this tile
     /// </summary>
-    public readonly List<BoardElement> speculativeElements = new List<BoardElement>();
+    //public readonly List<GridEntity> speculativeElements = new List<GridEntity>();
 
     public void InitPosition()
     {
@@ -32,10 +32,10 @@ public class Tile : MonoBehaviour
             inputPos);
     }
 
-    public void Add(BoardElement b)
+    public void Add(GridEntity b)
     {
-        elements.Add(b);
-        foreach(BoardElement obj in elements)
+        entities.Add(b);
+        foreach(GridEntity obj in entities)
         {
             if (obj.Equals(b))
                 continue;
@@ -44,10 +44,10 @@ public class Tile : MonoBehaviour
         }
     }
 
-    public void Remove(BoardElement b)
+    public void Remove(GridEntity b)
     {
-        elements.Remove(b);
-        foreach (BoardElement obj in elements)
+        entities.Remove(b);
+        foreach (GridEntity obj in entities)
         {
             if (obj.Equals(b))
                 continue;

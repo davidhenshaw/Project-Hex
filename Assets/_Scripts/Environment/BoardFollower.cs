@@ -9,9 +9,9 @@ using UnityEngine.Serialization;
 public class BoardFollower : MovementController
 {
     [FormerlySerializedAs("toFollow")]
-    public BoardElement Leader;
+    public GridEntity Leader;
     
-    ElementMovement _parentMover;
+    GridEntityMovement _parentMover;
 
     //private void OnParentMoved(Vector3Int from, Vector3Int to)
     //{
@@ -22,13 +22,13 @@ public class BoardFollower : MovementController
     {
         base.Awake();
         if(Leader != null)
-            _parentMover = Leader.GetComponent<ElementMovement>();
+            _parentMover = Leader.GetComponent<GridEntityMovement>();
     }
 
-    public void SetToFollow(BoardElement leader)
+    public void SetToFollow(GridEntity leader)
     {
         Leader = leader;
-        _parentMover = leader.GetComponent<ElementMovement>();
+        _parentMover = leader.GetComponent<GridEntityMovement>();
     }
 
     public void ClearLeader()

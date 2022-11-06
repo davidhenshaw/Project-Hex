@@ -21,16 +21,14 @@ public abstract class MovementController : MonoBehaviour
     public Vector3Int NextMove { get; set; }
     public bool IsNextPositionDirty { get; set; } = true;
 
-    protected ElementMovement _mover;
+    protected GridEntityMovement _mover;
 
     [SerializeField]
     GameObject _sprite;
 
-    bool isFacingRight = true;
-
     protected virtual void Awake()
     {
-        _mover = GetComponent<ElementMovement>();
+        _mover = GetComponent<GridEntityMovement>();
     }
 
     public abstract Vector3Int CalculateNextPosition();
@@ -86,7 +84,7 @@ public abstract class MovementController : MonoBehaviour
             return false;
         }
 
-        foreach (BoardElement b in destinationTile.elements)
+        foreach (GridEntity b in destinationTile.entities)
         {
             //don't check if the object is itself
             if (b.Equals(this.GetBoardElement()))
@@ -114,7 +112,7 @@ public abstract class MovementController : MonoBehaviour
             return false;
         }
 
-        foreach (BoardElement b in destinationTile.elements)
+        foreach (GridEntity b in destinationTile.entities)
         {
             //don't check if the object is itself
             if (b.Equals(this.GetBoardElement()))
@@ -153,7 +151,7 @@ public abstract class MovementController : MonoBehaviour
             return false;
         }
 
-        foreach (BoardElement b in destinationTile.elements)
+        foreach (GridEntity b in destinationTile.entities)
         {
             // if the element is trying to move in the opposite direction (swap places) with me, validation fails
             if (b.TryGetComponent(out MovementController other))
@@ -177,7 +175,7 @@ public abstract class MovementController : MonoBehaviour
 
     }
 
-    public virtual BoardElement GetBoardElement()
+    public virtual GridEntity GetBoardElement()
     {
         return _mover;
     }

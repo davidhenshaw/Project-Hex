@@ -10,7 +10,7 @@ public interface IInteractive
     void OnInteract(GameObject caller);
 }
 
-public class FlowerBehavior : BoardElement, IInteractive
+public class FlowerBehavior : GridEntity, IInteractive
 {
     public static Action<FlowerType> flowerCrossbred;
 

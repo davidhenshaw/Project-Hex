@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class Goal : BoardElement
+public class Goal : GridEntity
 {
     public bool IsOpen = false;
 
@@ -150,7 +150,7 @@ public class Goal : BoardElement
 
         while(currBee)
         {
-            ElementMovement mover = currBee.GetComponent<ElementMovement>();
+            GridEntityMovement mover = currBee.GetComponent<GridEntityMovement>();
             mover.Move(GridPosition);
 
             yield return new WaitForSeconds(0.2f);
@@ -162,7 +162,7 @@ public class Goal : BoardElement
         }
     }
 
-    public override void OnTileEnter(BoardElement other)
+    public override void OnTileEnter(GridEntity other)
     {
         if(other.TryGetComponent(out BeeBehavior bee))
         {

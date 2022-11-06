@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class StaticElementController : MovementController
 {
-    BoardElement staticElement;
+    GridEntity staticElement;
 
     protected override void Awake()
     {
         base.Awake();
-        staticElement = GetComponent<BoardElement>();
+        staticElement = GetComponent<GridEntity>();
     }
 
     public override Vector3Int GetCurrentPosition()
@@ -22,7 +22,7 @@ public class StaticElementController : MovementController
         return false;
     }
 
-    public override BoardElement GetBoardElement()
+    public override GridEntity GetBoardElement()
     {
         return staticElement;
     }

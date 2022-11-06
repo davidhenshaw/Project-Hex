@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ElementMovement : BoardElement
+public class GridEntityMovement : GridEntity
 {
     Collider _collider;
     [SerializeField]

@@ -5,8 +5,6 @@ using System;
 
 public class GameSession : Singleton<GameSession>
 {
-    private float _loadDelay = 1.2f;
-
     public bool IsPaused { get; private set; }
 
     protected override void Awake()

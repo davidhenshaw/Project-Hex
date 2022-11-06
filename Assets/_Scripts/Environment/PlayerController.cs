@@ -6,7 +6,6 @@ public class PlayerController : MovementController
 {
     bool _isInteracting = false;
 
-    public event Action Died;
     private BeeBehavior _beehaviour;
 
     [SerializeField]
@@ -80,7 +79,7 @@ public class PlayerController : MovementController
             return false;
         }
 
-        foreach (BoardElement b in destinationTile.elements)
+        foreach (GridEntity b in destinationTile.entities)
         {
             // if the element is trying to move in the opposite direction (swap places) with me, validation fails
             if (b.TryGetComponent(out BeeBehavior other))

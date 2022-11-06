@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class BoardElement : MonoBehaviour
+public abstract class GridEntity : MonoBehaviour
 {
     private Board _board;
     public Vector3Int GridPosition 
@@ -62,17 +62,17 @@ public abstract class BoardElement : MonoBehaviour
         currTile.Remove(this);
     }
 
-    public virtual BoardElement[] GetOverlappingObjects()
+    public virtual GridEntity[] GetOverlappingObjects()
     {
         return Board.GetObjectsAtPosition(GridPosition);
     }
 
-    public virtual void OnTileEnter(BoardElement other)
+    public virtual void OnTileEnter(GridEntity other)
     {
 
     }
 
-    public virtual void OnTileExit(BoardElement other)
+    public virtual void OnTileExit(GridEntity other)
     {
 
     }

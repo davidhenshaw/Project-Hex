@@ -79,11 +79,11 @@ public class Board : Singleton<Board>
         }
     }
 
-    public BoardElement[] GetObjectsAtPosition(Vector3Int gridPos)
+    public GridEntity[] GetObjectsAtPosition(Vector3Int gridPos)
     {
         if (!tiles.TryGetValue(gridPos, out Tile tile))
             return null;
 
-        return tile.elements.ToArray();
+        return tile.entities.ToArray();
     }
 }
