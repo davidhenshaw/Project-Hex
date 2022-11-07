@@ -150,7 +150,7 @@ public class BeeBehavior : MonoBehaviour
         var spriteGO = billboard.gameObject;
 
 
-        var killed = billboard.transform.DOKill();
+        billboard.transform.DOKill();
         _landingSequence.Kill();
         _hoverSequence.Kill();
 

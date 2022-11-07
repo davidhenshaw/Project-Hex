@@ -106,13 +106,17 @@ public class BeelineController : MonoBehaviour
         var newController = Instantiate(BeelineManager.Instance.EmptyBeelinePrefab, Board.Instance.grid.transform);
         
         //Replace previous root bee with a leader bee. There's a chance it already was one but whatever
-        var newLeader = Instantiate(BeelineManager.Instance.LeaderPrefab, 
+        var newLeaderObj = Instantiate(BeelineManager.Instance.LeaderPrefab, 
             rootBee.transform.position, 
             rootBee.transform.rotation, 
             newController.gameObject.transform);
 
-        if(rootBee.followerBee)
-            newLeader.GetComponent<BeeBehavior>().SetFollower(rootBee.followerBee);
+        BeeBehavior newLeaderBee = newLeaderObj.GetComponent<BeeBehavior>();
+
+        if (rootBee.followerBee)
+            newLeaderBee.SetFollower(rootBee.followerBee);
+
+        rootBee.CopyState(newLeaderBee);
 
         //Transfer rest of old beeline to the new one
         var currBee = rootBee.followerBee;
