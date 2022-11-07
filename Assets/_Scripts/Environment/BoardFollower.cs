@@ -45,5 +45,4 @@ public class BoardFollower : MovementController
         NextMove = _parentMover.GridPosition;
         return NextMove;
     }
-
 }

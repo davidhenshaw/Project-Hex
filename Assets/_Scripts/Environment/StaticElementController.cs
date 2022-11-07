@@ -17,12 +17,12 @@ public class StaticElementController : MovementController
         return staticElement.GridPosition;
     }
 
-    public override bool ValidateNextMove()
+    public override bool ResolveNextMove()
     {
-        return false;
+        return true;
     }
 
-    public override GridEntity GetBoardElement()
+    public override GridEntity GetGridEntity()
     {
         return staticElement;
     }
@@ -32,7 +32,7 @@ public class StaticElementController : MovementController
         return NextMove = staticElement.GridPosition;
     }
 
-    public override bool WillBlockerMove(Vector3Int destPos)
+    public override bool WillBlockerMove(Tile destinationTile)
     {
         return false;
     }

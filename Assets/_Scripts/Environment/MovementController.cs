@@ -20,8 +20,11 @@ public abstract class MovementController : MonoBehaviour
 
     public Vector3Int NextMove { get; set; }
     public bool IsNextPositionDirty { get; set; } = true;
+    public MovementController MovementDependency { get; set; }
+    public GridEntity GridEntity { get => _mover; }
 
     protected GridEntityMovement _mover;
+    protected Board board;
 
     [SerializeField]
     GameObject _sprite;
@@ -29,10 +32,11 @@ public abstract class MovementController : MonoBehaviour
     protected virtual void Awake()
     {
         _mover = GetComponent<GridEntityMovement>();
+        board = GetComponentInParent<Board>();
     }
 
     public abstract Vector3Int CalculateNextPosition();
-
+    
     public virtual void ExecuteMove()
     {
         var from = GetCurrentPosition();
@@ -42,26 +46,29 @@ public abstract class MovementController : MonoBehaviour
         Moved?.Invoke(from, NextMove);
     }
 
-    public virtual bool ValidateNextMove()
+    public virtual void HandleInvalidMove()
     {
-        if(!ValidateMovementOverlap())
+        NextMove = GridEntity.GridPosition;
+        IsNextPositionDirty = false;
+    }
+
+    public virtual bool ResolveNextMove()
+    {
+        Tile destinationTile;
+
+        // if there is no tile at the next grid position, you can't move there
+        if (!board.tiles.TryGetValue(NextMove, out destinationTile))
         {
             IsNextPositionDirty = false;
-            NextMove = GetCurrentPosition();
             return false;
         }
 
-        if (CanMoveImmediate(NextMove))
+        if (CanOverlapImmediate(destinationTile))
         {
             IsNextPositionDirty = false;
             return true;
         }
 
-        if (WillBlockerMove(NextMove))
-        {
-            IsNextPositionDirty = false;
-            return true;
-        }
 
         MoveBlocked?.Invoke(GetCurrentPosition(), NextMove);
         _mover.OnMoveBlocked(NextMove);
@@ -72,50 +79,64 @@ public abstract class MovementController : MonoBehaviour
         return false;
     }
 
-    public virtual bool CanMoveImmediate(Vector3Int destPos)
+    /// <summary>
+    /// Can this entity overlap what is currently at the destinationTile 
+    /// </summary>
+    /// <param name="destinationTile"></param>
+    /// <returns></returns>
+    public virtual bool CanOverlapImmediate(Tile destinationTile)
     {
-        var board = Board.Instance;
-
-        Tile destinationTile;
-
-        // if there is no tile at the next grid position, you can't move there
-        if (!board.tiles.TryGetValue(destPos, out destinationTile))
+        IsNextPositionDirty = false;
+        foreach (GridEntity otherEntity in destinationTile.entities)
         {
-            return false;
-        }
-
-        foreach (GridEntity b in destinationTile.entities)
-        {
-            //don't check if the object is itself
-            if (b.Equals(this.GetBoardElement()))
+            //don't check if the object is yourself
+            if (otherEntity.Equals(this.GridEntity))
                 continue;
 
-            // if the element is contained within the mask. If so, movement is blocked
-            if (b.gameObject.layer == LayerMask.NameToLayer("TileBlocking"))
-            {
+            if (GridEntity.CanOverlap(otherEntity))
+                continue;
+
+            if (!WillEntityMove(otherEntity))
                 return false;
-            }
         }
 
         return true;
     }
 
-    public virtual bool WillBlockerMove(Vector3Int destPos)
+    bool WillEntityMove(GridEntity other)
     {
-        var board = Board.Instance;
-
-        Tile destinationTile;
-
-        // if there is no tile at the next grid position, you can't move there
-        if (!board.tiles.TryGetValue(destPos, out destinationTile))
-        {
+        if (!other.TryGetComponent(out MovementController otherController))
             return false;
+
+        //Protect from circular dependencies
+        if (IsCircularDependency(otherController))
+            return false;
+
+        MovementDependency = otherController;
+
+        return otherController.ResolveNextMove() && otherController.NextMove != NextMove;
+    }
+
+    bool IsCircularDependency(MovementController movementController)
+    {
+        MovementController currController = MovementDependency;
+        while(currController != null)
+        {
+            if (currController.MovementDependency == this)
+                return true;
+
+            currController = currController.MovementDependency;
         }
 
+        return false;
+    }
+
+    public virtual bool WillBlockerMove(Tile destinationTile)
+    {
         foreach (GridEntity b in destinationTile.entities)
         {
             //don't check if the object is itself
-            if (b.Equals(this.GetBoardElement()))
+            if (b.Equals(this.GridEntity))
                 continue;
 
             // if the element is contained within the mask. If so, movement is blocked
@@ -126,7 +147,7 @@ public abstract class MovementController : MonoBehaviour
                     if(blocker.IsNextPositionDirty)
                     {
                         IsNextPositionDirty = false;
-                        return blocker.ValidateNextMove();
+                        return blocker.ResolveNextMove();
                     }
                     else
                     {
@@ -139,43 +160,13 @@ public abstract class MovementController : MonoBehaviour
         return true;
     }
 
-    public bool ValidateMovementOverlap()
-    {
-        var board = Board.Instance;
-
-        Tile destinationTile;
-
-        // if there is no tile at the next grid position, you can't move there
-        if (!board.tiles.TryGetValue(NextMove, out destinationTile))
-        {
-            return false;
-        }
-
-        foreach (GridEntity b in destinationTile.entities)
-        {
-            // if the element is trying to move in the opposite direction (swap places) with me, validation fails
-            if (b.TryGetComponent(out MovementController other))
-            {
-                Vector3 moveDir = NextMove - GetCurrentPosition();
-                Vector3 otherMoveDir = other.NextMove - other.GetCurrentPosition();
-                
-                if(Vector3.Dot(moveDir.normalized, otherMoveDir.normalized) <= -0.9f)
-                {
-                    return false;
-                }
-
-            }
-        }
-
-        return true;
-    }
-
     public virtual void PostMoveUpdate()
     {
-
+        IsNextPositionDirty = true;
+        MovementDependency = null;
     }
 
-    public virtual GridEntity GetBoardElement()
+    public virtual GridEntity GetGridEntity()
     {
         return _mover;
     }

@@ -15,7 +15,7 @@ public class Tile : MonoBehaviour
     /// <summary>
     /// A list of BoardElements that want to move to this tile
     /// </summary>
-    //public readonly List<GridEntity> speculativeElements = new List<GridEntity>();
+    public readonly List<GridEntity> speculativeElements = new List<GridEntity>();
 
     public void InitPosition()
     {

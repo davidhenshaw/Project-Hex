@@ -60,12 +60,16 @@ public class Board : Singleton<Board>
 
         foreach(MovementController moveController in moveControllers)
         {
-            moveController.CalculateNextPosition();
+            var nextPos = moveController.CalculateNextPosition();
+            RegisterSpeculativeMove(nextPos, moveController.GridEntity);
         }
 
         foreach(MovementController mover in moveControllers)
         {
-            mover.ValidateNextMove();
+            if(!mover.ResolveNextMove())
+            {
+                mover.HandleInvalidMove();
+            }
         }
 
         foreach(MovementController mover in moveControllers)
@@ -77,6 +81,25 @@ public class Board : Singleton<Board>
         {
             mover.PostMoveUpdate();
         }
+
+        ClearSpeculativeMoves();
+    }
+
+    void ClearSpeculativeMoves()
+    {
+        foreach(Tile tile in tiles.Values)
+        {
+            tile.speculativeElements.Clear();
+        }
+    }
+
+    void RegisterSpeculativeMove(Vector3Int moveTo, GridEntity entity)
+    {
+        if(tiles.TryGetValue(moveTo, out Tile tile))
+        {
+            tile.speculativeElements.Add(entity);
+        }
+
     }
 
     public GridEntity[] GetObjectsAtPosition(Vector3Int gridPos)

@@ -67,6 +67,11 @@ public abstract class GridEntity : MonoBehaviour
         return Board.GetObjectsAtPosition(GridPosition);
     }
 
+    public virtual bool CanOverlap(GridEntity other)
+    {
+        return other.gameObject.layer != LayerMask.NameToLayer("TileBlocking");
+    }
+
     public virtual void OnTileEnter(GridEntity other)
     {
 

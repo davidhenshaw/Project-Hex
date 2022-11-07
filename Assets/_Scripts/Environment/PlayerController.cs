@@ -11,7 +11,7 @@ public class PlayerController : MovementController
     [SerializeField]
     private GameObject _dirIndicator;
 
-    public override event Action<Vector3Int, Vector3Int> MoveBlocked;
+    //public override event Action<Vector3Int, Vector3Int> MoveBlocked;
 
     protected override void Awake()
     {
@@ -47,53 +47,6 @@ public class PlayerController : MovementController
 
         base.ExecuteMove();
         AudioManager.PlayOneShot(AudioManager.Instance.beeMoved);
-    }
-
-    public override bool ValidateNextMove()
-    {
-        if (_isInteracting)
-            return false;
-
-        if(!ValidateBeeOverlap())
-        {
-            MoveBlocked?.Invoke(GetCurrentPosition(), NextMove);
-            _mover.OnMoveBlocked(NextMove);
-
-            NextMove = GetCurrentPosition();
-            IsNextPositionDirty = false;
-
-            return false;
-        }
-        return base.ValidateNextMove();
-    }
-
-    public bool ValidateBeeOverlap()
-    {
-        var board = Board.Instance;
-
-        Tile destinationTile;
-
-        // if there is no tile at the next grid position, you can't move there
-        if (!board.tiles.TryGetValue(NextMove, out destinationTile))
-        {
-            return false;
-        }
-
-        foreach (GridEntity b in destinationTile.entities)
-        {
-            // if the element is trying to move in the opposite direction (swap places) with me, validation fails
-            if (b.TryGetComponent(out BeeBehavior other))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public override Vector3Int GetCurrentPosition()
-    {
-        return _mover.GridPosition;
     }
     
     public override Vector3Int CalculateNextPosition()
@@ -157,5 +110,4 @@ public class PlayerController : MovementController
 
         _dirIndicator.transform.rotation = Quaternion.Euler(0,0, HexUtil.ToAngle(dir));
     }
-
 }
