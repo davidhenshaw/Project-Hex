@@ -11,6 +11,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Daisy Particles
       objectReference: {fileID: 0}
+    - target: {fileID: 2769655432461222544, guid: d9600f7ff533aec4f975ae4d88a33a5e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8141667606566984539, guid: d9600f7ff533aec4f975ae4d88a33a5e, type: 3}
       propertyPath: m_RootOrder
       value: 1

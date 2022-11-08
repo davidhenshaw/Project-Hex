@@ -17,8 +17,7 @@ public class FlowerManager : Singleton<FlowerManager>
 
     public bool TryGetCrossbreed(FlowerType parentA, FlowerType parentB, out GameObject offspringPrefab)
     {
-        offspringPrefab = crossbreedDictionary[GenerateKey(parentA, parentB)];
-        return true;
+        return crossbreedDictionary.TryGetValue(GenerateKey(parentA, parentB), out offspringPrefab);
     }
 
     void BuildFlowerDictionary()

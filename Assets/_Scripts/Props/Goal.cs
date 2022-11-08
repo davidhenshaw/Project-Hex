@@ -138,7 +138,7 @@ public class Goal : GridEntity
 
         yield return new WaitForSeconds(0.8f);
 
-        Destroy(_uiLockMarker.gameObject);
+        _uiLockMarker.gameObject.SetActive(false);
     }
 
     IEnumerator AbsorbFollowerBees(BeeBehavior head)

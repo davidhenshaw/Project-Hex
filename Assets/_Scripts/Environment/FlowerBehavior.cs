@@ -72,7 +72,8 @@ public class FlowerBehavior : GridEntity, IInteractive
 
         if (bee.IsPollenated)
         {
-            CrossBreed(bee.PollenType);
+            if (!TryCrossBreed(bee.PollenType))
+                return;
             bee.ClearPollen();
             AudioManager.PlayOneShot(AudioManager.Instance.flowerPollenated);
         }
@@ -80,8 +81,8 @@ public class FlowerBehavior : GridEntity, IInteractive
         {
             bee.SetPollen(type);
             PlayFlowerWiggle();
-            FadeFlowerColor();
-            this.ClearPollen();
+            //FadeFlowerColor();
+            //this.ClearPollen();
         }
     }
 
@@ -91,10 +92,12 @@ public class FlowerBehavior : GridEntity, IInteractive
         HasPollen = false;
     }
 
-    public void CrossBreed(FlowerType other)
+    public bool TryCrossBreed(FlowerType other)
     {
         GameObject offspring;
-        FlowerManager.Instance.TryGetCrossbreed(this.type, other, out offspring);
+
+        if (!FlowerManager.Instance.TryGetCrossbreed(this.type, other, out offspring))
+            return false;
 
         Instantiate(offspring, transform.position, transform.rotation, Board.grid.transform);
         Instantiate(pollenBurstPrefab, transform.position, transform.rotation, Board.grid.transform);
@@ -103,5 +106,7 @@ public class FlowerBehavior : GridEntity, IInteractive
         flowerCrossbred?.Invoke(offspringType);
         
         Destroy(gameObject);
+
+        return true;
     }
 }

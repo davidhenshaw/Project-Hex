@@ -55,6 +55,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Coleus Particles
       objectReference: {fileID: 0}
+    - target: {fileID: 6015798234222321658, guid: 300c6614918a0374c9e102fd500d1ad7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6536429525438386696, guid: 300c6614918a0374c9e102fd500d1ad7, type: 3}
       propertyPath: playOnAwake
       value: 1

@@ -63,6 +63,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sunflower Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 499720113891058494, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3285406503305362617, guid: ae0ab0a80c716514aa0fed72d1e8f31d, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -137,6 +141,10 @@ PrefabInstance:
     - target: {fileID: 588376926953512522, guid: 6e24dd80084c4604689456a4f0a62212, type: 3}
       propertyPath: m_Name
       value: Sunflower Particles
+      objectReference: {fileID: 0}
+    - target: {fileID: 588376926953512522, guid: 6e24dd80084c4604689456a4f0a62212, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6825377647476230017, guid: 6e24dd80084c4604689456a4f0a62212, type: 3}
       propertyPath: m_RootOrder
