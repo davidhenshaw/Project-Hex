@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Sunflower
   particlePrefab: {fileID: 588376926953512522, guid: 6e24dd80084c4604689456a4f0a62212, type: 3}
+  icon: {fileID: -1381847567, guid: 2013832ecd3d68542b8861defd92cb47, type: 3}

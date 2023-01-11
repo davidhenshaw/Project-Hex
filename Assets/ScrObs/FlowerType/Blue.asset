@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Daisy
   particlePrefab: {fileID: 2769655432461222544, guid: d9600f7ff533aec4f975ae4d88a33a5e, type: 3}
+  icon: {fileID: -345697262, guid: 1c01cdd290170d54e960f03ec8812f62, type: 3}

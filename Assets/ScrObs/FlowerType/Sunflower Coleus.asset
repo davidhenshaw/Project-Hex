@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Sunflower Coleus
   m_EditorClassIdentifier: 
   displayName: Sunflower Coleus
-  particlePrefab: {fileID: 0}
+  particlePrefab: {fileID: 2937251221396264248, guid: 5692128bf37192741a974b7d091bdc42, type: 3}
+  icon: {fileID: 21300000, guid: 5aed0db0bfe1a8d42b57cfe0528e17cb, type: 3}

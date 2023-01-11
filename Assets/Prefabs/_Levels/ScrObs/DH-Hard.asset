@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0fc16129a83a204aa9f220c3e6fe02a, type: 3}
-  m_Name: Coleus
+  m_Script: {fileID: 11500000, guid: 01f9c373c2c6e224daf0f406ff043ec8, type: 3}
+  m_Name: DH-Hard
   m_EditorClassIdentifier: 
-  displayName: Coleus
-  particlePrefab: {fileID: 6015798234222321658, guid: 300c6614918a0374c9e102fd500d1ad7, type: 3}
-  icon: {fileID: 1733257559, guid: 858da0c65f374484fb764bec138a3dba, type: 3}
+  LevelPrefab: {fileID: 5079286647555840070, guid: ba62170bd3a1d43408a68c0be4c13b33, type: 3}
+  DisplayName: Keep your distance
+  Description: 
