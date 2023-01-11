@@ -5,11 +5,23 @@ using UnityEngine;
 public class BeelineController : MonoBehaviour
 {
     public BeeBehavior Leader { get; set; }
+    List<Transform> childTransforms = new List<Transform>();
+    LineRenderer lineRenderer;
+
+    private void Awake()
+    {
+        lineRenderer = GetComponent<LineRenderer>();    
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        GenerateLinkedList();
+        GenerateBeeLinks();
+    }
+
+    private void Update()
+    {
+        DrawConnectingLine(childTransforms);
     }
 
     /// <summary>
@@ -41,7 +53,7 @@ public class BeelineController : MonoBehaviour
 
         yield return null;
 
-        receiver.GenerateLinkedList();
+        receiver.GenerateBeeLinks();
 
         Destroy(donor.gameObject);
     }
@@ -65,6 +77,8 @@ public class BeelineController : MonoBehaviour
     public static IEnumerator HandleBeelineSplit(BeeBehavior toRemove)
     {
         BeelineController newBeeline = null;
+        BeelineController prevBeeline = toRemove.GetBeelineController();
+
         //Find the bee to remove
         if(toRemove.followerBee)
         {
@@ -76,9 +90,11 @@ public class BeelineController : MonoBehaviour
 
         yield return new WaitForEndOfFrame();
 
+        prevBeeline.GenerateBeeLinks();
+
         if(newBeeline != null)
         {
-            newBeeline.GenerateLinkedList();
+            newBeeline.GenerateBeeLinks();
             newBeeline.Leader.DoInteraction();
         }
     }
@@ -133,29 +149,40 @@ public class BeelineController : MonoBehaviour
         return newController.GetComponent<BeelineController>();
     }
 
-    void GenerateLinkedList()
+    void GenerateBeeLinks()
     {
         BeeBehavior prev = null;
+        childTransforms.Clear();
         for(int i = 0; i < transform.childCount; i++)
         {
-            if(transform.GetChild(i).TryGetComponent(out BeeBehavior currentBee))
-            {
-                if(Leader == null)
-                    Leader = currentBee;
-
-                if(prev != null)
-                {
-                    currentBee.SetLeader(prev);
-                    prev.SetFollower(currentBee);
-                }
-
-                prev = currentBee;
-            }
-            else
-            {
+            if (!transform.GetChild(i).TryGetComponent(out BeeBehavior currentBee))
                 continue;
+            
+            if(Leader == null)
+                Leader = currentBee;
+
+            if(prev != null)
+            {
+                currentBee.SetLeader(prev);
+                prev.SetFollower(currentBee);
             }
+
+            childTransforms.Add(currentBee.GetComponentInChildren<BillboardSprite>().transform);
+            prev = currentBee;
 
         }
+    }
+
+    void DrawConnectingLine(List<Transform> objTransforms)
+    {
+        if (objTransforms == null || objTransforms.Count <= 0)
+            return;
+
+        List<Vector3> linePos = objTransforms.ConvertAll(
+            (tf) => { return tf.position; }
+        );
+
+        lineRenderer.positionCount = linePos.Count;
+        lineRenderer.SetPositions(linePos.ToArray());
     }
 }
