@@ -36,22 +36,7 @@ public class Board : Singleton<Board>
         }
     }
 
-    private void Update()
-    {
-        HandleInputs();
-    }
-
-    void HandleInputs()
-    {
-        // In the original movement code, diagonal movements are confirmed by North and South button presses
-        // meaning we don't need to check East and West at all
-        if (Input.GetButtonDown("Move_N") || Input.GetButtonDown("Move_S"))
-        {
-            ResolveMoves();
-        }
-    }
-
-    public void ResolveMoves()
+    public void Tick()
     {
         if (GameSession.Instance.IsPaused)
             return;
@@ -60,6 +45,9 @@ public class Board : Singleton<Board>
 
         foreach(MovementController moveController in moveControllers)
         {
+            if (moveController is PlayerController)
+                continue;
+
             var nextPos = moveController.CalculateNextPosition();
             RegisterSpeculativeMove(nextPos, moveController.GridEntity);
         }

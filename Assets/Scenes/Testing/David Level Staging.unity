@@ -2687,6 +2687,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7457767304421665399}
     m_Modifications:
+    - target: {fileID: 59924219086620647, guid: 242f4bfa9f487eb48a3433e271ebc35d, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2863341122590660964, guid: 242f4bfa9f487eb48a3433e271ebc35d, type: 3}
       propertyPath: m_Name
       value: Player
@@ -2734,6 +2738,42 @@ PrefabInstance:
     - target: {fileID: 2863341122590660967, guid: 242f4bfa9f487eb48a3433e271ebc35d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3125550025364262982, guid: 242f4bfa9f487eb48a3433e271ebc35d, type: 3}
+      propertyPath: m_Name
+      value: NW_Arrow
+      objectReference: {fileID: 0}
+    - target: {fileID: 4265979484029446876, guid: 242f4bfa9f487eb48a3433e271ebc35d, type: 3}
+      propertyPath: m_Name
+      value: Dir Selector
+      objectReference: {fileID: 0}
+    - target: {fileID: 4597044244212821046, guid: 242f4bfa9f487eb48a3433e271ebc35d, type: 3}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5230605294752469817, guid: 242f4bfa9f487eb48a3433e271ebc35d, type: 3}
+      propertyPath: m_Name
+      value: N_Arrow
+      objectReference: {fileID: 0}
+    - target: {fileID: 6069434024213620556, guid: 242f4bfa9f487eb48a3433e271ebc35d, type: 3}
+      propertyPath: m_Name
+      value: SE_Arrow
+      objectReference: {fileID: 0}
+    - target: {fileID: 6494430444762861261, guid: 242f4bfa9f487eb48a3433e271ebc35d, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7897452000299374220, guid: 242f4bfa9f487eb48a3433e271ebc35d, type: 3}
+      propertyPath: m_Name
+      value: NE_ Arrow
+      objectReference: {fileID: 0}
+    - target: {fileID: 8764942167393623460, guid: 242f4bfa9f487eb48a3433e271ebc35d, type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 9009972067342161947, guid: 242f4bfa9f487eb48a3433e271ebc35d, type: 3}
+      propertyPath: m_Name
+      value: S_Arrow
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 242f4bfa9f487eb48a3433e271ebc35d, type: 3}
@@ -3364,7 +3404,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7792542728443522563}
   m_Layer: 0
-  m_Name: DH-Intermediate
+  m_Name: Level Entities
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -1,23 +1,39 @@
 using System;
 using UnityEngine;
 using metakazz.Hex;
+using System.Collections.Generic;
 
 public class PlayerController : MovementController
 {
+    private static List<PlayerController> AllPlayerControllers = new List<PlayerController>();
+
     bool _isInteracting = false;
 
     private BeeBehavior _beehaviour;
-
-    [SerializeField]
-    private GameObject _dirIndicator;
-
-    //public override event Action<Vector3Int, Vector3Int> MoveBlocked;
+    DirectionSelectorWidget _dirSelector;
 
     protected override void Awake()
     {
         base.Awake();
+        AllPlayerControllers.Add(this);
+
+        _dirSelector = GetComponentInChildren<DirectionSelectorWidget>();
         _beehaviour = GetComponent<BeeBehavior>();
         _beehaviour.InteractFinished += OnInteractFinished;
+    }
+
+    private void OnDisable()
+    {
+        AllPlayerControllers.Remove(this);
+    }
+
+    private void Start()
+    {
+        _dirSelector.Selected += (dir) =>
+        {
+            SetNextMoveRecursive(dir);
+            board.Tick();
+        };
     }
 
     private void OnInteractFinished()
@@ -38,6 +54,8 @@ public class PlayerController : MovementController
             _isInteracting = true;
             AudioManager.PlayOneShot(AudioManager.Instance.beeLand);
         }
+
+        CalculateNextPosition();
     }
 
     public override void ExecuteMove()
@@ -99,15 +117,23 @@ public class PlayerController : MovementController
 
     void SetNextMove(HexDirection dir)
     {
-        SetDirIndicator(dir);
         NextMove = _mover.GridPosition.Neighbor(dir);
     }
 
-    void SetDirIndicator(HexDirection dir)
+    /// <summary>
+    /// Sets next move for ALL player controllers currently in existence
+    /// </summary>
+    /// <param name="dir"></param>
+    void SetNextMoveRecursive(HexDirection dir)
     {
-        if (!_dirIndicator)
-            return;
+        NextMove = _mover.GridPosition.Neighbor(dir);
 
-        _dirIndicator.transform.rotation = Quaternion.Euler(0,0, HexUtil.ToAngle(dir));
+        foreach (PlayerController pc in AllPlayerControllers)
+        {
+            if (pc.Equals(this))
+                continue;
+
+            pc.SetNextMove(dir);
+        }
     }
 }
