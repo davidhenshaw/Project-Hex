@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class BeeRequirementView : MonoBehaviour
+public class BeeRequirementWidget : MonoBehaviour
 {
     [SerializeField]
     TMP_Text beesText;

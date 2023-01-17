@@ -63,14 +63,17 @@ public class Goal : GridEntity
 
         CurrentFlowers[type] += 1;
 
-        
-
         if (CheckRequiredFlowers())
         {
             GameEvents.Instance.FlowersReached?.Invoke();
             UnlockGoal();
 
             AudioManager.PlayOneShot(AudioManager.Instance.allFlowersPollenated);
+        }
+        else
+        if(IsOneFlowerType(out FlowerType flowerType))
+        {
+            GameEvents.Instance.OneFlowerTypeLeft?.Invoke(flowerType);
         }
     }
 
@@ -96,6 +99,30 @@ public class Goal : GridEntity
             {
                 return false;
             }
+        }
+
+        return true;
+    }
+
+    bool IsOneFlowerType(out FlowerType flowerType)
+    {
+        flowerType = null;
+
+        Dictionary<FlowerType, int> tempFlowerList = new Dictionary<FlowerType, int>(CurrentFlowers);
+        foreach(FlowerType flower in CurrentFlowers.Keys)
+        {
+            if(CurrentFlowers[flower] <= 0)
+            {
+                tempFlowerList.Remove(flower);
+            }
+        }
+
+        if (tempFlowerList.Count != 1)
+            return false;
+
+        foreach(FlowerType flower in tempFlowerList.Keys)
+        {//I couldn't find a way to get the keys other than a loop :I
+            flowerType = flower;
         }
 
         return true;

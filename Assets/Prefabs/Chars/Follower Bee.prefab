@@ -217,10 +217,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c06b5c38fed99634aa7bc41e46bd9a47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pollenParticles: {fileID: 0}
-  pollenType: {fileID: 0}
   leaderBee: {fileID: 0}
   followerBee: {fileID: 0}
+  landAmount: -0.3
+  landingDuration: 0.7
 --- !u!114 &5641578117823148376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,7 +259,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.35
+  m_Radius: 0.16
   m_Center: {x: 0, y: 0, z: -0.21}
 --- !u!95 &5641578117823148383
 Animator:
@@ -412,4 +412,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a948920f05e179746991bffe7bc4a47f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rotationOffset: {x: 0, y: 0, z: 0}
+  rotationOffset: {x: 0, y: 0, z: 0}

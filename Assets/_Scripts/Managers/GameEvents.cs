@@ -13,6 +13,8 @@ public class GameEvents : PersistentSingleton<GameEvents>
     public UnityEvent NextLevelLoadTrigger;
 
     public UnityEvent<FlowerType, int, int> FlowerProgressUpdated;
+    public UnityEvent<FlowerType> OneFlowerTypeLeft;
+    public UnityEvent GoalImpossible;
     public UnityEvent<int, int> BeeProgressUpdated;
 
     public UnityEvent PauseTriggered;
