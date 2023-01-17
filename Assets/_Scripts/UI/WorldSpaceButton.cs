@@ -8,6 +8,18 @@ public class WorldSpaceButton : MonoBehaviour
     public event Action<WorldSpaceButton> MouseEnter;
     public event Action<WorldSpaceButton> MouseDown;
     public event Action<WorldSpaceButton> MouseUp;
+    public event Action<WorldSpaceButton> MouseOver;
+
+    public Color NormalColor;
+    public Color MouseOverColor;
+
+    SpriteRenderer _sprite;
+
+    private void Start()
+    {
+        _sprite = GetComponentInChildren<SpriteRenderer>();
+        _sprite.color = NormalColor;
+    }
 
     private void OnMouseEnter()
     {
@@ -22,5 +34,17 @@ public class WorldSpaceButton : MonoBehaviour
     private void OnMouseUp()
     {
         MouseUp?.Invoke(this);
+    }
+
+    private void OnMouseOver()
+    {
+        MouseOver?.Invoke(this);
+
+        _sprite.color = MouseOverColor;
+    }
+
+    private void OnMouseExit()
+    {
+        _sprite.color = NormalColor;
     }
 }
