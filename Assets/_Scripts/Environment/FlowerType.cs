@@ -15,7 +15,11 @@ public class FlowerType : ScriptableObject
     [SerializeField]
     Sprite icon;
 
+    [SerializeField]
+    bool canPollinate;
+
     public string DisplayName { get => displayName;  }
     public GameObject ParticlesPrefab { get => particlePrefab; }
     public Sprite Icon { get => icon; }
+    public bool CanPollinate { get => canPollinate; }
 }

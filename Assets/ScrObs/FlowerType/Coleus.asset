@@ -15,3 +15,4 @@ MonoBehaviour:
   displayName: Coleus
   particlePrefab: {fileID: 6015798234222321658, guid: 300c6614918a0374c9e102fd500d1ad7, type: 3}
   icon: {fileID: 1733257559, guid: 858da0c65f374484fb764bec138a3dba, type: 3}
+  canPollinate: 1

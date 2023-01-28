@@ -29,7 +29,8 @@ public class Goal : GridEntity
         private set;
     }
 
-    public Dictionary<FlowerType, int> CurrentFlowers = new Dictionary<FlowerType, int>();
+    public Dictionary<FlowerType, int> FlowerHybridsDict = new Dictionary<FlowerType, int>();
+    public Dictionary<FlowerType, int> RegularFlowersDict = new Dictionary<FlowerType, int>();
 
     private void Awake()
     {
@@ -44,11 +45,28 @@ public class Goal : GridEntity
         GameEvents.Instance.GoalInit?.Invoke(flowerRequirements.ToArray());
         GameEvents.Instance.BeeProgressUpdated?.Invoke(CurrentBees, RequiredBees);
 
+        PopulateRegularFlowersDict();
     }
 
     private void OnDisable()
     {
         FlowerBehavior.flowerCrossbred -= OnFlowerCrossbred;
+    }
+
+    void PopulateRegularFlowersDict()
+    {
+        var allFlowers = FindObjectsOfType<FlowerBehavior>();
+        RegularFlowersDict.Clear();
+        foreach (FlowerBehavior flower in allFlowers)
+        {
+            if (!flower.Type.CanPollinate)
+                continue;
+
+            if (RegularFlowersDict.ContainsKey(flower.Type))
+                RegularFlowersDict[flower.Type] += 1;
+            else
+                RegularFlowersDict.TryAdd(flower.Type, 1);
+        }
     }
 
     void OnGameplayUIInit(GameplayUIScreen gameplayUI)
@@ -59,9 +77,8 @@ public class Goal : GridEntity
     void OnFlowerCrossbred(FlowerType type)
     {
         //If the key exists already, nothing bad happens
-        CurrentFlowers.TryAdd(type, 0);
-
-        CurrentFlowers[type] += 1;
+        FlowerHybridsDict.TryAdd(type, 0);
+        FlowerHybridsDict[type] += 1;
 
         if (CheckRequiredFlowers())
         {
@@ -86,7 +103,7 @@ public class Goal : GridEntity
             int currentCount;
 
             //This flower type might not exist in the current flowers dict yet if it hasn't been crossbred yet
-            if(CurrentFlowers.TryGetValue(type, out currentCount))
+            if(FlowerHybridsDict.TryGetValue(type, out currentCount))
             {
                 GameEvents.Instance.FlowerProgressUpdated?.Invoke(type, currentCount, reqCount);
 
@@ -107,11 +124,12 @@ public class Goal : GridEntity
     bool IsOneFlowerType(out FlowerType flowerType)
     {
         flowerType = null;
+        PopulateRegularFlowersDict();
 
-        Dictionary<FlowerType, int> tempFlowerList = new Dictionary<FlowerType, int>(CurrentFlowers);
-        foreach(FlowerType flower in CurrentFlowers.Keys)
+        Dictionary<FlowerType, int> tempFlowerList = new Dictionary<FlowerType, int>(RegularFlowersDict);
+        foreach(FlowerType flower in RegularFlowersDict.Keys)
         {
-            if(CurrentFlowers[flower] <= 0)
+            if(RegularFlowersDict[flower] <= 0)
             {
                 tempFlowerList.Remove(flower);
             }

@@ -19,6 +19,7 @@ public class FlowerBehavior : GridEntity, IInteractive
         get;
         private set;
     } = true;
+    public FlowerType Type { get => type; }
 
     ParticleSystem pollenParticles;
 
@@ -101,6 +102,8 @@ public class FlowerBehavior : GridEntity, IInteractive
 
         Instantiate(offspring, transform.position, transform.rotation, Board.grid.transform);
         Instantiate(pollenBurstPrefab, transform.position, transform.rotation, Board.grid.transform);
+
+        gameObject.SetActive(false);
 
         var offspringType = offspring.GetComponent<FlowerBehavior>().type;
         flowerCrossbred?.Invoke(offspringType);

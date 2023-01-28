@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01f9c373c2c6e224daf0f406ff043ec8, type: 3}
+  m_Name: DH-Intro-4.1
+  m_EditorClassIdentifier: 
+  LevelPrefab: {fileID: 9201359749279873360, guid: e658213fd2559544aa61b15a5b1b0fd4, type: 3}
+  DisplayName: No bee left behind
+  Description: 
