@@ -58,13 +58,13 @@ public class PlayerController : MovementController
         CalculateNextPosition();
     }
 
-    public override void ExecuteMove()
+    public override ActionBase ExecuteMove()
     {
         if (_isInteracting)
-            return;
+            return new MoveAction(this, GetCurrentPosition(), GetCurrentPosition());
 
-        base.ExecuteMove();
         AudioManager.PlayOneShot(AudioManager.Instance.beeMoved);
+        return base.ExecuteMove();
     }
     
     public override Vector3Int CalculateNextPosition()

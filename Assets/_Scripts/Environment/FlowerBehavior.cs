@@ -5,12 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using DG.Tweening;
 
-public interface IInteractive
-{
-    void OnInteract(GameObject caller);
-}
-
-public class FlowerBehavior : GridEntity, IInteractive
+public class FlowerBehavior : GridEntity, IInteractable
 {
     public static Action<FlowerType> flowerCrossbred;
 

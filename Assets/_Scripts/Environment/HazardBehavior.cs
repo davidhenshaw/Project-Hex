@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HazardBehavior : GridEntity, IInteractive
+public class HazardBehavior : GridEntity, IInteractable
 {
     public void OnInteract(GameObject caller)
     {

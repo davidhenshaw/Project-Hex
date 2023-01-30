@@ -4,7 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using System;
 
-public class BeeBehavior : MonoBehaviour
+public class BeeBehavior : MonoBehaviour, IInteractive
 {
     public bool IsPollenated
     {
@@ -176,7 +176,7 @@ public class BeeBehavior : MonoBehaviour
 
         foreach (GridEntity obj in overlappingObjects)
         {
-            if (obj.TryGetComponent(out IInteractive interactable))
+            if (obj.TryGetComponent(out IInteractable interactable))
             {
                 interactable.OnInteract(gameObject);
             }

@@ -9,6 +9,8 @@ public class Board : Singleton<Board>
 {
     public readonly Dictionary<Vector3Int, Tile> tiles = new Dictionary<Vector3Int, Tile>();
 
+    Stack<Turn> _turnActions = new Stack<Turn>();
+
     public Grid grid { get; private set; }
 
     // Start is called before the first frame update
@@ -73,6 +75,18 @@ public class Board : Singleton<Board>
         ClearSpeculativeMoves();
     }
 
+    public void UndoLastTurn()
+    {
+        if (!_turnActions.TryPop(out Turn turn))
+            return;
+
+
+        foreach(ActionBase action in turn.Actions)
+        {
+            action.Undo();
+        }
+    }
+
     void ClearSpeculativeMoves()
     {
         foreach(Tile tile in tiles.Values)
@@ -96,5 +110,21 @@ public class Board : Singleton<Board>
             return null;
 
         return tile.entities.ToArray();
+    }
+}
+
+struct Turn
+{
+    public readonly ActionBase[] Actions;
+
+    //public Turn(ActionBase[] actions)
+    //{
+    //    this.actions = actions;
+    //}
+
+    public Turn(ICollection<ActionBase> actions)
+    {
+        this.Actions = null;
+        actions.CopyTo(this.Actions, 0);
     }
 }

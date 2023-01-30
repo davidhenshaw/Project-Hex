@@ -37,8 +37,8 @@ public class StaticElementController : MovementController
         return false;
     }
 
-    public override void ExecuteMove()
+    public override ActionBase ExecuteMove()
     {
-        
+        return MoveAction.NullMove(this);
     }
 }

@@ -37,13 +37,15 @@ public abstract class MovementController : MonoBehaviour
 
     public abstract Vector3Int CalculateNextPosition();
     
-    public virtual void ExecuteMove()
+    public virtual ActionBase ExecuteMove()
     {
         var from = GetCurrentPosition();
         _mover.Move(NextMove);
         IsNextPositionDirty = true;
 
         Moved?.Invoke(from, NextMove);
+
+        return new MoveAction(this, from, NextMove);
     }
 
     public virtual void HandleInvalidMove()
