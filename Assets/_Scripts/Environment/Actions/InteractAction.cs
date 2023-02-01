@@ -19,4 +19,14 @@ public class InteractAction : ActionBase
     {
         throw new System.NotImplementedException();
     }
+
+    public override bool Validate(Board board)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void Execute()
+    {
+        throw new System.NotImplementedException();
+    }
 }

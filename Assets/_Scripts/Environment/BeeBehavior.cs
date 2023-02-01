@@ -32,7 +32,8 @@ public class BeeBehavior : MonoBehaviour, IInteractive
 
     public BeeBehavior leaderBee;
     public BeeBehavior followerBee;
-    MovementController _movementController;
+    EntityController _movementController;
+    GridEntity _entity;
     
     [Space]
 
@@ -47,7 +48,8 @@ public class BeeBehavior : MonoBehaviour, IInteractive
 
     private void Awake()
     {
-        _movementController = GetComponent<MovementController>();
+        _entity = GetComponent<GridEntity>();
+        _movementController = GetComponent<EntityController>();
         var beeSprite = GetComponentInChildren<BillboardSprite>();
 
         //Set up DOTween sequences
@@ -113,6 +115,21 @@ public class BeeBehavior : MonoBehaviour, IInteractive
         }
     }
 
+    public ActionBase GetInteraction()
+    {
+        GridEntity[] overlappingObjects = GetOverlappingObjects();
+
+        foreach (GridEntity obj in overlappingObjects)
+        {
+            if (obj.TryGetComponent(out IInteractable interactable))
+            {
+                return new InteractAction(this, interactable, _entity.GridPosition);
+            }
+        }
+
+        return null;
+    }
+
     public void TriggerInteract()
     {
         StartCoroutine(InteractSequence());
@@ -120,10 +137,10 @@ public class BeeBehavior : MonoBehaviour, IInteractive
 
     IEnumerator InteractSequence()
     {
-        GridEntity[] overlappingObjects = GetOverlappingObjects();
+        //GridEntity[] overlappingObjects = GetOverlappingObjects();
 
-        if (overlappingObjects == null)
-            yield break;
+        //if (overlappingObjects == null)
+        //    yield break;
 
         if (followerBee)
             followerBee.TriggerInteract();

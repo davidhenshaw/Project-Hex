@@ -3,7 +3,7 @@ using UnityEngine;
 using metakazz.Hex;
 using System.Collections.Generic;
 
-public class PlayerController : MovementController
+public class PlayerController : EntityController
 {
     private static List<PlayerController> AllPlayerControllers = new List<PlayerController>();
 
@@ -29,11 +29,11 @@ public class PlayerController : MovementController
 
     private void Start()
     {
-        _dirSelector.Selected += (dir) =>
-        {
-            SetNextMoveRecursive(dir);
-            board.Tick();
-        };
+        //_dirSelector.Selected += (dir) =>
+        //{
+        //    SetNextMoveRecursive(dir);
+        //    _board.Tick();
+        //};
     }
 
     private void OnInteractFinished()
@@ -48,76 +48,94 @@ public class PlayerController : MovementController
 
     void HandleInputs()
     {
+        //if (Input.GetKeyDown(KeyCode.Space) ||
+        //    Input.GetButtonDown("Move_N") ||
+        //    Input.GetButtonDown("Move_NE") ||
+        //    Input.GetButtonDown("Move_SE") ||
+        //    Input.GetButtonDown("Move_S") ||
+        //    Input.GetButtonDown("Move_SW") ||
+        //    Input.GetButtonDown("Move_NW"))
+        //{
+        //    _board.Tick();
+        //}
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             _beehaviour.TriggerInteract();
             _isInteracting = true;
             AudioManager.PlayOneShot(AudioManager.Instance.beeLand);
         }
-
-        CalculateNextPosition();
     }
 
-    public override ActionBase ExecuteMove()
+    public override void ExecuteMove(Vector3Int destination)
     {
         if (_isInteracting)
-            return new MoveAction(this, GetCurrentPosition(), GetCurrentPosition());
+            return;
+        
+        base.ExecuteMove(destination);
 
         AudioManager.PlayOneShot(AudioManager.Instance.beeMoved);
-        return base.ExecuteMove();
     }
     
-    public override Vector3Int CalculateNextPosition()
+    public override ActionBase CalculateNextAction()
     {
-        if (Input.GetButton("Move_E"))
-        {
-            if (Input.GetButtonDown("Move_N"))
-            {
-                SetNextMove(HexDirection.NORTHEAST);
-            }
-            else if(Input.GetButtonDown("Move_S"))
-            {
-                SetNextMove(HexDirection.SOUTHEAST);
-            }
-            return NextMove;
-        }
+        NextAction = null;
 
-        if (Input.GetButton("Move_W"))
+        if(Input.GetKeyDown(KeyCode.Space))
         {
-            if (Input.GetButtonDown("Move_N"))
-            {
-                SetNextMove(HexDirection.NORTHWEST);
-            }
-            else if (Input.GetButtonDown("Move_S"))
-            {
-                SetNextMove(HexDirection.SOUTHWEST);
-            }
-            return NextMove;
+            NextAction = _beehaviour.GetInteraction();
+            _isInteracting = true;
         }
 
         if(Input.GetButtonDown("Move_N"))
         {
-            SetNextMove(HexDirection.NORTH);
+            NextAction = SetNextMove(HexDirection.NORTH);
         }        
         
         if(Input.GetButtonDown("Move_S"))
         {
-            SetNextMove(HexDirection.SOUTH);
+            NextAction = SetNextMove(HexDirection.SOUTH);
+        }
+        
+        if(Input.GetButtonDown("Move_NE"))
+        {
+            NextAction = SetNextMove(HexDirection.NORTHEAST);
         }
 
-        return NextMove;
+        if (Input.GetButtonDown("Move_SE"))
+        {
+            NextAction = SetNextMove(HexDirection.SOUTHEAST);
+        }
+
+        if (Input.GetButtonDown("Move_NW"))
+        {
+            NextAction = SetNextMove(HexDirection.NORTHWEST);
+        }
+
+        if (Input.GetButtonDown("Move_SW"))
+        {
+            NextAction = SetNextMove(HexDirection.SOUTHWEST);
+        }
+
+        return NextAction;
     }
 
-    public override void PostMoveUpdate()
+    public override void PostActionUpdate()
     {
-        base.PostMoveUpdate();
+        base.PostActionUpdate();
 
         _beehaviour.OnPostMoveUpdate();
     }
 
-    void SetNextMove(HexDirection dir)
+    ActionBase SetNextMove(HexDirection dir)
     {
-        NextMove = _mover.GridPosition.Neighbor(dir);
+        var action = new MoveAction(this, CurrentPosition, GetNeighborDirection(dir));
+        return action;
+    }
+
+    Vector3Int GetNeighborDirection(HexDirection dir)
+    {
+        return _entity.GridPosition.Neighbor(dir);
     }
 
     /// <summary>
@@ -126,7 +144,7 @@ public class PlayerController : MovementController
     /// <param name="dir"></param>
     void SetNextMoveRecursive(HexDirection dir)
     {
-        NextMove = _mover.GridPosition.Neighbor(dir);
+        NextAction = SetNextMove(dir);
 
         foreach (PlayerController pc in AllPlayerControllers)
         {

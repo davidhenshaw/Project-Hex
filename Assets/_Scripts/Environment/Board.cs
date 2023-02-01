@@ -38,39 +38,56 @@ public class Board : Singleton<Board>
         }
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) ||
+            Input.GetButtonDown("Move_N")   ||
+            Input.GetButtonDown("Move_NE")  ||
+            Input.GetButtonDown("Move_SE")  ||
+            Input.GetButtonDown("Move_S")   ||
+            Input.GetButtonDown("Move_SW")  ||
+            Input.GetButtonDown("Move_NW"))
+        {
+            Tick();
+        }
+    }
+
     public void Tick()
     {
         if (GameSession.Instance.IsPaused)
             return;
 
-        var moveControllers = GetComponentsInChildren<MovementController>();
+        var controllers = GetComponentsInChildren<EntityController>();
+        List<ActionBase> actions = new List<ActionBase>();
 
-        foreach(MovementController moveController in moveControllers)
+        foreach(EntityController controller in controllers)
         {
-            if (moveController is PlayerController)
+            //if (controller is PlayerController)
+            //    continue;
+
+            controller.CalculateNextAction();
+        }
+
+        foreach(EntityController controller in controllers)
+        {
+            controller.ValidateNextAction();
+        }
+
+        foreach(EntityController controller in controllers)
+        {
+            if (controller.NextAction == null)
                 continue;
 
-            var nextPos = moveController.CalculateNextPosition();
-            RegisterSpeculativeMove(nextPos, moveController.GridEntity);
+            controller.NextAction.Execute();
+            actions.Add(controller.NextAction);
         }
 
-        foreach(MovementController mover in moveControllers)
+        foreach (EntityController controller in controllers)
         {
-            if(!mover.ResolveNextMove())
-            {
-                mover.HandleInvalidMove();
-            }
+            controller.PostActionUpdate();
         }
 
-        foreach(MovementController mover in moveControllers)
-        {
-            mover.ExecuteMove();
-        }
-
-        foreach (MovementController mover in moveControllers)
-        {
-            mover.PostMoveUpdate();
-        }
+        _turnActions.Push( new Turn(actions) );
 
         ClearSpeculativeMoves();
     }
@@ -117,14 +134,9 @@ struct Turn
 {
     public readonly ActionBase[] Actions;
 
-    //public Turn(ActionBase[] actions)
-    //{
-    //    this.actions = actions;
-    //}
-
     public Turn(ICollection<ActionBase> actions)
     {
-        this.Actions = null;
+        this.Actions = new ActionBase[actions.Count];
         actions.CopyTo(this.Actions, 0);
     }
 }

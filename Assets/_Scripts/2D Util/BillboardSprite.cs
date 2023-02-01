@@ -13,7 +13,7 @@ public class BillboardSprite : MonoBehaviour
     [SerializeField]
     public Vector3 rotationOffset = new Vector3(0, 0, 0);
 
-    MovementController _movementController;
+    EntityController _movementController;
 
     void Update ( )
     {
@@ -24,7 +24,7 @@ public class BillboardSprite : MonoBehaviour
 
     private void Awake()
     {
-        _movementController = GetComponentInParent<MovementController>();
+        _movementController = GetComponentInParent<EntityController>();
         if(_movementController)
         {
             _movementController.Moved += OnMove;

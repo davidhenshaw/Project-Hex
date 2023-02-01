@@ -6,17 +6,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class BoardFollower : MovementController
+public class BoardFollower : EntityController
 {
     [FormerlySerializedAs("toFollow")]
     public GridEntity Leader;
     
     GridEntityMovement _parentMover;
-
-    //private void OnParentMoved(Vector3Int from, Vector3Int to)
-    //{
-    //    _mover.Move(from);
-    //}
 
     protected override void Awake()
     {
@@ -37,12 +32,12 @@ public class BoardFollower : MovementController
         _parentMover = null;
     }
 
-    public override Vector3Int CalculateNextPosition()
+    public override ActionBase CalculateNextAction()
     {
         if (_parentMover == null)
-            return GetCurrentPosition();
+            return null;
 
-        NextMove = _parentMover.GridPosition;
-        return NextMove;
+        NextAction = new MoveAction(this, CurrentPosition, Leader.GridPosition);
+        return NextAction;
     }
 }
