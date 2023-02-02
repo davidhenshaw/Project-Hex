@@ -52,6 +52,11 @@ public class Board : Singleton<Board>
         }
     }
 
+    public bool IsValid(Vector3Int pos)
+    {
+        return tiles.ContainsKey(pos);
+    }
+
     public void Tick()
     {
         if (GameSession.Instance.IsPaused)
@@ -62,9 +67,6 @@ public class Board : Singleton<Board>
 
         foreach(EntityController controller in controllers)
         {
-            //if (controller is PlayerController)
-            //    continue;
-
             controller.CalculateNextAction();
         }
 

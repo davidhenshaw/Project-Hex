@@ -34,6 +34,7 @@ public class BeeBehavior : MonoBehaviour, IInteractive
     public BeeBehavior followerBee;
     EntityController _movementController;
     GridEntity _entity;
+    public Vector3Int Position => _entity.GridPosition;
     
     [Space]
 
@@ -113,21 +114,6 @@ public class BeeBehavior : MonoBehaviour, IInteractive
         {
             gameObject.SetActive(false);
         }
-    }
-
-    public ActionBase GetInteraction()
-    {
-        GridEntity[] overlappingObjects = GetOverlappingObjects();
-
-        foreach (GridEntity obj in overlappingObjects)
-        {
-            if (obj.TryGetComponent(out IInteractable interactable))
-            {
-                return new InteractAction(this, interactable, _entity.GridPosition);
-            }
-        }
-
-        return null;
     }
 
     public void TriggerInteract()

@@ -41,32 +41,6 @@ public class PlayerController : EntityController
         _isInteracting = false;
     }
 
-    private void Update()
-    {
-        HandleInputs();
-    }
-
-    void HandleInputs()
-    {
-        //if (Input.GetKeyDown(KeyCode.Space) ||
-        //    Input.GetButtonDown("Move_N") ||
-        //    Input.GetButtonDown("Move_NE") ||
-        //    Input.GetButtonDown("Move_SE") ||
-        //    Input.GetButtonDown("Move_S") ||
-        //    Input.GetButtonDown("Move_SW") ||
-        //    Input.GetButtonDown("Move_NW"))
-        //{
-        //    _board.Tick();
-        //}
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            _beehaviour.TriggerInteract();
-            _isInteracting = true;
-            AudioManager.PlayOneShot(AudioManager.Instance.beeLand);
-        }
-    }
-
     public override void ExecuteMove(Vector3Int destination)
     {
         if (_isInteracting)
@@ -83,8 +57,9 @@ public class PlayerController : EntityController
 
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            NextAction = _beehaviour.GetInteraction();
+            NextAction = new InteractAction(_beehaviour, _beehaviour.Position);
             _isInteracting = true;
+            return NextAction;
         }
 
         if(Input.GetButtonDown("Move_N"))

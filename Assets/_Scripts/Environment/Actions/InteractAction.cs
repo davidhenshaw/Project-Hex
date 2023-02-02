@@ -5,13 +5,12 @@ using UnityEngine;
 public class InteractAction : ActionBase
 {
     public IInteractive Caller { get; private set; }
-    public IInteractable Target { get; private set; }
     public Vector3Int Position { get; private set; }
+    public readonly ActionBase[] ResultingActions;
 
-    public InteractAction(IInteractive caller, IInteractable target, Vector3Int position)
+    public InteractAction(IInteractive caller, Vector3Int position)
     {
         Caller = caller;
-        Target = target;
         Position = position;
     }
 
@@ -22,11 +21,11 @@ public class InteractAction : ActionBase
 
     public override bool Validate(Board board)
     {
-        throw new System.NotImplementedException();
+        return board.IsValid(Position);
     }
 
     public override void Execute()
     {
-        throw new System.NotImplementedException();
+        Caller.TriggerInteract();
     }
 }
