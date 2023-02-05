@@ -30,6 +30,13 @@ public class InteractAction : ActionBase
     public override void Execute()
     {
         ResultingActions = Caller.TriggerInteract();
+        foreach(ActionBase action in ResultingActions)
+        {
+            if (action == null)
+                continue;
+
+            action.Execute();
+        }
     }
 
     public override ActionBase GetMimickAction(EntityController copyer)

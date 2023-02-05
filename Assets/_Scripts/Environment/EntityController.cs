@@ -34,7 +34,11 @@ public abstract class EntityController : MonoBehaviour
         _board = GetComponentInParent<Board>();
     }
 
-    public abstract ActionBase CalculateNextAction();
+    public virtual ActionBase CalculateNextAction()
+    {
+        NextActionCalculated?.Invoke(NextAction);
+        return NextAction;
+    }
     
     public virtual void HandleInvalidAction(ActionBase action)
     {

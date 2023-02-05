@@ -14,10 +14,10 @@ public class BeelineManager : Singleton<BeelineManager>
         GameEvents.Instance.OneFlowerTypeLeft.AddListener( CheckBeesForPollen );
     }
 
-    private void OnDisable()
-    {
-        GameEvents.Instance.OneFlowerTypeLeft.RemoveListener(CheckBeesForPollen);
-    }
+    //private void OnDisable()
+    //{
+    //    GameEvents.Instance.OneFlowerTypeLeft.RemoveListener(CheckBeesForPollen);
+    //}
 
     void CheckBeesForPollen(FlowerType lastFlower)
     {

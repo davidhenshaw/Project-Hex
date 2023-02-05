@@ -133,8 +133,9 @@ public class BeeBehavior : MonoBehaviour, IInteractive, IPollinator
             if (obj.TryGetComponent(out IInteractable interactable))
             {
                 var outputActions = interactable.OnInteract(gameObject);
-
-                actions.AddRange(outputActions);
+                
+                if(outputActions != null)
+                    actions.AddRange(outputActions);
             }
         }
 

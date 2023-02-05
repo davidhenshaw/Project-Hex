@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,8 @@ using UnityEngine;
 public class StaticElementController : EntityController
 {
     GridEntity staticElement;
+
+    public override event Action<ActionBase> NextActionCalculated;
 
     protected override void Awake()
     {
@@ -21,6 +24,6 @@ public class StaticElementController : EntityController
 
     public override ActionBase CalculateNextAction()
     {
-        return null;
+        return base.CalculateNextAction();
     }
 }

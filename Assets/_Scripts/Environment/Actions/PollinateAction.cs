@@ -48,6 +48,7 @@ public class PollinateAction : ActionBase
 
     public override void Undo()
     {
+        Target.ClearPollen();
         Target.SetPollen(PreviousPollen);
     }
 

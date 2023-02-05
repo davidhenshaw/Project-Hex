@@ -12,6 +12,8 @@ public class PlayerController : EntityController
     private BeeBehavior _beehaviour;
     DirectionSelectorWidget _dirSelector;
 
+    public override event Action<ActionBase> NextActionCalculated;
+
     protected override void Awake()
     {
         base.Awake();
@@ -91,6 +93,8 @@ public class PlayerController : EntityController
         {
             NextAction = SetNextMove(HexDirection.SOUTHWEST);
         }
+
+        NextActionCalculated?.Invoke(NextAction);
 
         return NextAction;
     }

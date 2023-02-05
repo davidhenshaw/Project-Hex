@@ -46,10 +46,15 @@ public class FlowerBehavior : GridEntity, IInteractable
         {
             var beeAction = TryPollinate(bee);
             var flowerAction = TryCrossBreed(bee.PollenType);
-            arr.Add(beeAction);
+
+            if(beeAction != null)
+                arr.Add(beeAction);
+            
+            if(flowerAction != null)
+                arr.Add(flowerAction);
         }
 
-        return null;
+        return arr.ToArray();
     }
 
     void PlayPollenBurstEffect()
@@ -116,7 +121,9 @@ public class FlowerBehavior : GridEntity, IInteractable
 
         if (!FlowerManager.Instance.TryGetCrossbreed(this._type, other, out offspring))
             return null;
+        var action = new FlowerTransformAction(this, offspring);
+        action.OnExecute += OnCrossBreed;
 
-        return new FlowerTransformAction(this, offspring);
+        return action;
     }
 }
