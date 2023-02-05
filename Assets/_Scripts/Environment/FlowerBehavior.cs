@@ -4,43 +4,57 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using DG.Tweening;
+using UnityEngine.Serialization;
 
 public class FlowerBehavior : GridEntity, IInteractable
 {
-    public static Action<FlowerType> flowerCrossbred;
+    public static Action<FlowerType> FlowerCrossbred;
 
     public bool HasPollen
     {
         get;
         private set;
     } = true;
-    public FlowerType Type { get => type; }
+    public FlowerType Type { get => _type; }
 
-    ParticleSystem pollenParticles;
-
-    [SerializeField]
-    GameObject pollenBurstPrefab;
+    ParticleSystem _pollenParticles;
 
     [SerializeField]
-    FlowerType type;
+    [FormerlySerializedAs("pollenBurstPrefab")]
+    GameObject _pollenBurstPrefab;
 
     [SerializeField]
-    Color fadeColor;
+    [FormerlySerializedAs("type")]
+    FlowerType _type;
+
+    [SerializeField]
+    [FormerlySerializedAs("fadeColor")]
+    Color _fadeColor;
 
     SpriteRenderer[] childSprites;
 
     private void Awake()
     {
-        pollenParticles = GetComponentInChildren<ParticleSystem>();
+        _pollenParticles = GetComponentInChildren<ParticleSystem>();
         childSprites = GetComponentsInChildren<SpriteRenderer>();
     }
 
-    public void OnInteract(GameObject caller)
+    public ActionBase[] OnInteract(GameObject caller)
     {
+        var arr = new List<ActionBase>();
         if(caller.TryGetComponent(out BeeBehavior bee))
         {
-            TryPollenate(bee);
+            var beeAction = TryPollinate(bee);
+            var flowerAction = TryCrossBreed(bee.PollenType);
+            arr.Add(beeAction);
         }
+
+        return null;
+    }
+
+    void PlayPollenBurstEffect()
+    {
+        Instantiate(_pollenBurstPrefab, transform.position, transform.rotation, Board.grid.transform);
     }
 
     void PlayFlowerWiggle()
@@ -57,54 +71,52 @@ public class FlowerBehavior : GridEntity, IInteractable
     {
         foreach (SpriteRenderer sprite in childSprites)
         {
-            sprite.DOColor(fadeColor, 0.3f);
+            sprite.DOColor(_fadeColor, 0.3f);
         }
     }
 
-    void TryPollenate(BeeBehavior bee)
+    void OnCrossBreed(FlowerType flowerType)
     {
-        if (!this.HasPollen)
-            return;
+        PlayPollenBurstEffect();
+        FlowerCrossbred?.Invoke(flowerType);
+    }
 
-        if (bee.IsPollenated)
+    ActionBase TryPollinate(BeeBehavior bee)
+    {
+        //if (!this.HasPollen)
+        //    return;
+
+        if (!bee.IsPollenated)
+        //{
+        //    if (!TryCrossBreed(bee.PollenType))
+        //        return;
+        //    bee.ClearPollen();
+        //    AudioManager.PlayOneShot(AudioManager.Instance.flowerPollenated);
+        //}
+        //else
         {
-            if (!TryCrossBreed(bee.PollenType))
-                return;
-            bee.ClearPollen();
-            AudioManager.PlayOneShot(AudioManager.Instance.flowerPollenated);
-        }
-        else
-        {
-            bee.SetPollen(type);
             PlayFlowerWiggle();
-            //FadeFlowerColor();
-            //this.ClearPollen();
+            return new PollinateAction(bee, this);
         }
+        return null;
     }
 
     public void ClearPollen()
     {
-        pollenParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        _pollenParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         HasPollen = false;
     }
 
-    public bool TryCrossBreed(FlowerType other)
+    public ActionBase TryCrossBreed(FlowerType other)
     {
         GameObject offspring;
 
-        if (!FlowerManager.Instance.TryGetCrossbreed(this.type, other, out offspring))
-            return false;
+        if (other == null)
+            return null;
 
-        Instantiate(offspring, transform.position, transform.rotation, Board.grid.transform);
-        Instantiate(pollenBurstPrefab, transform.position, transform.rotation, Board.grid.transform);
+        if (!FlowerManager.Instance.TryGetCrossbreed(this._type, other, out offspring))
+            return null;
 
-        gameObject.SetActive(false);
-
-        var offspringType = offspring.GetComponent<FlowerBehavior>().type;
-        flowerCrossbred?.Invoke(offspringType);
-        
-        Destroy(gameObject);
-
-        return true;
+        return new FlowerTransformAction(this, offspring);
     }
 }

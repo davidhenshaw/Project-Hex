@@ -12,4 +12,8 @@ public class HazardBehavior : GridEntity, IInteractable
         }
     }
 
+    ActionBase[] IInteractable.OnInteract(GameObject caller)
+    {
+        throw new System.NotImplementedException();
+    }
 }

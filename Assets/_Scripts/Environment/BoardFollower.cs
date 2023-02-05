@@ -10,34 +10,44 @@ public class BoardFollower : EntityController
 {
     [FormerlySerializedAs("toFollow")]
     public GridEntity Leader;
-    
-    GridEntityMovement _parentMover;
 
+    EntityController _leaderController;
     protected override void Awake()
     {
         base.Awake();
         if(Leader != null)
-            _parentMover = Leader.GetComponent<GridEntityMovement>();
+        {
+            _leaderController = Leader.GetComponent<EntityController>();
+            _leaderController.NextActionCalculated += OnLeaderCalculateAction;
+        }
+
+    }
+
+    private void OnLeaderCalculateAction(ActionBase action)
+    {
+        NextAction = action.GetMimickAction(this);
     }
 
     public void SetToFollow(GridEntity leader)
     {
         Leader = leader;
-        _parentMover = leader.GetComponent<GridEntityMovement>();
+        _leaderController = leader.GetComponent<EntityController>();
     }
 
     public void ClearLeader()
     {
         Leader = null;
-        _parentMover = null;
+        _leaderController = null;
     }
 
     public override ActionBase CalculateNextAction()
     {
-        if (_parentMover == null)
+        if (_leaderController == null)
             return null;
 
-        NextAction = new MoveAction(this, CurrentPosition, Leader.GridPosition);
+        if (_leaderController.NextAction == null)
+            return null;
+
         return NextAction;
     }
 }

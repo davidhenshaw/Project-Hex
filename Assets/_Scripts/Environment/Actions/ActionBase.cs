@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System;
+
 
 public abstract class ActionBase
 {
@@ -9,4 +8,6 @@ public abstract class ActionBase
     public abstract bool Validate(Board board);
 
     public abstract void Execute();
+
+    public abstract ActionBase GetMimickAction(EntityController copyer);
 }

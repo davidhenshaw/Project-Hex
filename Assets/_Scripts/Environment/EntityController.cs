@@ -18,6 +18,8 @@ public abstract class EntityController : MonoBehaviour
     /// </summary>
     public virtual event Action<Vector3Int, Vector3Int> MoveBlocked;
 
+    public virtual event Action<ActionBase> NextActionCalculated;
+
     public ActionBase NextAction { get; set; }
     public bool IsNextPositionDirty { get; set; } = true;
     public GridEntity GridEntity { get => _entity; }

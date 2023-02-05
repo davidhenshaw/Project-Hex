@@ -6,7 +6,7 @@ public class InteractAction : ActionBase
 {
     public IInteractive Caller { get; private set; }
     public Vector3Int Position { get; private set; }
-    public readonly ActionBase[] ResultingActions;
+    public ActionBase[] ResultingActions { get; private set; }
 
     public InteractAction(IInteractive caller, Vector3Int position)
     {
@@ -16,7 +16,10 @@ public class InteractAction : ActionBase
 
     public override void Undo()
     {
-        throw new System.NotImplementedException();
+        foreach(ActionBase action in ResultingActions)
+        {
+            action.Undo();
+        }
     }
 
     public override bool Validate(Board board)
@@ -26,6 +29,11 @@ public class InteractAction : ActionBase
 
     public override void Execute()
     {
-        Caller.TriggerInteract();
+        ResultingActions = Caller.TriggerInteract();
+    }
+
+    public override ActionBase GetMimickAction(EntityController copyer)
+    {
+        return new InteractAction(copyer.GetComponent<IInteractive>(), copyer.CurrentPosition);
     }
 }

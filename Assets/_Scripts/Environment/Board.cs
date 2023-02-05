@@ -50,6 +50,11 @@ public class Board : Singleton<Board>
         {
             Tick();
         }
+
+        if(Input.GetKeyDown(KeyCode.Tab))
+        {
+            UndoLastTurn();
+        }
     }
 
     public bool IsValid(Vector3Int pos)
@@ -89,7 +94,8 @@ public class Board : Singleton<Board>
             controller.PostActionUpdate();
         }
 
-        _turnActions.Push( new Turn(actions) );
+        if(actions.Count > 0)
+            _turnActions.Push( new Turn(actions) );
 
         ClearSpeculativeMoves();
     }
@@ -97,7 +103,10 @@ public class Board : Singleton<Board>
     public void UndoLastTurn()
     {
         if (!_turnActions.TryPop(out Turn turn))
+        {
+            Debug.Log("No more turns to undo");
             return;
+        }
 
 
         foreach(ActionBase action in turn.Actions)
@@ -134,11 +143,27 @@ public class Board : Singleton<Board>
 
 struct Turn
 {
-    public readonly ActionBase[] Actions;
+    public ActionBase[] Actions { get; private set; }
 
     public Turn(ICollection<ActionBase> actions)
     {
         this.Actions = new ActionBase[actions.Count];
         actions.CopyTo(this.Actions, 0);
+    }
+
+    public void Undo()
+    {
+        if (Actions == null)
+        {
+            Debug.Log("Cannot undo action-less Turn");
+            return;
+        }
+
+        foreach (ActionBase action in Actions)
+        {
+            action.Undo();
+        }
+
+        Actions = null;
     }
 }

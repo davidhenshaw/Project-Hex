@@ -2,10 +2,10 @@
 
 public interface IInteractable
 {
-    void OnInteract(GameObject caller);
+    ActionBase[] OnInteract(GameObject caller);
 }
 
 public interface IInteractive
 {
-    void TriggerInteract();
+    ActionBase[] TriggerInteract();
 }

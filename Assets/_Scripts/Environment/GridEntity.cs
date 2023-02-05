@@ -26,7 +26,7 @@ public abstract class GridEntity : MonoBehaviour
         toTile.Add(this);
     }
 
-    protected Board Board {
+    public Board Board {
         get
         {
             if(!_board)

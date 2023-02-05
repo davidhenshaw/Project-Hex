@@ -25,7 +25,7 @@ public class MoveAction : ActionBase
 
     public override void Undo()
     {
-        throw new System.NotImplementedException();
+        Controller.ExecuteMove(Start);
     }
 
     public override void Execute()
@@ -54,6 +54,11 @@ public class MoveAction : ActionBase
         IsNextPositionDirty = false;
 
         return false;
+    }
+
+    public override ActionBase GetMimickAction(EntityController copyer)
+    {
+        return new MoveAction(copyer, copyer.CurrentPosition, Start);
     }
 
     /// <summary>

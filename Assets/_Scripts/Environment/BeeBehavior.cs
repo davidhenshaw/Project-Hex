@@ -4,7 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using System;
 
-public class BeeBehavior : MonoBehaviour, IInteractive
+public class BeeBehavior : MonoBehaviour, IInteractive, IPollinator
 {
     public bool IsPollenated
     {
@@ -28,7 +28,6 @@ public class BeeBehavior : MonoBehaviour, IInteractive
     public bool DeferredDisable { get; set; } = false;
 
     GameObject pollenParticles;
-    FlowerType pollenType;
 
     public BeeBehavior leaderBee;
     public BeeBehavior followerBee;
@@ -45,7 +44,8 @@ public class BeeBehavior : MonoBehaviour, IInteractive
 
     public float landAmount = -0.3f;
     public float landingDuration = 0.7f;
-    public FlowerType PollenType { get => pollenType; }
+    public FlowerType PollenType { get; protected set ; }
+    public FlowerType GetPollenType() => PollenType; 
 
     private void Awake()
     {
@@ -114,36 +114,33 @@ public class BeeBehavior : MonoBehaviour, IInteractive
         {
             gameObject.SetActive(false);
         }
+        else
+        {
+            _landingSequence.WaitForElapsedLoops(1);
+            _landingSequence.Rewind();
+            InteractFinished?.Invoke();
+        }
     }
 
-    public void TriggerInteract()
+    public ActionBase[] TriggerInteract()
     {
-        StartCoroutine(InteractSequence());
-    }
+        List<ActionBase> actions = new List<ActionBase>();
 
-    IEnumerator InteractSequence()
-    {
-        //GridEntity[] overlappingObjects = GetOverlappingObjects();
+        GridEntity[] overlappingObjects = GetOverlappingObjects();
 
-        //if (overlappingObjects == null)
-        //    yield break;
+        foreach (GridEntity obj in overlappingObjects)
+        {
+            if (obj.TryGetComponent(out IInteractable interactable))
+            {
+                var outputActions = interactable.OnInteract(gameObject);
 
-        if (followerBee)
-            followerBee.TriggerInteract();
+                actions.AddRange(outputActions);
+            }
+        }
 
-        Debug.Log("Start Interact");
-        //Play the interact animation and wait for the descend animation to play
-        yield return _landingSequence.Play().WaitForElapsedLoops(1);
+        _landingSequence.Play().WaitForElapsedLoops(1);
 
-        DoInteraction();
-
-        Debug.Log("End Interact");
-
-
-        //Wait for ascent animation to play
-        yield return _landingSequence.WaitForElapsedLoops(1);
-        _landingSequence.Rewind();
-        InteractFinished?.Invoke();
+        return actions.ToArray();
     }
 
     IEnumerator DeathSequence()
@@ -173,22 +170,9 @@ public class BeeBehavior : MonoBehaviour, IInteractive
 
     }
 
-    public void DoInteraction()
-    {
-        GridEntity[] overlappingObjects = GetOverlappingObjects();
-
-        foreach (GridEntity obj in overlappingObjects)
-        {
-            if (obj.TryGetComponent(out IInteractable interactable))
-            {
-                interactable.OnInteract(gameObject);
-            }
-        }
-    }
-
     public void ClearPollen()
     {
-        this.pollenType = null;
+        PollenType = null;
         IsPollenated = false;
 
         Destroy(pollenParticles);
@@ -196,7 +180,7 @@ public class BeeBehavior : MonoBehaviour, IInteractive
 
     public void SetPollen(FlowerType type)
     {
-        this.pollenType = type;
+        this.PollenType = type;
         if (!type)
             return;
         IsPollenated = true;
@@ -266,7 +250,7 @@ public class BeeBehavior : MonoBehaviour, IInteractive
     {
         other.IsPollenated = true;
         other.pollenParticles = pollenParticles;
-        other.SetPollen(pollenType);
+        other.SetPollen(PollenType);
 
         if(pollenParticles)
         {

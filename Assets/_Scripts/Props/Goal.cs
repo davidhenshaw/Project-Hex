@@ -35,7 +35,7 @@ public class Goal : GridEntity
     private void Awake()
     {
         GameEvents.Instance.GameplayUIInit.AddListener(OnGameplayUIInit);
-        FlowerBehavior.flowerCrossbred += OnFlowerCrossbred;
+        FlowerBehavior.FlowerCrossbred += OnFlowerCrossbred;
     }
 
     protected override void Start()
@@ -50,7 +50,7 @@ public class Goal : GridEntity
 
     private void OnDisable()
     {
-        FlowerBehavior.flowerCrossbred -= OnFlowerCrossbred;
+        FlowerBehavior.FlowerCrossbred -= OnFlowerCrossbred;
     }
 
     void PopulateRegularFlowersDict()
