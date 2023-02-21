@@ -5,26 +5,27 @@ using UnityEngine;
 
 public class FlowerTransformAction : ActionBase
 {
-    FlowerBehavior Original;
-    GameObject TargetObject;
+    FlowerBehavior _original;
+    GameObject _targetPrefab;
+    GameObject _instantiatedPrefab;
 
     public event Action<FlowerType> OnExecute;
     public event Action OnValidate;
 
     public FlowerTransformAction(FlowerBehavior original, GameObject target)
     {
-        Original = original;
-        TargetObject = target;
+        _original = original;
+        _targetPrefab = target;
     }
 
     public override void Execute()
     {
-        GameObject.Instantiate(TargetObject, Original.transform.position, Original.transform.rotation, Original.Board.grid.transform);
+        _instantiatedPrefab = GameObject.Instantiate(_targetPrefab, _original.transform.position, _original.transform.rotation, _original.Board.grid.transform);
         //GameObject.Instantiate(pollenBurstPrefab, transform.position, transform.rotation, Board.grid.transform);
 
-        Original.gameObject.SetActive(false);
+        _original.gameObject.SetActive(false);
 
-        var offspringType = TargetObject.GetComponent<FlowerBehavior>().Type;
+        var offspringType = _targetPrefab.GetComponent<FlowerBehavior>().Type;
         OnExecute?.Invoke(offspringType);
     }
 
@@ -35,11 +36,12 @@ public class FlowerTransformAction : ActionBase
 
     public override void Undo()
     {
-        throw new System.NotImplementedException();
+        _original.gameObject.SetActive(true);
+        GameObject.Destroy(_instantiatedPrefab);
     }
 
     public override bool Validate(Board board)
     {
-        throw new System.NotImplementedException();
+        return true;
     }
 }

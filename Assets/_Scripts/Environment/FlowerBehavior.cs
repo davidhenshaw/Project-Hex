@@ -51,7 +51,10 @@ public class FlowerBehavior : GridEntity, IInteractable
                 arr.Add(beeAction);
             
             if(flowerAction != null)
+            {
                 arr.Add(flowerAction);
+                arr.Add(new PollinateAction(bee, null));
+            }
         }
 
         return arr.ToArray();
@@ -101,7 +104,7 @@ public class FlowerBehavior : GridEntity, IInteractable
         //else
         {
             PlayFlowerWiggle();
-            return new PollinateAction(bee, this);
+            return new PollinateAction(bee, this.Type);
         }
         return null;
     }

@@ -23,13 +23,6 @@ public class PollinateAction : ActionBase
         Target = target;
     }
 
-    public PollinateAction(IPollinator target, FlowerBehavior flower)
-    {
-        PreviousPollen = target.GetPollenType();
-        IncomingPollen = flower.Type;
-        Target = target;
-    }
-
     public override void Execute()
     {
         if(IncomingPollen == null)

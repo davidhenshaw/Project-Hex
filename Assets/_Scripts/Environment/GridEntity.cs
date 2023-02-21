@@ -2,6 +2,7 @@
 
 public abstract class GridEntity : MonoBehaviour
 {
+    private bool _isInit = false;
     private Board _board;
     public Vector3Int GridPosition 
     {
@@ -52,6 +53,20 @@ public abstract class GridEntity : MonoBehaviour
         //Snap to this tile's center
         transform.position = Board.grid
                                 .CellToWorld(GridPosition);
+
+        _isInit = true;
+    }
+
+    private void OnEnable()
+    {
+        if (!_isInit)
+            return;
+        
+        Tile currTile;
+        Board.tiles.TryGetValue(GridPosition, out currTile);
+
+        if (currTile)
+            currTile.Add(this);
     }
 
     private void OnDisable()
