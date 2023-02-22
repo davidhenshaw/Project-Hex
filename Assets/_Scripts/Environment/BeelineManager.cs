@@ -39,7 +39,7 @@ public class BeelineManager : Singleton<BeelineManager>
         if (!canPollinate)
         {
             GameEvents.Instance.GoalImpossible?.Invoke();
-            Debug.Log("No win condition met. No more cross-pollinations can be done", this);
+            //Debug.Log("No win condition met. No more cross-pollinations can be done", this);
         }
     }
 }

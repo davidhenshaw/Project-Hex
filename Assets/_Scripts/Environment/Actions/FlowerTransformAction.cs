@@ -11,6 +11,7 @@ public class FlowerTransformAction : ActionBase
 
     public event Action<FlowerType> OnExecute;
     public event Action OnValidate;
+    public event Action<FlowerType> OnUndo;
 
     public FlowerTransformAction(FlowerBehavior original, GameObject target)
     {
@@ -36,6 +37,8 @@ public class FlowerTransformAction : ActionBase
 
     public override void Undo()
     {
+        var offspringType = _targetPrefab.GetComponent<FlowerBehavior>().Type;
+        OnUndo?.Invoke(offspringType);
         _original.gameObject.SetActive(true);
         GameObject.Destroy(_instantiatedPrefab);
     }

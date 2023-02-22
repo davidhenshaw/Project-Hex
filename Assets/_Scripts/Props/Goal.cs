@@ -36,6 +36,7 @@ public class Goal : GridEntity
     {
         GameEvents.Instance.GameplayUIInit.AddListener(OnGameplayUIInit);
         FlowerBehavior.FlowerCrossbred += OnFlowerCrossbred;
+        FlowerBehavior.FlowerRemoved += OnFlowerRemoved;
     }
 
     protected override void Start()
@@ -74,6 +75,29 @@ public class Goal : GridEntity
         _uiLockMarker = gameplayUI.CreateUIMarker(transform, lockIcon);
     }
 
+    void OnFlowerRemoved(FlowerType flowerType)
+    {
+        if(FlowerHybridsDict.TryGetValue(flowerType, out int currentCount))
+        {
+            int reqCount = 0;
+            FlowerHybridsDict[flowerType]--;
+            currentCount--;
+            foreach (FlowerCount reqFlower in flowerRequirements)
+            {
+                if (reqFlower.type == flowerType)
+                    reqCount = reqFlower.count;
+            }
+
+            GameEvents.Instance.FlowerProgressUpdated?.Invoke(flowerType, currentCount, reqCount);
+        }
+
+        if(RegularFlowersDict.TryGetValue(flowerType, out int count))
+        {
+            RegularFlowersDict[flowerType]--;
+        }
+
+    }
+
     void OnFlowerCrossbred(FlowerType type)
     {
         //If the key exists already, nothing bad happens
@@ -102,7 +126,7 @@ public class Goal : GridEntity
             int reqCount = reqFlower.count;
             int currentCount;
 
-            //This flower type might not exist in the current flowers dict yet if it hasn't been crossbred yet
+            //This flower type might not exist in the current flowers dict if it hasn't been crossbred yet
             if(FlowerHybridsDict.TryGetValue(type, out currentCount))
             {
                 GameEvents.Instance.FlowerProgressUpdated?.Invoke(type, currentCount, reqCount);

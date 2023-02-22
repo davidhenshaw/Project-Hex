@@ -9,6 +9,7 @@ using UnityEngine.Serialization;
 public class FlowerBehavior : GridEntity, IInteractable
 {
     public static Action<FlowerType> FlowerCrossbred;
+    public static Action<FlowerType> FlowerRemoved;
 
     public bool HasPollen
     {
@@ -126,6 +127,7 @@ public class FlowerBehavior : GridEntity, IInteractable
             return null;
         var action = new FlowerTransformAction(this, offspring);
         action.OnExecute += OnCrossBreed;
+        action.OnUndo += (offspringType) => { FlowerRemoved?.Invoke(offspringType); };
 
         return action;
     }
