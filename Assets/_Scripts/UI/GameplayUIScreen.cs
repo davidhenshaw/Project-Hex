@@ -19,9 +19,9 @@ public class GameplayUIScreen : UIScreen
 
     private void OnEnable()
     {
-        GameEvents.Instance.GoalImpossible.AddListener(
-            () => { StartCoroutine(OnGoalImpossible()); }
-        );
+        //GameEvents.Instance.GoalImpossible.AddListener(
+        //    () => { StartCoroutine(OnGoalImpossible()); }
+        //);
     }
 
     IEnumerator OnGoalImpossible()
