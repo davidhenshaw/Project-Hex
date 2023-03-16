@@ -3,7 +3,7 @@
 public abstract class GridEntity : MonoBehaviour
 {
     private bool _isInit = false;
-    private Board _board;
+    protected Board _board;
     public Vector3Int GridPosition 
     {
         get;

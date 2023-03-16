@@ -69,9 +69,31 @@ public class BeelineController : MonoBehaviour
         return currBee;
     }
 
+    public List<BeeBehavior> GetBeesAsList()
+    {
+        return childTransforms.ConvertAll(
+                (beeTf) => { return beeTf.GetComponentInParent<BeeBehavior>(); }
+                );
+    }
+
     public void RemoveBee(BeeBehavior toRemove)
     {
         StartCoroutine(HandleBeelineSplit(toRemove));
+    }
+
+    public void AddBee(BeeBehavior toAdd)
+    {
+        toAdd.transform.SetParent(this.transform);
+        GenerateBeeLinks();
+    }
+
+    public void AddBees(ICollection<BeeBehavior> toAdd)
+    {
+        foreach(BeeBehavior bee in toAdd)
+        {
+            bee.transform.SetParent(this.transform);
+        }
+        GenerateBeeLinks();
     }
 
     public static IEnumerator HandleBeelineSplit(BeeBehavior toRemove)
@@ -86,7 +108,9 @@ public class BeelineController : MonoBehaviour
         }
         
         ClearNeighborReferences(toRemove);
-        Destroy(toRemove.gameObject);
+        //Destroy(toRemove.gameObject);
+        toRemove.gameObject.transform.SetParent(null);
+        toRemove.gameObject.SetActive(false);
 
         yield return new WaitForEndOfFrame();
 
@@ -94,7 +118,7 @@ public class BeelineController : MonoBehaviour
 
         if(newBeeline != null)
         {
-            newBeeline.GenerateBeeLinks();
+            prevBeeline.GenerateBeeLinks();
             //newBeeline.Leader.DoInteraction();
         }
     }
@@ -155,6 +179,9 @@ public class BeelineController : MonoBehaviour
         childTransforms.Clear();
         for(int i = 0; i < transform.childCount; i++)
         {
+            if (!transform.GetChild(i).gameObject.activeInHierarchy)
+                continue;
+
             if (!transform.GetChild(i).TryGetComponent(out BeeBehavior currentBee))
                 continue;
             
@@ -176,7 +203,12 @@ public class BeelineController : MonoBehaviour
     void DrawConnectingLine(List<Transform> objTransforms)
     {
         if (objTransforms == null || objTransforms.Count <= 0)
+        {
+            lineRenderer.enabled = false;
             return;
+        }
+        else
+            lineRenderer.enabled = true;
 
         List<Vector3> linePos = objTransforms.ConvertAll(
             (tf) => { return tf.position; }

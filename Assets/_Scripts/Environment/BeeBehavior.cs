@@ -12,7 +12,7 @@ public class BeeBehavior : MonoBehaviour, IInteractive, IPollinator
         private set;
     } = false;
 
-    public bool IsFirst
+    public bool IsLeader
     {
         get { return (!leaderBee && GetComponent<PlayerController>()); }
     }
@@ -71,6 +71,7 @@ public class BeeBehavior : MonoBehaviour, IInteractive, IPollinator
             return;
 
         _movementController.MoveBlocked += OnMoveBlocked;
+        _hoverSequence.Play();
     }
 
     private void OnDisable()
@@ -155,7 +156,7 @@ public class BeeBehavior : MonoBehaviour, IInteractive, IPollinator
         _landingSequence.Kill();
         _hoverSequence.Kill();
 
-        spriteGO.transform.SetParent(BeelineManager.Instance.transform, true);
+        //spriteGO.transform.SetParent(BeelineManager.Instance.transform, true);
 
         GetBeelineController().RemoveBee(this);
 
@@ -163,10 +164,10 @@ public class BeeBehavior : MonoBehaviour, IInteractive, IPollinator
             .SetEase(Ease.Linear)
             .SetLoops(3, LoopType.Incremental)
             .OnComplete(() => {
-                Destroy(spriteGO);
+                //Destroy(spriteGO);
             });
         
-        Destroy(billboard);
+        //Destroy(billboard);
         yield return null;
 
     }
@@ -190,11 +191,34 @@ public class BeeBehavior : MonoBehaviour, IInteractive, IPollinator
     }
     
     [ContextMenu("Kill Bee")]
-    public void Kill()
+    public ActionBase Kill()
     {
         AudioManager.PlayOneShot(AudioManager.Instance.beeDied);
 
-        StartCoroutine(DeathSequence());
+        //StartCoroutine(DeathSequence());
+        
+        //Unparent the sprite so I can screw with it without it being destroyed
+        var billboard = GetComponentInChildren<BillboardSprite>();
+        var spriteGO = billboard.gameObject;
+
+
+        billboard.transform.DOKill();
+        _landingSequence.Kill();
+        _hoverSequence.Kill();
+
+        //spriteGO.transform.SetParent(BeelineManager.Instance.transform, true);
+
+        //GetBeelineController().RemoveBee(this);
+
+        //spriteGO.transform.DORotate(new Vector3(360, 0, 0), 0.1f)
+        //    .SetEase(Ease.Linear)
+        //    .SetLoops(3, LoopType.Incremental)
+        //    .OnComplete(() => {
+        //        //Destroy(spriteGO);
+        //    });
+
+        return new BeelineRemoveAction(this);
+        //Destroy(billboard);
     }
 
     public void SetLeader(BeeBehavior otherBee)
@@ -213,7 +237,7 @@ public class BeeBehavior : MonoBehaviour, IInteractive, IPollinator
 
         if (otherBee.TryGetComponent(out BoardFollower followerComponent))
         {
-            followerComponent.SetToFollow(this.GetComponent<GridEntity>());
+            followerComponent.SetLeader(this.GetComponent<GridEntity>());
         }
     }
 

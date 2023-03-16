@@ -176,7 +176,7 @@ public class Goal : GridEntity
         Debug.Log("bee entered goal");
         GameEvents.Instance.BeeProgressUpdated?.Invoke(CurrentBees, RequiredBees);
 
-        if(bee.IsFirst)
+        if(bee.IsLeader)
         {
             StartCoroutine(AbsorbFollowerBees(bee));
         }
@@ -215,16 +215,17 @@ public class Goal : GridEntity
         BeeBehavior currBee = head.followerBee;
 
         yield return new WaitForSeconds(0.2f);
-        head.gameObject.SetActive(false); //assumes head be is already on the goal tile
-
+        //head.gameObject.SetActive(false); //assumes head be is already on the goal tile
+        _board.TileEnterActions.Add(new DisableEntityAction(head.GetComponent<GridEntity>()));
         while(currBee)
         {
-            GridEntityMovement mover = currBee.GetComponent<GridEntityMovement>();
-            mover.Move(GridPosition);
-
+            var entController = currBee.GetComponent<EntityController>();
+            //mover.Move(GridPosition);
+            _board.TileEnterActions.Add(new MoveAction(entController, GridPosition));
             yield return new WaitForSeconds(0.2f);
 
-            currBee.gameObject.SetActive(false);
+            //currBee.gameObject.SetActive(false);
+            _board.TileEnterActions.Add(new DisableEntityAction(head.GetComponent<GridEntity>()));
             currBee = currBee.followerBee;
             
             yield return new WaitForSeconds(0.25f);

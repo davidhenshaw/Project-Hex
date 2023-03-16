@@ -10,6 +10,8 @@ public class Board : Singleton<Board>
     public readonly Dictionary<Vector3Int, Tile> tiles = new Dictionary<Vector3Int, Tile>();
 
     Stack<Turn> _turnActions = new Stack<Turn>();
+    public readonly List<ActionBase> TileEnterActions = new List<ActionBase>();
+    public readonly List<ActionBase> TileExitActions = new List<ActionBase>();
 
     public Grid grid { get; private set; }
 
@@ -68,7 +70,7 @@ public class Board : Singleton<Board>
             return;
 
         var controllers = GetComponentsInChildren<EntityController>();
-        List<ActionBase> actions = new List<ActionBase>();
+        List<ActionBase> pastActions = new List<ActionBase>();
 
         foreach(EntityController controller in controllers)
         {
@@ -80,13 +82,31 @@ public class Board : Singleton<Board>
             controller.ValidateNextAction();
         }
 
+        foreach(ActionBase action in TileEnterActions)
+        {
+            if (action != null)
+            {
+                action.Execute();
+                pastActions.Add(action);
+            }
+        }
+
         foreach(EntityController controller in controllers)
         {
             if (controller.NextAction == null)
                 continue;
 
             controller.NextAction.Execute();
-            actions.Add(controller.NextAction);
+            pastActions.Add(controller.NextAction);
+        }
+
+        foreach (ActionBase action in TileExitActions)
+        {
+            if (action != null)
+            {
+                action.Execute();
+                pastActions.Add(action);
+            }
         }
 
         foreach (EntityController controller in controllers)
@@ -94,8 +114,8 @@ public class Board : Singleton<Board>
             controller.PostActionUpdate();
         }
 
-        if(actions.Count > 0)
-            _turnActions.Push( new Turn(actions) );
+        if(pastActions.Count > 0)
+            _turnActions.Push( new Turn(pastActions) );
 
         ClearSpeculativeMoves();
     }

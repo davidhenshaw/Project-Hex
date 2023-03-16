@@ -23,6 +23,13 @@ public class MoveAction : ActionBase
         Destination = endLocation;
     }
 
+    public MoveAction(EntityController entity, Vector3Int endLocation)
+    {
+        Controller = entity;
+        Start = entity.CurrentPosition;
+        Destination = endLocation;
+    }
+
     public override void Undo()
     {
         Controller.ExecuteMove(Start);

@@ -29,7 +29,7 @@ public class BoardFollower : EntityController
         NextAction = action.GetMimickAction(this);
     }
     
-    public void SetToFollow(GridEntity leader)
+    public void SetLeader(GridEntity leader)
     {
         Leader = leader;
         _leaderController = leader.GetComponent<EntityController>();
@@ -49,6 +49,7 @@ public class BoardFollower : EntityController
         if (_leaderController.NextAction == null)
             return null;
 
+        NextAction = _leaderController.NextAction.GetMimickAction(this);
         NextActionCalculated?.Invoke(NextAction);
         return NextAction;
     }

@@ -14,6 +14,12 @@ public class HazardBehavior : GridEntity, IInteractable
 
     ActionBase[] IInteractable.OnInteract(GameObject caller)
     {
-        throw new System.NotImplementedException();
+        if (caller.TryGetComponent(out BeeBehavior bee))
+        {
+            return new ActionBase[] { bee.Kill() };
+        }
+        else
+            return null;
+
     }
 }
